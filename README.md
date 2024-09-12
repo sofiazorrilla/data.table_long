@@ -1,7 +1,7 @@
 # data.table
-Repositorio de taller de data.table para Rladies 31 mayo 2024
+Repositorio de taller de introducción al paquete data.table 
 
-## Temas del taller
+## Primera sesión 
 
 1. Introducción
 
