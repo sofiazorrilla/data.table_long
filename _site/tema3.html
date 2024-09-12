@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Filtros y selección de columnas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar floating nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title"><img src="img/logo.png" alt="Logo" class="logo"></span>
+    </a>
+  </div>
+        <div class="quarto-navbar-tools ms-auto">
+    <a href="https://twitter.com" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
+    <div class="dropdown">
+      <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-github"></i></a>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quarto-navigation-tool-dropdown-0">
+          <li>
+            <a class="dropdown-item quarto-navbar-tools ms-auto-item" href="https://code.com">
+            Source Code
+            </a>
+          </li>
+      </ul>
+    </div>
+</div>
+          <div id="quarto-search" class="" title="Search"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3.html">Operaciones</a></li><li class="breadcrumb-item"><a href="./tema3.html">Filtros y selección de columnas</a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation floating overflow-auto">
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+ <span class="menu-text">Introducción</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introducción y recursos</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Sintaxis básica</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Importar y exportar datos</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true">
+ <span class="menu-text">Operaciones</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema3.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">Filtros y selección de columnas</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Modificación de columnas</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Agrupación</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema6.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Cadenas de operaciones</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema7.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Uniones entre tablas</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#operaciones-sobre-las-filas" id="toc-operaciones-sobre-las-filas" class="nav-link active" data-scroll-target="#operaciones-sobre-las-filas">Operaciones sobre las filas</a>
+  <ul class="collapse">
+  <li><a href="#seleccionar-por-índices" id="toc-seleccionar-por-índices" class="nav-link" data-scroll-target="#seleccionar-por-índices">Seleccionar por índices</a></li>
+  <li><a href="#filtrar-filas" id="toc-filtrar-filas" class="nav-link" data-scroll-target="#filtrar-filas">Filtrar filas</a></li>
+  <li><a href="#ordenar-filas" id="toc-ordenar-filas" class="nav-link" data-scroll-target="#ordenar-filas">Ordenar filas</a></li>
+  </ul></li>
+  <li><a href="#operaciones-sobre-las-columnas" id="toc-operaciones-sobre-las-columnas" class="nav-link" data-scroll-target="#operaciones-sobre-las-columnas">Operaciones sobre las columnas</a>
+  <ul class="collapse">
+  <li><a href="#seleccionar-columnas-por-índice" id="toc-seleccionar-columnas-por-índice" class="nav-link" data-scroll-target="#seleccionar-columnas-por-índice">Seleccionar columnas por índice</a></li>
+  <li><a href="#seleccionar-columnas-por-nombre" id="toc-seleccionar-columnas-por-nombre" class="nav-link" data-scroll-target="#seleccionar-columnas-por-nombre">Seleccionar columnas por nombre</a></li>
+  <li><a href="#renombrar-columnas" id="toc-renombrar-columnas" class="nav-link" data-scroll-target="#renombrar-columnas">Renombrar columnas</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content column-body" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Filtros y selección de columnas</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="operaciones-sobre-las-filas" class="level1">
+<h1>Operaciones sobre las filas</h1>
+<section id="seleccionar-por-índices" class="level2">
+<h2 class="anchored" data-anchor-id="seleccionar-por-índices">Seleccionar por índices</h2>
+<p>Similar a como se seleccionan filas en un data.frame, en un objeto data.table se pueden seleccionar filas utilizando rangos de índices. En los siguientes dos ejemplos se muestra como seleccionar las primeras dos filas de la tabla de registros.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/plantae_mexico_conCoords_specimen.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       gbifID                 occurrenceID       phylum          class        order      family       genus
+1: 2825623524 TAIF:PLANT:318128:1:1:411555 Tracheophyta Polypodiopsida Polypodiales Pteridaceae    Adiantum
+2: 2825649445 TAIF:PLANT:318579:1:1:411579 Tracheophyta Polypodiopsida Polypodiales Pteridaceae Scoliosorus
+                  species infraspecificEpithet taxonRank                         scientificName
+1:      Adiantum andicola                        SPECIES               Adiantum andicola Liebm.
+2: Scoliosorus ensiformis                        SPECIES Scoliosorus ensiformis (Hook.) T.Moore
+                    verbatimScientificName verbatimScientificNameAuthorship countryCode     stateProvince
+1:                Adiantum andicola Liebm.                               NA          MX Oaxaca (瓦哈卡州)
+2: Scoliosorus ensiformis (Hook.) T. Moore                               NA          MX Oaxaca (瓦哈卡州)
+   decimalLatitude decimalLongitude coordinateUncertaintyInMeters elevation day month year      basisOfRecord
+1:        17.30213         -96.3808                            NA      2267  27     2 2012 PRESERVED_SPECIMEN
+2:        17.30213         -96.3808                            NA      2267  27     2 2012 PRESERVED_SPECIMEN</code></pre>
+</div>
+</div>
+<p><br></p>
+<p><strong>Nota:</strong> Cuando solo estamos seleccionando filas no es necesario incluir la coma al final.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       gbifID                 occurrenceID       phylum          class        order      family       genus
+1: 2825623524 TAIF:PLANT:318128:1:1:411555 Tracheophyta Polypodiopsida Polypodiales Pteridaceae    Adiantum
+2: 2825649445 TAIF:PLANT:318579:1:1:411579 Tracheophyta Polypodiopsida Polypodiales Pteridaceae Scoliosorus
+                  species infraspecificEpithet taxonRank                         scientificName
+1:      Adiantum andicola                        SPECIES               Adiantum andicola Liebm.
+2: Scoliosorus ensiformis                        SPECIES Scoliosorus ensiformis (Hook.) T.Moore
+                    verbatimScientificName verbatimScientificNameAuthorship countryCode     stateProvince
+1:                Adiantum andicola Liebm.                               NA          MX Oaxaca (瓦哈卡州)
+2: Scoliosorus ensiformis (Hook.) T. Moore                               NA          MX Oaxaca (瓦哈卡州)
+   decimalLatitude decimalLongitude coordinateUncertaintyInMeters elevation day month year      basisOfRecord
+1:        17.30213         -96.3808                            NA      2267  27     2 2012 PRESERVED_SPECIMEN
+2:        17.30213         -96.3808                            NA      2267  27     2 2012 PRESERVED_SPECIMEN</code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="filtrar-filas" class="level2">
+<h2 class="anchored" data-anchor-id="filtrar-filas">Filtrar filas</h2>
+<p>De acuerdo con la sintaxis del paquete, el espacio i es el lugar en el que se pueden realizar operaciones sobre las filas como los filtros. Por ejemplo, utilizando la tabla de registros de especies de plantas podríamos estar interesados en solo seleccionar aquellos registros que pertenezcan al género Quercus.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_quercus <span class="ot">&lt;-</span> data[genus <span class="sc">==</span> <span class="st">"Quercus"</span>,] </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_quercus)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 51985    23</code></pre>
+</div>
+</div>
+<p>O podríamos estar interesadas en seleccionar solo los registros más viejos, los que fueron colectados antes de 1950.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_quercus_viejos <span class="ot">&lt;-</span> data[genus <span class="sc">==</span> <span class="st">"Quercus"</span> <span class="sc">&amp;</span> year <span class="sc">&lt;=</span> <span class="dv">1950</span>,]</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_quercus_viejos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2927   23</code></pre>
+</div>
+</div>
+<p><br></p>
+</section>
+<section id="ordenar-filas" class="level2">
+<h2 class="anchored" data-anchor-id="ordenar-filas">Ordenar filas</h2>
+<p>Otra función que se puede realizar en el espacio de las filas es ordenarlas. Por ejemplo, podríamos ordenar la tabla de registros del género Quercus por estado en orden alfabético.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenar los datos de la tabla de registros de Quercus por estado en orden alfabetico</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ordered_data <span class="ot">=</span> data_quercus[<span class="fu">order</span>(stateProvince)]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># seleccionar la columna de estado como vector y seleccionar los valores únicos</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mostrar solo los primeros valores</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ordered_data<span class="sc">$</span>stateProvince) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] ""                        "Aguascalientes"          "Baja California"         "Baja California (norte)"
+[5] "Baja California Norte"   "Baja California Sur"    </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Carga el archivo de registros de plantas utilizando la función fread que revisamos en el tema anterior</li>
+<li>Utiliza un filtro para quedarte con las filas que pertenezcan a un género o especie que te guste</li>
+<li>Ordena de manera descendente por año</li>
+</ol>
+<p>Pregunta:</p>
+<p>¿De qué año son los registros más nuevos y más viejos de la especie que escogiste? (selecciona utilizando rangos la primera y la última fila de la tabla)</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="sourceCode" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/plantae_mexico_conCoords_specimen.csv"</span>, <span class="at">quote=</span><span class="st">""</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>data_quercus <span class="ot">&lt;-</span> data[genus <span class="sc">==</span> <span class="st">"Quercus"</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(year),] </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>data_quercus_ordenado <span class="ot">&lt;-</span> data_quercus[<span class="fu">order</span>(<span class="sc">-</span>year)] </span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Una función útil en el paquete es la función .N que te permite guardar el número de observaciones en el grupo actual. En este caso solo tenemos un solo grupo y por lo tanto guarda el número de filas en la tabla.</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>data_quercus_ordenado[<span class="fu">c</span>(<span class="dv">1</span>,.N),] <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 2%">
+<col style="width: 13%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 2%">
+<col style="width: 5%">
+<col style="width: 5%">
+<col style="width: 2%">
+<col style="width: 7%">
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 3%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 7%">
+<col style="width: 2%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 1%">
+<col style="width: 4%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">gbifID</th>
+<th style="text-align: left;">occurrenceID</th>
+<th style="text-align: left;">phylum</th>
+<th style="text-align: left;">class</th>
+<th style="text-align: left;">order</th>
+<th style="text-align: left;">family</th>
+<th style="text-align: left;">genus</th>
+<th style="text-align: left;">species</th>
+<th style="text-align: left;">infraspecificEpithet</th>
+<th style="text-align: left;">taxonRank</th>
+<th style="text-align: left;">scientificName</th>
+<th style="text-align: left;">verbatimScientificName</th>
+<th style="text-align: left;">verbatimScientificNameAuthorship</th>
+<th style="text-align: left;">countryCode</th>
+<th style="text-align: left;">stateProvince</th>
+<th style="text-align: right;">decimalLatitude</th>
+<th style="text-align: right;">decimalLongitude</th>
+<th style="text-align: right;">coordinateUncertaintyInMeters</th>
+<th style="text-align: right;">elevation</th>
+<th style="text-align: right;">day</th>
+<th style="text-align: right;">month</th>
+<th style="text-align: right;">year</th>
+<th style="text-align: left;">basisOfRecord</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">4531629317</td>
+<td style="text-align: left;">101427a9-2277-4bbb-b31b-1f7e463b2e0e</td>
+<td style="text-align: left;">Tracheophyta</td>
+<td style="text-align: left;">Magnoliopsida</td>
+<td style="text-align: left;">Fagales</td>
+<td style="text-align: left;">Fagaceae</td>
+<td style="text-align: left;">Quercus</td>
+<td style="text-align: left;">Quercus hypoleucoides</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">SPECIES</td>
+<td style="text-align: left;">Quercus hypoleucoides A.Camus</td>
+<td style="text-align: left;">Quercus hypoleucoides</td>
+<td style="text-align: left;">A. Camus</td>
+<td style="text-align: left;">MX</td>
+<td style="text-align: left;">Sonora</td>
+<td style="text-align: right;">30.82500</td>
+<td style="text-align: right;">-110.22300</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">1713</td>
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2023</td>
+<td style="text-align: left;">PRESERVED_SPECIMEN</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">730972925</td>
+<td style="text-align: left;">http://coldb.mnhn.fr/catalognumber/mnhn/p/p06859288</td>
+<td style="text-align: left;">Tracheophyta</td>
+<td style="text-align: left;">Magnoliopsida</td>
+<td style="text-align: left;">Fagales</td>
+<td style="text-align: left;">Fagaceae</td>
+<td style="text-align: left;">Quercus</td>
+<td style="text-align: left;">Quercus caudicans</td>
+<td style="text-align: left;"></td>
+<td style="text-align: left;">SPECIES</td>
+<td style="text-align: left;">Quercus caudicans Née</td>
+<td style="text-align: left;">Quercus candicans Née</td>
+<td style="text-align: left;">Née</td>
+<td style="text-align: left;">MX</td>
+<td style="text-align: left;">Morelos</td>
+<td style="text-align: right;">19.02889</td>
+<td style="text-align: right;">-99.24833</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">20</td>
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1827</td>
+<td style="text-align: left;">PRESERVED_SPECIMEN</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><br> <br></p>
+</section>
+</section>
+<section id="operaciones-sobre-las-columnas" class="level1">
+<h1>Operaciones sobre las columnas</h1>
+<section id="seleccionar-columnas-por-índice" class="level2">
+<h2 class="anchored" data-anchor-id="seleccionar-columnas-por-índice">Seleccionar columnas por índice</h2>
+<p>De acuerdo con la sintaxis del paquete, el espacio j nos permite realizar operaciones sobre las columnas. Una de esas operaciones es la selección de columnas.</p>
+<p>Se pueden seleccionar por medio de índices:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="dv">7</span><span class="sc">:</span><span class="dv">8</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               genus               species
+     1:    Syngonium  Syngonium angustatum
+     2:     Scaevola     Scaevola plumieri
+     3:   Tillandsia    Tillandsia fuchsii
+     4:    Commelina     Commelina rufipes
+     5: Heterosperma Heterosperma pinnatum
+    ---                                   
+ 99996:   Polypodium                      
+ 99997: Hesperoyucca Hesperoyucca whipplei
+ 99998: Fimbristylis   Fimbristylis cymosa
+ 99999:    Commelina    Commelina tuberosa
+100000:       Salvia    Salvia polystachia</code></pre>
+</div>
+</div>
+</section>
+<section id="seleccionar-columnas-por-nombre" class="level2">
+<h2 class="anchored" data-anchor-id="seleccionar-columnas-por-nombre">Seleccionar columnas por nombre</h2>
+<p>Se pueden seleccionar las columas por nombre y regresar como vector:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data[,species] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Syngonium angustatum"  "Scaevola plumieri"     "Tillandsia fuchsii"    "Commelina rufipes"    
+[5] "Heterosperma pinnatum" "Begonia crassicaulis" </code></pre>
+</div>
+</div>
+<p>Se pueden seleccionar las columnas usando una lista y regresar como tabla:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="fu">list</span>(family,genus,species)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               family        genus               species
+     1:       Araceae    Syngonium  Syngonium angustatum
+     2:  Goodeniaceae     Scaevola     Scaevola plumieri
+     3:  Bromeliaceae   Tillandsia    Tillandsia fuchsii
+     4: Commelinaceae    Commelina     Commelina rufipes
+     5:    Asteraceae Heterosperma Heterosperma pinnatum
+    ---                                                 
+ 99996: Polypodiaceae   Polypodium                      
+ 99997:  Asparagaceae Hesperoyucca Hesperoyucca whipplei
+ 99998:    Cyperaceae Fimbristylis   Fimbristylis cymosa
+ 99999: Commelinaceae    Commelina    Commelina tuberosa
+100000:     Lamiaceae       Salvia    Salvia polystachia</code></pre>
+</div>
+</div>
+<p>Un atajo para no escribir <code>list()</code> es <code>.()</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data[,.(family,genus,species)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               family        genus               species
+     1:       Araceae    Syngonium  Syngonium angustatum
+     2:  Goodeniaceae     Scaevola     Scaevola plumieri
+     3:  Bromeliaceae   Tillandsia    Tillandsia fuchsii
+     4: Commelinaceae    Commelina     Commelina rufipes
+     5:    Asteraceae Heterosperma Heterosperma pinnatum
+    ---                                                 
+ 99996: Polypodiaceae   Polypodium                      
+ 99997:  Asparagaceae Hesperoyucca Hesperoyucca whipplei
+ 99998:    Cyperaceae Fimbristylis   Fimbristylis cymosa
+ 99999: Commelinaceae    Commelina    Commelina tuberosa
+100000:     Lamiaceae       Salvia    Salvia polystachia</code></pre>
+</div>
+</div>
+<p>Para seleccionar columnas guardadas en una variable se puede utilizar el prefijo <code>..</code>:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"family"</span>,<span class="st">"genus"</span>,<span class="st">"species"</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>data[ , ..variables]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               family        genus               species
+     1:       Araceae    Syngonium  Syngonium angustatum
+     2:  Goodeniaceae     Scaevola     Scaevola plumieri
+     3:  Bromeliaceae   Tillandsia    Tillandsia fuchsii
+     4: Commelinaceae    Commelina     Commelina rufipes
+     5:    Asteraceae Heterosperma Heterosperma pinnatum
+    ---                                                 
+ 99996: Polypodiaceae   Polypodium                      
+ 99997:  Asparagaceae Hesperoyucca Hesperoyucca whipplei
+ 99998:    Cyperaceae Fimbristylis   Fimbristylis cymosa
+ 99999: Commelinaceae    Commelina    Commelina tuberosa
+100000:     Lamiaceae       Salvia    Salvia polystachia</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li>Selecciona las columnas que contengan información acerca de la ubicación geográfica de los registros.</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>info_geografica &lt;- c(“countryCode”, “stateProvince”, “decimalLatitude”, “decimalLongitude”, “coordinateUncertaintyInMeters”, “elevation”)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>vars_info_geografica <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"countryCode"</span>, <span class="st">"stateProvince"</span>, <span class="st">"decimalLatitude"</span>, <span class="st">"decimalLongitude"</span>, <span class="st">"coordinateUncertaintyInMeters"</span>, <span class="st">"elevation"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>data[,..vars_info_geografica,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        countryCode                   stateProvince decimalLatitude decimalLongitude coordinateUncertaintyInMeters
+     1:          MX                        Veracruz        19.33330        -96.66670                            NA
+     2:          MX                         Yucatan        21.25417        -89.80833                            70
+     3:          MX                         Chiapas        15.65000        -92.80000                           100
+     4:          MX                         Chiapas        16.08111        -93.47805                           100
+     5:          MX                         Durango        25.54389       -104.59100                            50
+    ---                                                                                                           
+ 99996:          MX                          Mexico        20.00583       -100.13200                            80
+ 99997:          MX                 Baja California        32.35806       -116.93146                         10000
+ 99998:          MX Veracruz de ignacio de la llave        20.20833        -96.79167                            80
+ 99999:          MX             Michoacan de ocampo        19.76222       -100.86611                            80
+100000:          MX                        Guerrero        17.46814       -100.13643                         10490
+        elevation
+     1:        NA
+     2:       0.0
+     3:    1400.0
+     4:     473.5
+     5:    1900.0
+    ---          
+ 99996:    2400.0
+ 99997:        NA
+ 99998:        NA
+ 99999:    1020.0
+100000:    1300.0</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="renombrar-columnas" class="level2">
+<h2 class="anchored" data-anchor-id="renombrar-columnas">Renombrar columnas</h2>
+<p>En el espacio de operaciones sobre las columnas también se pueden renombrar las columnas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>data[, .(<span class="at">especie =</span> species, <span class="at">genero =</span> genus)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                      especie       genero
+     1:  Syngonium angustatum    Syngonium
+     2:     Scaevola plumieri     Scaevola
+     3:    Tillandsia fuchsii   Tillandsia
+     4:     Commelina rufipes    Commelina
+     5: Heterosperma pinnatum Heterosperma
+    ---                                   
+ 99996:                         Polypodium
+ 99997: Hesperoyucca whipplei Hesperoyucca
+ 99998:   Fimbristylis cymosa Fimbristylis
+ 99999:    Commelina tuberosa    Commelina
+100000:    Salvia polystachia       Salvia</code></pre>
+</div>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

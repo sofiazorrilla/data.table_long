@@ -1,0 +1,24 @@
+---
+title: "Sintaxis básica"
+---
+
+data.table es un objeto de R que está pensado para mantener las operaciones en uno o pocos comandos. La lógica de la sintaxis básica es la siguiente:
+
+1. Un espacio para las operaciones sobre las filas, por ejemplo filtrar u ordenar.
+
+2. Un espacio en el que se ejecutan las operaciones sobre las columnas, por ejemplo, seleccionar, modificar, crear, etc. 
+
+3. Un espacio en el que se pueden indicar agrupaciones con base en las cuales se apliquen otras operaciones (group_by en dplyr)
+
+
+:::{.center}
+![Sintaxis básica. DT = objeto data.table, i = espacio en el que ocurren las operaciones de las filas (filtrar u ordenar), j = espacio en el que ocurren las operaciones sobre las columnas (seleccionar, modificar), by = espacio para hacer agrupaciones por medio de un índice](img/sintaxis.png)
+:::
+
+## Cheatsheet
+
+![](img/datatable.pdf){width="1000" height=1000}
+
+
+
+

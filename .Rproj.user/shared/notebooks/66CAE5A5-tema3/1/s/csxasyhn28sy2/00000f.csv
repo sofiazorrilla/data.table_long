@@ -1,0 +1,8 @@
+"0","#| echo: false"
+"0","data_quercus_viejos <- data_quercus[year <= 1950, ]"
+"0","dim(data_quercus_viejos)"
+"1","[1]"
+"1"," 2927"
+"1","   23"
+"1","
+"

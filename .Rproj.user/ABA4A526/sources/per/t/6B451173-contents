@@ -1,0 +1,104 @@
+---
+title: "Modificación de columnas"
+format: 
+  html:
+    page-layout: full 
+---
+```{r}
+#| echo: false
+#| warning: false
+
+library(data.table)
+plants <- fread("data/sub_100000_plantae_mexico_conCoords_specimen.csv")
+```
+Durante esta sección continuaremos trabajando con el datase de especímenes de plantas que tiene registrados la plataforma GBIF (Global Biodiversity Information Facility) para México. Pero para otros ejercicios usaremos un conjunto de datos que contiene información de la Oficina de Estadísticas de Transporte para todos los vuelos que partieron de los aeropuertos de la ciudad de Nueva York en 2014 (https://raw.githubusercontent.com/Rdatatable/data.table/master/vignettes/flights14.csv).
+
+## Selección por múltiples filtros
+
+Aquí sólo mostraremos un ejemplo de algo que se retomará en el tema 6 
+Por ejemplo si nos interesa seleccionar los datos de acuerdo a más de una característica podemos apoyarnos del operador &.
+
+```{r}
+plants[family=="Araceae" & year==1997]
+```
+
+<br>
+
+### Operaciones en j
+Pero además de aplicar filtros data.table nos permite efectuar operaciones por ejemplo contar cuántas coincidencias tenemos para nuestros criterios aplicados.
+
+```{r}
+plants[family=="Araceae" & year==1997, .N]
+```
+Es importante notar que en el primer espacio de nuestro corchete filtramos mientras en el segundo hicimos una operación. 
+Lo que hicimos nos permite saber cuántas coincidencias hay de plantas registradas en 1997 independientemente de la especie. Existen símbolos especiales como .N que nos cuenta el número de observaciones que cumplen nuestros criterios.
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Pregunta:
+¿Cuántos registros hay para el año 1983? (Utiliza .N)
+::: 
+
+::: {.callout-note collapse="true"}
+
+## Respuesta
+```{r}
+plants[year==1983, .N]
+```
+:::
+ 
+Además de esto podemos hacer operaciones, pero para esta parte usaremos otro dataset
+
+```{r}
+flights <- fread("data/flights14.csv")
+```
+
+Por ejemplo si quisieramos saber el promedio de retraso de salida de los vuelos haríamos lo que sigue
+
+```{r}
+flights[, mean(dep_delay)]
+```
+
+Ahora calcularemos el promedio de retraso de salida para todo los vuelos que salieron del aeropuerto JFK en el mes de febrero.
+
+```{r}
+flights[origin == "JFK" & month == 2L,
+        .(mean_arr = mean(arr_delay))]
+```
+
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Ahora es tu turno: Calcula el promedio de retraso de salida y entrada para todo los vuelos que salieron del aeropuerto JFK en el mes de Junio. Llama a tus nuevas columnas "mean_arr" y "mean_dep"
+
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+
+```{r}
+flights[origin == "JFK" & month == 6L,
+        .(mean_arr = mean(arr_delay), mean_dep = mean(dep_delay))]
+```
+
+::: 
+
+## Agregar nuevas columnas a nuestro data.table
+
+Ahora qué sucede si queremos generar una nueva columna dentro de nuestro data frame. Por ejemplo si estimamos la diferencia que hay entre los retrasos de salida y llegada
+
+```{r}
+flights[, dif:=dep_delay - arr_delay]
+flights
+
+```
+
+Sino quisiera agregarla esto es lo que se haría
+
+```{r}
+flights[, .(dif = dep_delay - arr_delay)]
+```
+

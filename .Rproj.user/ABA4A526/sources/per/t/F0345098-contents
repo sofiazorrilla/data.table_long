@@ -1,0 +1,217 @@
+---
+title: "Filtros y selección de columnas"
+format: 
+  html:
+    page-layout: full 
+---
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(data.table)
+```
+
+# Operaciones sobre las filas
+
+## Seleccionar por índices
+
+Similar a como se seleccionan filas en un data.frame, en un objeto data.table se pueden seleccionar filas utilizando rangos de índices. En los siguientes dos ejemplos se muestra como seleccionar las primeras dos filas de la tabla de registros. 
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+data = fread("data/head_registros.csv")
+```
+
+```{.r}
+library(data.table)
+
+
+data = fread("data/plantae_mexico_conCoords_specimen.csv")
+```
+
+```{r}
+data[1:2] 
+```
+
+<br>
+
+**Nota:** Cuando solo estamos seleccionando filas no es necesario incluir la coma al final.
+
+```{r}
+data[1:2,] 
+```
+
+<br>
+
+## Filtrar filas
+
+De acuerdo con la sintaxis del paquete, el espacio i es el lugar en el que se pueden realizar operaciones sobre las filas como los filtros. Por ejemplo, utilizando la tabla de registros de especies de plantas podríamos estar interesados en solo seleccionar aquellos registros que pertenezcan al género Quercus. 
+
+```{.r}
+data_quercus <- data[genus == "Quercus",] 
+
+dim(data_quercus)
+```
+
+```{r}
+#| echo: false
+
+data_quercus <- fread("data/data_quercus.csv")
+dim(data_quercus)
+
+```
+
+O podríamos estar interesadas en seleccionar solo los registros más viejos, los que fueron colectados antes de 1950. 
+
+```{.r}
+data_quercus_viejos <- data[genus == "Quercus" & year <= 1950,]
+
+dim(data_quercus_viejos)
+```
+
+```{r}
+#| echo: false
+data_quercus_viejos <- data_quercus[year <= 1950, ]
+dim(data_quercus_viejos)
+```
+
+
+<br>
+
+## Ordenar filas
+
+Otra función que se puede realizar en el espacio de las filas es ordenarlas. Por ejemplo, podríamos ordenar la tabla de registros del género Quercus por estado en orden alfabético.
+
+```{r}
+# Ordenar los datos de la tabla de registros de Quercus por estado en orden alfabetico
+
+ordered_data = data_quercus[order(stateProvince)]
+
+# seleccionar la columna de estado como vector y seleccionar los valores únicos
+# mostrar solo los primeros valores
+
+unique(ordered_data$stateProvince) |> head()
+```
+
+::: {.callout-note collapse="true"}
+## Reto
+
+1. Carga el archivo de registros de plantas utilizando la función fread que revisamos en el tema anterior
+2. Utiliza un filtro para quedarte con las filas que pertenezcan a un género o especie que te guste
+3. Ordena de manera descendente por año
+
+Pregunta:
+
+¿De qué año son los registros más nuevos y más viejos de la especie que escogiste? (selecciona utilizando rangos la primera y la última fila de la tabla)
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+```{.r}
+library(data.table)
+
+data = fread("data/plantae_mexico_conCoords_specimen.csv", quote="")
+
+data_quercus <- data[genus == "Quercus" & !is.na(year),] 
+
+data_quercus_ordenado <- data_quercus[order(-year)] 
+
+data_quercus_ordenado[c(1, nrow(data_quercus_ordenado)),]$year
+
+
+```
+
+```{r}
+#| echo: false
+
+data_quercus[!is.na(year),][order(-year)][c(1,.N)]$year 
+```
+:::
+
+<br>
+<br>
+
+# Operaciones sobre las columnas
+
+```{r}
+#| echo: false
+
+data = fread("data/sub_100000_plantae_mexico_conCoords_specimen.csv")
+
+```
+
+## Seleccionar columnas por índice
+
+De acuerdo con la sintaxis del paquete, el espacio j nos permite realizar operaciones sobre las columnas. Una de esas operaciones es la selección de columnas. 
+
+Se pueden seleccionar por medio de índices:
+
+```{r}
+data[,7:8,]
+```
+
+
+## Seleccionar columnas por nombre
+
+Se pueden seleccionar las columas por nombre y regresar como vector:
+
+```{r}
+data[,species] |> head()
+```
+
+Se pueden seleccionar las columnas usando una lista y regresar como tabla:
+
+```{r}
+data[,list(family,genus,species)]
+```
+
+Un atajo para no escribir `list()` es `.()`:
+
+```{r}
+data[,.(family,genus,species)]
+```
+
+Para seleccionar columnas guardadas en una variable se puede utilizar el prefijo `..`:
+
+```{r}
+variables <- c("family","genus","species")
+
+data[ , ..variables]
+```
+
+Nota: Tanto los objetos data.frame como los data.table son listas (aun cuando las vemos como tablas). El hecho de que las operaciones realizadas en el espacio j regresen listas es muy poderoso y permite hacer operaciones más complicadas más adelante.
+
+::: {.callout-note collapse="true"}
+## Reto
+
+1. Selecciona las columnas que contengan información acerca de la ubicación geográfica de los registros.
+:::
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+info_geografica <- c("countryCode", "stateProvince", "decimalLatitude", "decimalLongitude", "coordinateUncertaintyInMeters", "elevation")
+
+```{r}
+vars_info_geografica <- c("countryCode", "stateProvince", "decimalLatitude", "decimalLongitude", "coordinateUncertaintyInMeters", "elevation")
+
+data[,..vars_info_geografica,]
+```
+
+:::
+
+## Renombrar columnas
+
+En el espacio de operaciones sobre las columnas también se pueden renombrar las columnas. 
+
+```{r}
+data[, .(especie = species, genero = genus)]
+```
+
+

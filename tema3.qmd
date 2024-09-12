@@ -1,0 +1,239 @@
+---
+title: "Filtros y selección de columnas"
+format: 
+  html:
+    page-layout: full 
+---
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(tidyverse)
+library(data.table)
+```
+
+# Operaciones sobre las filas
+
+## Seleccionar por índices
+
+Similar a como se seleccionan filas en un data.frame, en un objeto data.table se pueden seleccionar filas utilizando rangos de índices. En los siguientes dos ejemplos se muestra como seleccionar las primeras dos filas de la tabla de registros. 
+
+
+```{r}
+#| echo: false
+#| warning: false
+
+data = fread("data/universal_top_spotify_songs.csv")
+```
+
+```{.r}
+library(data.table)
+
+
+data = fread("data/universal_top_spotify_songs.csv")
+```
+
+```{r}
+data[1:2,] 
+```
+
+<br>
+
+**Nota:** Cuando solo estamos seleccionando filas no es necesario incluir la coma al final.
+
+```{r}
+data[1:2] 
+```
+
+<br>
+
+## Filtrar filas
+
+De acuerdo con la sintaxis del paquete, el espacio i es el lugar en el que se pueden realizar operaciones sobre las filas como los filtros. Por ejemplo, utilizando la tabla de canciones podríamos estar interesados en solo seleccionar aquellos registros que pertenezcan a México. 
+
+```{.r}
+data_MX <- data[country == "MX",] 
+
+dim(data_MX)
+```
+
+```{r}
+#| echo: false
+
+data_MX <- data[country == "MX",] 
+
+dim(data_MX)
+
+```
+
+O podríamos estar interesadas en seleccionar solo los registros más viejos, los que fueron publicados antes del 2000. 
+
+```{.r}
+data_MX_viejos <- data[country == "MX" & album_release_date <= 2000,]
+
+dim(data_MX_viejos)
+```
+
+```{r}
+#| echo: false
+data_MX_viejos <- data[country == "MX" & album_release_date <= 2000,]
+
+dim(data_MX_viejos)
+```
+
+Operadores lógicos para hacer los filtros:
+
+|  Operador |          Comparación         |    Ejemplo    | Resultado |
+|:---------:|:----------------------------:|:-------------:|:---------:|
+| x \| y    | x Ó y es verdadero           | TRUE \| FALSE | TRUE      |
+| x & y     | x Y y son verdaderos         | TRUE & FALSE  | FALSE     |
+| !x        | x no es verdadero (negación) | !TRUE         | FALSE     |
+| isTRUE(x) | x es verdadero (afirmación)  | isTRUE(TRUE)  | TRUE      |
+
+<br>
+
+## Ordenar filas
+
+Otra función que se puede realizar en el espacio de las filas es ordenarlas. Por ejemplo, podríamos ordenar la tabla de canciones de México por qué tan bailable es.
+
+```{r}
+# Ordenar los datos de la tabla de registros de Quercus por estado en orden alfabetico
+
+ordered_data_MX = data_MX[order(danceability, decreasing = T)]
+
+# seleccionar la columna de estado como vector y seleccionar los valores únicos
+# mostrar solo los primeros valores
+
+unique(ordered_data_MX$danceability) |> head()
+```
+
+::: {.callout-note collapse="true"}
+## Reto
+
+1. Carga el archivo de canciones utilizando la función fread que revisamos en el tema anterior
+2. Utiliza un filtro para quedarte con las filas que pertenezcan al pais que te interese
+3. Ordena de manera descendente por ranking
+
+Pregunta:
+
+¿De qué rango de años son las 50 canciones más escuchadas 
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+```{r}
+#| code-fold: true
+
+data_MX_ordenado <- data_MX[order(-daily_rank)] 
+
+years <- unique(format(data_MX_ordenado$album_release_date,"%Y"))
+
+c(min(years),max(years))
+
+```
+:::
+
+<br>
+<br>
+
+# Operaciones sobre las columnas
+
+## Seleccionar columnas por índice
+
+De acuerdo con la sintaxis del paquete, el espacio j nos permite realizar operaciones sobre las columnas. Una de esas operaciones es la selección de columnas. 
+
+Se pueden seleccionar por medio de índices:
+
+```{r}
+data[,c(2,3,7),]
+```
+
+
+## Seleccionar columnas por nombre
+
+Se pueden seleccionar las columas por nombre y regresar como vector:
+
+```{r}
+data[,name] |> head()
+```
+
+Se pueden seleccionar las columnas usando una lista y regresar como tabla:
+
+```{r}
+data[,list(artists,name,album_name)]
+```
+
+Un atajo para no escribir `list()` es `.()`:
+
+```{r}
+data[,.(artists,name,album_name)]
+```
+
+Seleccionar columnas por rangos usando nombres:
+
+```{r}
+data[,spotify_id:weekly_movement]
+```
+
+Para seleccionar columnas guardadas en una variable se puede utilizar el prefijo `..`:
+
+```{r}
+variables <- c("artists","name","album_name")
+
+data[ , ..variables]
+```
+
+Nota: Tanto los objetos data.frame como los data.table son listas (aun cuando las vemos como tablas). El hecho de que las operaciones realizadas en el espacio j regresen listas es muy poderoso y permite hacer operaciones más complicadas más adelante.
+
+::: {.callout-note collapse="true"}
+## Reto
+
+A. Me gustaría tener un data frame en donde solo tuviera la información de las características de las canciones (por ejemplo: duración, energía, etc.)
+
+  1. Enlista los nombres de columnas y analiza de qué tratan 
+  2. Guarda los nombres de las columnas que solo contengan información acerca las características  en un objeto
+  3. Selecciona las columnas de la tabla data usando el objeto de nombres de columnas. 
+
+B. Genera un objeto data.table que tenga los registros del mes de septiembre 2024 y las columnas que describen las características de las cancions (utiliza un solo comando).
+
+:::
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+info_canciones <- c("duration_ms", "danceability", "energy", "loudness", "speechiness", "acousticness","instrumentalness","liveness")
+
+```{r}
+#| code-fold: true
+info_canciones <- c("duration_ms", "danceability", "energy", "loudness", "speechiness", "acousticness","instrumentalness","liveness")
+
+data[,..info_canciones,]
+
+data[format(snapshot_date, "%Y-%m") == "2024-09" , ..info_canciones]
+```
+
+:::
+
+## Deseleccionar columas
+
+Similar a las formas de seleccionar columnas podemos utilizar los operadores `-` y `!` para evitar la selección de ciertas columnas o rangos de columnas.
+
+```{r}
+data[,-c("name","artists")] %>% colnames()
+
+data[,!c("spotify_id")] %>% colnames()
+
+data[,!(key:time_signature)] %>% colnames()
+```
+
+## Renombrar columnas
+
+En el espacio de operaciones sobre las columnas también se pueden renombrar las columnas. 
+
+```{r}
+data[, .(artista = artists, song_name = name)]
+```
+
+

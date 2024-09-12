@@ -1,0 +1,38 @@
+---
+title: "Introducción y recursos"
+---
+
+## ¿Qué es? ¿Qué ventajas tiene?
+
+Es un paquete que extiende y hace más eficiente el `data.frame` de R base. De acuerdo con los creadores del [paquete](https://rdatatable.gitlab.io/data.table/index.html):
+
+> Las operaciones de manipulación de datos como subconjunto, grupo, actualización, unión, etc., están **inherentemente relacionadas**. Mantener estas operaciones juntas permite:
+
+> - una **sintaxis concisa** y consistente independientemente del conjunto de operaciones que desees realizar para lograr tu objetivo final.
+> - realizar análisis de manera **fluida** sin la carga cognitiva de tener que mapear cada operación a una función particular de un conjunto potencialmente enorme de funciones disponibles antes de realizar el análisis.
+> - **optimizar** automáticamente las operaciones internamente y de manera muy efectiva, al saber precisamente los datos requeridos para cada operación, lo que lleva a un código muy rápido y eficiente en términos de memoria.
+
+> En resumen, si estás interesado en **reducir** enormemente el **tiempo de programación y computación**, entonces este paquete es para ti.
+
+> ([Vigneta de introducción a data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html))
+
+
+## Comparaciones con otros paquetes
+
+[Benchmarks](https://duckdblabs.github.io/db-benchmark/)
+
+## Instalación
+
+```{r}
+#| eval: false
+
+install.packages("data.table")
+```
+
+## Recursos
+
+### Comunidad 
+ - [StackOverflow data.table](https://stackoverflow.com/questions/tagged/data.table)
+ - [Wiki](https://github.com/Rdatatable/data.table/wiki)
+ - [Vignettes](https://rdatatable.gitlab.io/data.table/index.html)
+ - [Tutorial recomendado](https://franknarf1.github.io/r-tutorial/_book/tables.html#program-cols)

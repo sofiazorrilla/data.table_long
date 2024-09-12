@@ -1,0 +1,258 @@
+---
+title: "Importar y exportar datos"
+---
+
+## Crear un objeto data.table
+
+Un objeto data.table se puede definir, por ejemplo:
+
+```{r}
+library(data.table)
+
+DT = data.table(
+  ID = c("b","b","b","a","a","c"),
+  a = 1:6,
+  b = 7:12,
+  c = 13:18
+)
+
+DT
+```
+
+<br>
+
+::: {.callout-note collapse="true"}
+## Reto
+
+Imaginemos que queremos crear una simulación de una base de datos de secuencias aleatorias. La tabla que queremos al final va a tener dos columnas, la primera es un número identificador de cada secuencia y la segunda la secuencia aleatoria de tamaño 300. Por ejemplo, la siguiente tabla muestra las primeras 10 filas del resultado esperado. 
+
+```{r}
+#| echo: false 
+#| message: false
+
+library(data.table)
+
+secuencias <- data.table(
+                id = seq(1,10000), 
+                sequencia = sapply(seq(1, 10000), function(x) paste(sample(c("A", "T", "C", "G"), 100, replace = TRUE), collapse = "")))
+
+head(secuencias) |> knitr::kable()
+
+```
+
+**Ejercicio:** Genera un objeto data.table en el que la primera columna sea un id de secuencia y la segunda sea una secuencia (aleatoria) de tamaño 300 caracteres
+
+:::
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+```{r}
+#| code-fold: true
+secuencias <- data.table(
+                id = seq(1,10000), 
+                sequencia = sapply(seq(1, 10000), function(x) paste(sample(c("A", "T", "C", "G"), 100, replace = TRUE), collapse = "")))
+
+head(secuencias)
+```
+:::
+
+
+<br>
+
+## Importar y exportar datos de archivos
+
+Las funciones para importar (`fread`) y exportar (`fwrite`) tienen las siguientes opciones principales:
+
+- `x`: el objeto que queremos exportar.
+
+- `file`: ruta para escribir/leer el archivo.
+
+- `sep`: el delimitador entre columnas.
+
+Nota: La función tiene muchos argumentos que pueden ayudarte a personalizar el proceso de cargar datos en R. 
+
+```{.r}
+fread(input, file, text, cmd, sep="auto", sep2="auto", dec=".", quote="\"",
+     nrows=Inf, header="auto",
+     na.strings=getOption("datatable.na.strings","NA"),  # due to change to ""; see NEWS
+     stringsAsFactors=FALSE, verbose=getOption("datatable.verbose", FALSE),
+     skip="__auto__", select=NULL, drop=NULL, colClasses=NULL,
+     integer64=getOption("datatable.integer64", "integer64"),
+     col.names,
+     check.names=FALSE, encoding="unknown",
+     strip.white=TRUE, fill=FALSE, blank.lines.skip=FALSE,
+     key=NULL, index=NULL,
+     showProgress=getOption("datatable.showProgress", interactive()),
+     data.table=getOption("datatable.fread.datatable", TRUE),
+     nThread=getDTthreads(verbose),
+     logical01=getOption("datatable.logical01", FALSE),  # due to change to TRUE; see NEWS
+     keepLeadingZeros = getOption("datatable.keepLeadingZeros", FALSE),
+     yaml=FALSE, autostart=NA, tmpdir=tempdir(), tz="UTC"
+     )
+
+```
+
+### Conjunto de datos
+
+Muchos de los ejemplos de este curso los haremos utilizando la tabla de las 50 mejores canciones para 73 paises de acuerdo a Spotify. La tabla la pueden descargar en [kaggle](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data) y se actualiza todos los días. La tabla que yo utilicé para este curso fue descargada el 8 de septiembre 2024. La tabla:
+- Tiene 25 columnas y 1,179,453 registros de canciones
+- Tiene registros desde el 2023-10-18 al 2024-09-08
+- Pesa 279 MB. 
+
+**Nota:** `fread()` también permite leer archivos comprimidos `.gz`
+
+```{.r}
+library(data.table)
+
+data = fread("data/universal_top_spotify_songs.csv", quote="")
+
+head(data) |> knitr::kable()
+```
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(data.table)
+
+fread("data/universal_top_spotify_songs.csv") |> head() |> knitr::kable()
+
+```
+
+<br>
+
+::: {.callout-note collapse="true"}
+## Reto
+
+
+Utiliza el código anterior para cargar la tabla de canciones en tu computadora. 
+
+Nota: Si quieres experimentar con tablas más grandes en la página de Kaggle hay muchas opciones. Por ejemplo: [Spotify Charts](https://www.kaggle.com/datasets/dhruvildave/spotify-charts) que contiene las publicaciones de Top 200 y Top 50 globales desde 1 de enero 2017 (pesa 3.5 GB) y tiene 9 columnas. 
+
+:::
+
+## Exportar
+
+data.table también tiene una función optimizada para escribir los datos con los que estamos trabajando en forma de archivo. Los argumentos básicos son:
+
+- `x` = objeto que se quiere exportar como archivo
+- `file` = nombre del archivo
+- `sep` = caracter que se quiere utilizar como delimitador de campo
+- `compress` = debido a que podríamos estar trabajando con tablas de datos muy grandes podemos escribir los archivos comprimidos. Se puede especificar "gzip" o "auto" y utilizar la extension `.gz` en el nombre del archivo para escribir un archivo comprimido, la opción "none" nos permite escribir archivos sin comprimir. 
+
+**Ejemplo**: podemos escribir la tabla DT que creamos al principio de la sección:
+
+```{.r}
+fwrite(DT, "data/testDT.csv", sep = ",")
+```
+
+<br>
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Exporta la tabla de canciones como un archivo comprimido.
+
+:::
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+```{.r}
+fwrite(data, "data/universal_top_spotify_songs.csv.gz", sep = ",", compress = "auto")
+```
+
+:::
+
+## Velocidad dplyr vs data.table
+
+A continuación se muestra la comparación de un ejemplo de lectura de una tabla de 3062756 filas y 50 columnas utilizando la función de R base `read.csv` y `fread`. 
+
+```{.r}
+
+library(rbenchmark)
+
+test = benchmark("r base" = {
+            read.csv("big_data/plantae_mexico_conCoords_specimen.csv")
+          },
+          "data.table" = {
+            fread("big_data/plantae_mexico_conCoords_specimen.csv")
+          },
+          replications = 10,
+          columns = c("test", "replications", "elapsed",
+                      "relative", "user.self", "sys.self"))
+
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| eval: true
+
+read.csv("data/benchmark_results.csv") |> knitr::kable()
+```
+
+::: {.callout-note collapse="true"}
+## Reto
+
+Si quieres, puedes revisar el tiempo que te toma cargar la tabla de canciones de spotify utilizando read.csv y fread. Utiliza el comando de benchmark de la paquetería rbenchmark para contar el tiempo. 
+
+:::
+
+<br>
+
+## data.frame - data.table
+
+El objeto de data.table es un objeto basado en un data.frame, por lo tanto es compatible con las funciones de R base que trabajan con data.frame. 
+
+```{.r}
+str(data)
+```
+```
+Classes ‘data.table’ and 'data.frame':  1179453 obs. of  25 variables:
+ $ spotify_id        : chr  "2plbrEY59IikOBgBGLjaoe" "6dOtVTDdiauQNBQEDOtlAB" "5G2f63n7IPVPPjfNIGih7Q" "2HRqTpkrJO5ggZyyK6NPWz" ...
+ $ name              : chr  "Die With A Smile" "BIRDS OF A FEATHER" "Taste" "Espresso" ...
+ $ artists           : chr  "Lady Gaga, Bruno Mars" "Billie Eilish" "Sabrina Carpenter" "Sabrina Carpenter" ...
+ $ daily_rank        : int  1 2 3 4 5 6 7 8 9 10 ...
+ $ daily_movement    : int  0 0 0 46 0 2 43 1 -2 1 ...
+ $ weekly_movement   : int  0 0 0 46 0 1 43 0 41 -1 ...
+ $ country           : chr  "" "" "" "" ...
+ $ snapshot_date     : IDate, format: "2024-09-08" "2024-09-08" ...
+ $ popularity        : int  97 100 94 83 94 96 84 97 77 91 ...
+ $ is_explicit       : logi  FALSE FALSE FALSE TRUE FALSE FALSE ...
+ $ duration_ms       : int  251667 210373 157279 175459 170887 195824 186365 218423 190427 180304 ...
+ $ album_name        : chr  "Die With A Smile" "HIT ME HARD AND SOFT" "Short n' Sweet" "Short n' Sweet" ...
+ $ album_release_date: IDate, format: "2024-08-16" "2024-05-17" ...
+ $ danceability      : num  0.521 0.747 0.674 0.699 0.66 0.924 0.675 0.7 0.466 0.472 ...
+ $ energy            : num  0.592 0.507 0.907 0.776 0.756 0.668 0.586 0.582 0.872 0.471 ...
+ $ key               : int  6 2 3 0 0 11 9 11 7 10 ...
+ $ loudness          : num  -7.78 -10.17 -4.09 -5.28 -3.74 ...
+ $ mode              : int  0 1 1 1 0 1 1 0 1 1 ...
+ $ speechiness       : num  0.0304 0.0358 0.064 0.0293 0.032 0.0469 0.0531 0.0356 0.0336 0.0603 ...
+ $ acousticness      : num  0.308 0.2 0.101 0.131 0.00289 0.446 0.257 0.0502 0.0156 0.151 ...
+ $ instrumentalness  : num  0.00 6.08e-02 0.00 5.36e-06 0.00 5.94e-04 0.00 0.00 0.00 0.00 ...
+ $ liveness          : num  0.122 0.117 0.297 0.205 0.193 0.0678 0.104 0.0881 0.121 0.14 ...
+ $ valence           : num  0.535 0.438 0.721 0.708 0.838 0.787 0.621 0.785 0.806 0.219 ...
+ $ tempo             : num  158 105 113 104 116 ...
+ $ time_signature    : int  3 4 4 4 4 4 4 4 4 3 ...
+ - attr(*, ".internal.selfref")=<externalptr> 
+
+```
+
+Sin embargo, los objetos se pueden cambiar de clase utilizando `as.data.frame` y `setDF` para convertir a data frame o `as.data.table` y `setDT` para convertir a data.table. Por ejemplo: 
+
+```{r}
+library(magrittr)
+
+# Recuerda que DT es el objeto data.table que definimos al principio de la lección
+
+as.data.frame(DT) %>% class()
+
+as.data.frame(DT) %>% as.data.table() %>% class()
+
+as.data.frame(DT) %>% setDT(DT) %>% class()
+```
+
+La diferencia entre las funciones `set` y las funciones `as.` es que la primera modifica directamente la tabla de referencia guardada en la memoria (no genera una copia) mientras que la segunda genera una nueva copia del objeto. 
+

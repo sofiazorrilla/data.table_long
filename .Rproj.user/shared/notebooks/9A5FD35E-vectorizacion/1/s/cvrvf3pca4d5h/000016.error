@@ -1,0 +1,1 @@
+{"frames":[{"func":"stopifnot(`m must be symmetric` = m == t(m))","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0},{"func":"stop(simpleError(msg, call = if (p <- sys.parent(1L)) sys.call(p)))","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error: m must be symmetric\n"}

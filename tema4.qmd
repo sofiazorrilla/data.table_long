@@ -1,0 +1,169 @@
+---
+title: "Modificación de columnas"
+format: 
+  html:
+    page-layout: full 
+---
+
+```{r}
+#| echo: false
+library(data.table)
+library(magrittr)
+data = fread("data/universal_top_spotify_songs.csv")
+```
+
+
+
+### Operaciones en j
+
+data.table nos permite efectuar operaciones sobre las columnas, por ejemplo, contar cuántas coincidencias tenemos para nuestros criterios aplicados.
+
+```{r}
+data[country == "MX" & acousticness > 0.5, length(spotify_id)]
+
+data[country == "MX" & acousticness > 0.5, .N]
+```
+
+Existen símbolos especiales como .N que nos cuenta el número de observaciones que cumplen nuestros criterios para el número de grupos que hemos definido. En este caso todas las observaciones pertenecen al mismo grupo.
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Pregunta:
+¿Cuántas canciones que se hayan publicado de antes del 2000 han estado dentro del top 50? (Utiliza .N)
+::: 
+
+::: {.callout-note collapse="true"}
+
+## Respuesta
+```{r}
+data[album_release_date<2000,.N]
+```
+:::
+ 
+
+Por ejemplo si quisieramos saber el promedio de duración en minutos de las canciones
+
+```{r}
+data[, duration_ms/1000/60] %>% mean()
+
+
+data[,mean(duration_ms/1000/60)]
+
+```
+
+Además podemos combinar filtros sobre las filas y acciones sobre las columnas. Por ejemplo, si queremos calcular el promedio de popularidad de las canciones en el top 50 de México. Primero hacemos un filtro de las canciones populares en México y después obtenemos el promedio de popularidad únicamente de estas filas.
+
+>> Nota: La popularidad de una canción es un valor entre 0 y 100, donde 100 indica la mayor popularidad. La popularidad se calcula mediante un algoritmo y se basa, en su mayoría, en el número total de reproducciones que ha tenido la canción y en cuán recientes han sido esas reproducciones.
+En términos generales, las canciones que se reproducen mucho actualmente tendrán una popularidad mayor que las canciones que se reprodujeron mucho en el pasado. Las canciones duplicadas (por ejemplo, la misma canción de un sencillo y de un álbum) se califican de manera independiente. La popularidad de los artistas y los álbumes se deriva matemáticamente de la popularidad de las canciones. Nota: el valor de popularidad puede no reflejar la popularidad real en algunos días, ya que no se actualiza en tiempo real.
+
+```{r}
+data[country == "MX", mean(popularity)]
+```
+
+Debido a que tanto el filtro como la función sobre la columna están en el mismo comando, data.table sabe el total de las operaciones y puede hacer más eficiente la velocidad y el uso de la memoria cuando las ejecuta.
+
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Calcula el promedio y desviación estandar en los movimientos diarios de ranking (el cambio en las clasificaciones en comparación con el día anterior) en las canciones populares de México. 
+
+
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+
+```{r}
+#| code-fold: true
+data[country == "MX",
+        c(mean(daily_movement), sd(daily_movement))]
+```
+
+::: 
+
+## Agregar nuevas columnas a nuestro data.table 
+
+Hasta ahora estabamos aplicando funciones y obtuvimos vectores o números como resultado pero podemos utilizar el espacio j para crear nuevas columnas en nuestras tablas. Por ejemplo, podemos guardar la duración de cada canción en minutos. 
+
+```{r}
+ data[, .(duration_min = duration_ms/1000/60)]
+```
+
+
+Ahora qué sucede si queremos generar la nueva columna dentro de nuestra tabla original. Por ejemplo si estimamos la diferencia en tiempo desde que el album fue publicado y la fecha en la que apareció entre el top 50
+
+**Nota:** El operador `:=` sirve para modificar tablas guardadas en la memoria directamente (modify in place)
+
+```{r}
+data[, date_dif := snapshot_date - album_release_date]
+
+data
+
+```
+
+Para agregar múltiples columnas en la tabla original se utiliza la siguientes sintaxis 
+
+```
+dt[,`:=`(col1 = funcion, col2 = funcion)]
+
+dt[, c("col1","col2","col3") := list(val1,val2,val3)]
+```
+
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+1. Agrega una nueva columna (`year_release`) a la tabla original que solo muestre el año de publicación del album de la canción
+
+2. En un solo comando: genera una columna de diferencia entre la fecha de publicación y la fecha en la que la canción apareció en el top50. Además generar una columna de duración de la canción en minutos
+
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+### Ejercicio 1 
+```{r}
+#| code-fold: true
+
+# Ejercicio 1
+data[, year_release := format(album_release_date, "%Y")]
+
+colnames(data)
+head(data[,.(year_release)])
+
+```
+
+### Ejercicio 2
+```{r}
+#| code-fold: true
+
+
+# Ejercicio 2
+
+data[, c("days_until_top50","duration_min") := .(snapshot_date-album_release_date, duration_ms/1000/60)]
+
+colnames(data)
+data[,.(days_until_top50,duration_min)]
+```
+::: 
+
+
+<!-- ## Indices
+
+```{.r}
+setkeyv(data,"country")
+
+data["Mexico"]
+
+data["Mexico", nomatch = NULL]
+
+data[country == "Mexico"]
+
+data[,.N]
+``` -->
+
+

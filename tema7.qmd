@@ -1,0 +1,155 @@
+---
+title: "Uniones entre tablas"
+---
+
+## Función `merge`
+
+Hay dos formas de escribir uniones entre tablas usando `data.table`. La primera es mediante la función `merge()` de r base. Los argumentos básicos de esta función son:
+
+```
+merge(x, y, by = intersect(names(x), names(y)),
+      by.x = by, by.y = by, all = FALSE, all.x = all, all.y = all,
+      sort = TRUE, suffixes = c(".x",".y"), no.dups = TRUE,
+      incomparables = NULL, ...)
+
+```
+
+`x`, `y` = son los objetos data.table que se quieren unir
+
+`by`, `by.x`, `by.y` = nombres de las columnas que funcionan como índice para hacer la unión. Cuando ambas tablas tienen el mismo nombre de columna se utiliza by, cuando no, se puede especificar el nombre en x (by.x) y el nombre en y (by.y)
+
+`all`, `all.x`, `all.y` = especifican el tipo de unión. all = T es para hacer full join (mantiene todas las filas de ambas tablas), all.x = T es para hacer left join (mantiene todas las filas de la tabla x), all.y es para hacer right join (mantiene todas las filas de y), all = F es para hacer inner join (solo mantiene las filas que están en ambas tablas)
+
+
+
+```{r}
+#| echo: true
+
+library(data.table)
+
+dt1 = data.table(id = seq(1,10), letter1 = LETTERS[sample(1:10, replace = T)])
+
+dt2 = data.table(id = seq(6,15), letter2 = LETTERS[sample(1:10, replace = T)])
+
+dt1
+dt2
+
+# inner join
+merge(dt1,dt2,by = "id")
+
+# left join
+merge(dt1,dt2,by = "id", all.x = T)
+
+# right join
+merge(dt1,dt2,by = "id", all.y = T)
+
+# full join
+merge(dt1,dt2,by = "id", all = T)
+```
+
+
+## Sintaxis de `data.table`
+
+La segunda forma de hacer uniones entre tablas es usando la sintaxis de data.table. 
+
+```
+DT1[DT2, nomatch = 0]
+```
+
+Si lo traducimos a la sintaxis de la función anterior entonces la tabla que está por fuera es `x`, la tabla que está por dentro es `y` y el argumento `nomatch` te permite indicar qué hacer con las claves para las que no encuentra coincidencia en ambas tablas. Cuando `nomatch = 0` no incluye las claves que no se comparten entre tablas. 
+
+```{r}
+
+# inner join
+dt1[dt2, on = "id", nomatch=0]
+
+# left join
+dt1[dt2, on = "id"]
+
+# right join
+dt2[dt1, on = "id"]
+
+```
+
+
+## Ejercicio
+
+Queremos averiguar cuántos registros y de cuántas especies de algún género de plantas hay de cada categoría de conservación (IUCN) para México. 
+
+Con lo aprendido en los temas anteriores podemos generar un subconjunto de la tabla de registros que solo tenga los registros de un género (por ejemplo para el género Quercus).
+
+**Paso 1.** Filtra la tabla de registros de plantas para México para quedarte con la información de algún género que te guste.
+
+Además, encontramos que utilizando el paquete `rredlist` podemos buscar el estatus de conservación de la IUCN para algunas especies que nos interesen con la función `rl_search`. 
+
+El siguiente código muestra una forma para obtener el estatus de conservación. Lo que hace es buscar los resultados en la base de datos de la lista roja para cada especie en el subconjunto de registros de encinos de la tabla de registros de plantas para México. 
+
+```{r}
+#| eval: false 
+
+library("rredlist")
+library("magrittr")
+
+data = fread("data/data_quercus.csv")
+
+token = "9bb4facb6d23f48efbf424bb05c0c1ef1cf6f468393bc745d42179ac4aca5fee"
+
+sp_list = unique(data$species)
+sp_list = sp_list[which(sp_list != "")] # quitar elementos vacios
+
+red_list = list()
+
+for (i in sp_list) {
+        red_list[[i]] <- rl_search(i, key = token)$result
+}
+
+# seleccionar columnas útiles
+iucn_data = do.call(rbind,red_list) %>% select(scientific_name, category, population_trend)
+
+write.csv(iucn_data, "data/iucn_data.csv", row.names = F)
+
+```
+
+**Paso 2:** Utiliza el código anterior para generar la tabla de estados de conservación para las especies del género que elegiste.
+
+**Paso 3:** Une la tabla de los registros del genero que escogiste con la de estados de conservación
+
+**Paso 4:** Haz un resumen del número de registros y el número de especies que hay para cada estado de conservación. Por ejemplo, para los encinos los resultados son los siguientes:
+
+```{r}
+#| echo: false
+
+data = fread("data/data_quercus.csv")
+
+dataIUCN = fread("data/iucn_data.csv")
+setnames(dataIUCN, "scientific_name", "species") # renombrar la columna de scientific_name a species porque es la clave que ambas tablas tienen en comun
+
+# Hacer un left join para añadir la información de la iucn a la tabla de datos
+join = data[dataIUCN, on = "species"]
+
+# Hacer el resumen, primero contando los registros agrupando por especie y por categoría. Después, utilizando una cadena y solo agrupamos por categoría, la suma de las filas dentro de un grupo sería el número de registros que pertenecen a la categoría y el número de filas de cada grupo corresponde al número de especies en la categoría.
+
+join[,.N,by=.(species,category)][,.(numero_registros = sum(N),numero_sp = .N),by = category] |> knitr::kable()
+
+```
+
+::: {.callout-note collapse="true"}
+## Respuesta
+
+```{.r}
+#| echo: false
+
+data = fread("data/data_quercus.csv")
+
+dataIUCN = fread("data/iucn_data.csv")
+setnames(dataIUCN, "scientific_name", "species") # renombrar la columna de scientific_name a species porque es la clave que ambas tablas tienen en comun
+
+# Hacer un left join para añadir la información de la iucn a la tabla de datos
+join = data[dataIUCN, on = "species"]
+
+# Hacer el resumen, primero contando los registros agrupando por especie y por categoría. Después, utilizando una cadena y solo agrupamos por categoría, la suma de las filas dentro de un grupo sería el número de registros que pertenecen a la categoría y el número de filas de cada grupo corresponde al número de especies en la categoría.
+
+join[,.N,by=.(species,category)][,.(numero_registros = sum(N),numero_sp = .N),by = category] 
+
+```
+:::

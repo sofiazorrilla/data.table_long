@@ -1,0 +1,14 @@
+{
+  "hash": "44f1302dfd3fbd1d4ac017d8020e2f03",
+  "result": {
+    "markdown": "---\ntitle: \"Introducción y recursos\"\n---\n\n\n## ¿Qué es? ¿Qué ventajas tiene?\n\nEs un paquete que extiende y hace más eficiente el `data.frame` de R base. De acuerdo con los creadores del [paquete](https://rdatatable.gitlab.io/data.table/index.html):\n\n> Las operaciones de manipulación de datos como subconjunto, grupo, actualización, unión, etc., están **inherentemente relacionadas**. Mantener estas operaciones juntas permite:\n\n> - una **sintaxis concisa** y consistente independientemente del conjunto de operaciones que desees realizar para lograr tu objetivo final.\n> - realizar análisis de manera **fluida** sin la carga cognitiva de tener que mapear cada operación a una función particular de un conjunto potencialmente enorme de funciones disponibles antes de realizar el análisis.\n> - **optimizar** automáticamente las operaciones internamente y de manera muy efectiva, al saber precisamente los datos requeridos para cada operación, lo que lleva a un código muy rápido y eficiente en términos de memoria.\n\n> En resumen, si estás interesado en **reducir** enormemente el **tiempo de programación y computación**, entonces este paquete es para ti.\n\n> ([Vigneta de introducción a data.table](https://cran.r-project.org/web/packages/data.table/vignettes/datatable-intro.html))\n\n\n## Comparaciones con otros paquetes\n\n[Benchmarks](https://duckdblabs.github.io/db-benchmark/)\n\n## Instalación\n\n\n::: {.cell}\n\n```{.r .cell-code}\ninstall.packages(\"data.table\")\n```\n:::\n\n\n## Recursos\n\n### Comunidad \n - [StackOverflow data.table](https://stackoverflow.com/questions/tagged/data.table)\n - [Wiki](https://github.com/Rdatatable/data.table/wiki)\n - [Vignettes](https://rdatatable.gitlab.io/data.table/index.html)\n - [Tutorial recomendado](https://franknarf1.github.io/r-tutorial/_book/tables.html#program-cols)\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

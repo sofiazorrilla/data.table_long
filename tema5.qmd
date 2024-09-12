@@ -1,0 +1,90 @@
+---
+title: "Agrupación y cadenas de operaciones"
+format: 
+  html:
+    page-layout: full 
+---
+
+Ahora continuaremos usando el dataset de las plantas para sacar datos considerando agrupaciones. 
+Por ejemplo podemos estimar cuántas veces aparece una canción entre las top 50.
+
+```{r}
+#| echo: false
+library(data.table)
+library(magrittr)
+library(ggplot2)
+
+data = fread("data/universal_top_spotify_songs.csv")
+```
+
+```{r}
+data[,.N,by = name]
+```
+
+
+Se pueden usar múltiples factores en las agrupaciones. Por ejemplo, cuantas veces aparece una canción de su album particular por pais.
+
+```{r}
+times_song_per_album_per_country <- data[,.N,by = .(album_name,name,country)] 
+
+```
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+1. Genera una tabla en la que calcules el número de paises en el que un album estuvo en el top 50
+2. Haz una gráfica para visualizar los resultados
+
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+```{r}
+#| code-fold: true
+songs_per_album_per_country <- times_song_per_album_per_country[,.(n_songs = .N),by = .(album_name,country)]
+
+countries_per_album <- songs_per_album_per_country[,.(n_countries = .N), by = album_name] 
+
+countries_per_album %>% 
+  ggplot(aes(x = n_countries))+
+    geom_histogram(bins = 50)+
+    theme_bw()
+```
+
+:::
+
+## Cadenas de operaciones
+
+Una función muy importante del paquete es la capacidad de encadenar operaciones en un mismo comando sin necesidad de guardar el resultado en algun objeto. 
+
+Es una función similar al uso del pipe `%>%` o `|>` en tidyverse o rbase. En data table se pueden evaluar una serie de expresiones una después de la otra escribiendolas entre corchetes de esta manera:
+
+```
+DT[ ... ][ ... ][ ... ]
+```
+o de forma vertical
+
+```
+DT[ ...
+   ][ ...
+     ][ ...
+       ]
+```
+
+Por ejemplo, recapitulando temas anteriores ¿cómo contarías el número de paises en los que una canción ha estado en el top 50?
+
+```{r}
+
+data[,.N, by = .(name,country)][,.(ncountry = .N), by = name]
+
+```
+
+
+En realidad los corchetes consecutivos es una funcionalidad que viene desde R base. Por ejemplo, podemos seleccionar las primeras 10 filas del df data y después seleccionar las primeras dos. 
+
+
+```{r}
+
+as.data.frame(data)[1:10,][1:2,]
+
+```

@@ -1,0 +1,7 @@
+"0","as.data.frame(DT) %>% setDT(DT) %>% class()
+"
+"1","[1]"
+"1"," ""data.table"""
+"1"," ""data.frame"""
+"1","
+"
