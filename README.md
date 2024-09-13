@@ -36,6 +36,9 @@ Repositorio de taller de introducción al paquete data.table
     - ¿Qué es y para qué sirve?
     - Ejemplos
 
+## Segunda Sesión 
+---
+
 7. Unión de tablas
     - Sintaxis data.table
     - Función merge 
