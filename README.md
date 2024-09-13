@@ -1,6 +1,24 @@
 # data.table
 Repositorio de taller de introducción al paquete data.table 
 
+## Requisitos
+1. Principalmente necesitarás instalar el paquete data.table. Sin embargo, hay algunos paquetes adicionales que debes revisar que tengas:
+   ```
+    # Lista de paquetes que queremos asegurarnos que estén instalados
+    packages <- c("data.table", "magrittr", "dplyr", "ggplot2")
+    
+    # Función para instalar paquetes si no están ya instalados
+    install_if_missing <- function(package) {
+      if (!require(package, character.only = TRUE)) {
+        install.packages(package)
+        library(package, character.only = TRUE)
+      }
+    }
+    
+    # Revisa cada paquete y lo instala si es necesario
+    sapply(packages, install_if_missing)
+   ```
+
 ## Primera sesión 
 
 1. Introducción
