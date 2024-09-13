@@ -34,7 +34,7 @@ Repositorio de taller de introducción al paquete data.table
 # download.file(url = "https://github.com/sofiazorrilla/data.table_long/raw/main/data/universal_top_spotify_songs.csv.gz", destfile = "data/universal_top_spotify_songs.csv.gz")
 
 # Descarga el script con los comandos del tutorial
-# download.file(url = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/main/scripts/script_ejemplos_ejercicios.R", destfile = "data/script_ejemplos_ejercicios.R")
+# download.file(url = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/main/scripts/script_ejemplos_ejercicios.R", destfile = "script_ejemplos_ejercicios.R")
 
 ```
 2. Abre el siguiente [Etherpad](https://etherpad.wikimedia.org/p/data.table_ejercicios) para pegar las respuestas de los ejercicios del taller conforme los vayamos haciendo.
