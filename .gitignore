@@ -2,6 +2,8 @@
 # Ignorar la tabla grande descomprimida
 data/universal_top_spotify_songs.csv
 
+# Ignorar las respuestas de los ejercicios
+scripts/script_ejemplos_ejercicios_respuestas.R
 
 
 
