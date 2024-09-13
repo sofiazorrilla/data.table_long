@@ -18,7 +18,7 @@ Repositorio de taller de introducción al paquete data.table
     # Revisa cada paquete y lo instala si es necesario
     sapply(packages, install_if_missing)
    ```
-Datos para la primera sesión: [Top Spotify Songs in 73 Countries](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data)
+2. Datos para la primera sesión: [Top Spotify Songs in 73 Countries](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data)
 
 ## Primera sesión 
 
