@@ -230,7 +230,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#cadenas-de-operaciones" id="toc-cadenas-de-operaciones" class="nav-link active" data-scroll-target="#cadenas-de-operaciones">Cadenas de operaciones</a></li>
+  <li><a href="#agrupación-por-expresión" id="toc-agrupación-por-expresión" class="nav-link active" data-scroll-target="#agrupación-por-expresión">Agrupación por expresión</a></li>
+  <li><a href="#cadenas-de-operaciones" id="toc-cadenas-de-operaciones" class="nav-link" data-scroll-target="#cadenas-de-operaciones">Cadenas de operaciones</a></li>
   </ul>
 </nav>
     </div>
@@ -327,10 +328,74 @@ Respuesta
 </div>
 </div>
 </div>
+<section id="agrupación-por-expresión" class="level2">
+<h2 class="anchored" data-anchor-id="agrupación-por-expresión">Agrupación por expresión</h2>
+<p>El espacio <code>by</code> también nos permite formar los grupos directamente de una expresión. Por ejemplo, si quisieramos contar el número de canciones en cada pais que tienen una popularidad mayor a 80.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data[,.N,by <span class="ot">=</span> .(country,<span class="at">PopAbove80 =</span> popularity <span class="sc">&gt;</span> <span class="dv">80</span>)] <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   country PopAbove80     N
+    &lt;char&gt;     &lt;lgcl&gt; &lt;int&gt;
+1:               TRUE 14869
+2:              FALSE  1138
+3:      ZA      FALSE 10786
+4:      ZA       TRUE  5244
+5:      VN       TRUE  2622
+6:      VN      FALSE 13634</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Calcula cuántas veces una canción ha sido ranqueada como la número 1 (para cualquier pais). Muestra las 5 canciones que hayan tenido el ranking 1 más veces.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>freq_num1 <span class="ot">&lt;-</span> data[,.N,by <span class="ot">=</span> .(name,<span class="at">num1 =</span> daily_rank <span class="sc">==</span> <span class="dv">1</span>)]</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>freq_num1[num1 <span class="sc">==</span> T] <span class="sc">%&gt;%</span> .[<span class="fu">order</span>(<span class="sc">-</span>N)] <span class="sc">%&gt;%</span> .[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           name   num1     N
+                         &lt;char&gt; &lt;lgcl&gt; &lt;int&gt;
+1:                         LUNA   TRUE  1015
+2:                          Who   TRUE   624
+3:   i like the way you kiss me   TRUE   570
+4: Si Antes Te Hubiera Conocido   TRUE   531
+5:                    La Diabla   TRUE   505</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
 <section id="cadenas-de-operaciones" class="level2">
 <h2 class="anchored" data-anchor-id="cadenas-de-operaciones">Cadenas de operaciones</h2>
 <p>Una función muy importante del paquete es la capacidad de encadenar operaciones en un mismo comando sin necesidad de guardar el resultado en algun objeto.</p>
-<p>Es una función similar al uso del pipe <code>%&gt;%</code> o <code>|&gt;</code> en tidyverse o rbase. En data table se pueden evaluar una serie de expresiones una después de la otra escribiendolas entre corchetes de esta manera:</p>
+<p>Es una función que se puede entender de manera similar al uso del pipe <code>%&gt;%</code> o <code>|&gt;</code> en tidyverse o rbase. En data table se pueden evaluar una serie de expresiones una después de la otra escribiendolas entre corchetes de esta manera:</p>
 <pre><code>DT[ ... ][ ... ][ ... ]</code></pre>
 <p>o de forma vertical</p>
 <pre><code>DT[ ...
@@ -339,7 +404,7 @@ Respuesta
        ]</code></pre>
 <p>Por ejemplo, recapitulando temas anteriores ¿cómo contarías el número de paises en los que una canción ha estado en el top 50?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>data[,.N, by <span class="ot">=</span> .(name,country)][,.(<span class="at">ncountry =</span> .N), by <span class="ot">=</span> name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data[,.N, by <span class="ot">=</span> .(name,country)][,.(<span class="at">ncountry =</span> .N), by <span class="ot">=</span> name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            name ncountry
                           &lt;char&gt;    &lt;int&gt;
@@ -358,7 +423,7 @@ Respuesta
 </div>
 <p>En realidad los corchetes consecutivos es una funcionalidad que viene desde R base. Por ejemplo, podemos seleccionar las primeras 10 filas del df data y después seleccionar las primeras dos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(data)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,][<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(data)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,][<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              spotify_id               name               artists daily_rank daily_movement weekly_movement country
 1 2plbrEY59IikOBgBGLjaoe   Die With A Smile Lady Gaga, Bruno Mars          1              0               0        

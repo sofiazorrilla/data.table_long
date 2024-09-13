@@ -53,11 +53,38 @@ countries_per_album %>%
 
 :::
 
+## Agrupación por expresión 
+
+El espacio `by` también nos permite formar los grupos directamente de una expresión. Por ejemplo, si quisieramos contar el número de canciones en cada pais que tienen una popularidad mayor a 80.
+
+```{r}
+data[,.N,by = .(country,PopAbove80 = popularity > 80)] %>% head()
+```
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Calcula cuántas veces una canción ha sido ranqueada como la número 1 (para cualquier pais). Muestra las 5 canciones que hayan tenido el ranking 1 más veces.
+
+::: 
+
+::: {.callout-note collapse="true"}
+## Respuesta
+```{r}
+#| code-fold: true
+
+freq_num1 <- data[,.N,by = .(name,num1 = daily_rank == 1)]
+freq_num1[num1 == T] %>% .[order(-N)] %>% .[1:5]
+
+```
+
+:::
+
 ## Cadenas de operaciones
 
 Una función muy importante del paquete es la capacidad de encadenar operaciones en un mismo comando sin necesidad de guardar el resultado en algun objeto. 
 
-Es una función similar al uso del pipe `%>%` o `|>` en tidyverse o rbase. En data table se pueden evaluar una serie de expresiones una después de la otra escribiendolas entre corchetes de esta manera:
+Es una función que se puede entender de manera similar al uso del pipe `%>%` o `|>` en tidyverse o rbase. En data table se pueden evaluar una serie de expresiones una después de la otra escribiendolas entre corchetes de esta manera:
 
 ```
 DT[ ... ][ ... ][ ... ]

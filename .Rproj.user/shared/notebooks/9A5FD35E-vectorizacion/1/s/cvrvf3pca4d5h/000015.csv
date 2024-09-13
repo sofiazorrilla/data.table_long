@@ -1,4 +1,0 @@
-"0","stopifnot(""m must be symmetric""= m == t(m))
-"
-"2","Error: m must be symmetric
-"

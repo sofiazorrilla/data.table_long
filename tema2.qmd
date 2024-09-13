@@ -24,23 +24,7 @@ DT
 ::: {.callout-note collapse="true"}
 ## Reto
 
-Imaginemos que queremos crear una simulación de una base de datos de secuencias aleatorias. La tabla que queremos al final va a tener dos columnas, la primera es un número identificador de cada secuencia y la segunda la secuencia aleatoria de tamaño 300. Por ejemplo, la siguiente tabla muestra las primeras 10 filas del resultado esperado. 
-
-```{r}
-#| echo: false 
-#| message: false
-
-library(data.table)
-
-secuencias <- data.table(
-                id = seq(1,10000), 
-                sequencia = sapply(seq(1, 10000), function(x) paste(sample(c("A", "T", "C", "G"), 100, replace = TRUE), collapse = "")))
-
-head(secuencias) |> knitr::kable()
-
-```
-
-**Ejercicio:** Genera un objeto data.table en el que la primera columna sea un id de secuencia y la segunda sea una secuencia (aleatoria) de tamaño 300 caracteres
+Imaginemos que queremos crear una simulación de una base de datos de 10,000 secuencias aleatorias. La tabla que queremos va a tener dos columnas, la primera es un número identificador y la segunda una secuencia aleatoria de 100 pb de longitud. Por ejemplo, la siguiente tabla muestra las primeras 10 filas del resultado esperado. 
 
 :::
 
@@ -62,11 +46,11 @@ head(secuencias)
 
 ## Importar y exportar datos de archivos
 
-Las funciones para importar (`fread`) y exportar (`fwrite`) tienen las siguientes opciones principales:
+Las funciones para importar y exportar son: `fread` y `fwrite`
 
-- `x`: el objeto que queremos exportar.
+Tienen las siguientes opciones principales, por ejemplo:
 
-- `file`: ruta para escribir/leer el archivo.
+- `file`: ruta del archivo.
 
 - `sep`: el delimitador entre columnas.
 
@@ -90,15 +74,36 @@ fread(input, file, text, cmd, sep="auto", sep2="auto", dec=".", quote="\"",
      keepLeadingZeros = getOption("datatable.keepLeadingZeros", FALSE),
      yaml=FALSE, autostart=NA, tmpdir=tempdir(), tz="UTC"
      )
+     
+fwrite(x, file = "", append = FALSE, quote = "auto",
+  sep=getOption("datatable.fwrite.sep", ","),
+  sep2 = c("","|",""),
+  eol = if (.Platform$OS.type=="windows") "\r\n" else "\n",
+  na = "", dec = ".", row.names = FALSE, col.names = TRUE,
+  qmethod = c("double","escape"),
+  logical01 = getOption("datatable.logical01", FALSE),  # due to change to TRUE; see NEWS
+  logicalAsInt = logical01,  # deprecated
+  scipen = getOption('scipen', 0L),
+  dateTimeAs = c("ISO","squash","epoch","write.csv"),
+  buffMB = 8L, nThread = getDTthreads(verbose),
+  showProgress = getOption("datatable.showProgress", interactive()),
+  compress = c("auto", "none", "gzip"),
+  yaml = FALSE,
+  bom = FALSE,
+  verbose = getOption("datatable.verbose", FALSE),
+  encoding = "")
 
 ```
 
 ### Conjunto de datos
 
 Muchos de los ejemplos de este curso los haremos utilizando la tabla de las 50 mejores canciones para 73 paises de acuerdo a Spotify. La tabla la pueden descargar en [kaggle](https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data) y se actualiza todos los días. La tabla que yo utilicé para este curso fue descargada el 8 de septiembre 2024. La tabla:
+
 - Tiene 25 columnas y 1,179,453 registros de canciones
 - Tiene registros desde el 2023-10-18 al 2024-09-08
 - Pesa 279 MB. 
+
+**Nota:** En caso de que no quieran descargar la lista actualizada aquí está el link de google drive del [archivo](https://drive.google.com/file/d/1uMM71MMAaV19pxWNlDdchOZbXhcRIQbH/view?usp=sharing) que yo utilicé.
 
 **Nota:** `fread()` también permite leer archivos comprimidos `.gz`
 

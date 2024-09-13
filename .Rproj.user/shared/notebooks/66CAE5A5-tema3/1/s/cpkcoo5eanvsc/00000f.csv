@@ -1,4 +1,0 @@
-"0","#| echo: false"
-"0","#| warning: false"
-"0",""
-"0","data = fread(""data/head_registros.csv"")"

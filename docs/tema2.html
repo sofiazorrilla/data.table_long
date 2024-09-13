@@ -299,50 +299,7 @@ Reto
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Imaginemos que queremos crear una simulación de una base de datos de secuencias aleatorias. La tabla que queremos al final va a tener dos columnas, la primera es un número identificador de cada secuencia y la segunda la secuencia aleatoria de tamaño 300. Por ejemplo, la siguiente tabla muestra las primeras 10 filas del resultado esperado.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<colgroup>
-<col style="width: 2%">
-<col style="width: 97%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: right;">id</th>
-<th style="text-align: left;">sequencia</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: right;">1</td>
-<td style="text-align: left;">CAAATGATTGTTTATGTTGAGGTACATTGGATGCAGATTGCCTCGAACAGCGACATCAAAGACCCATGCACCGCGATTATCGACTAGCAAAACATATTAC</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">2</td>
-<td style="text-align: left;">TATGTGACAGCGGGTGCTGCGATGCAATCCGCCGTGACATCATCCCCATCCTATGGGACCCGAACCGGACAGAAGTCCTGTACCAGAACGATTCGGGAGG</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">3</td>
-<td style="text-align: left;">ACACGAGGCAGCGCGGATGTATTCTTACGGGGTACGAGCGTCCGTGCAGGGTCGGCATCGGATACCCTGGGACAAGAGCCTCGTCTGGCTACAGCACACT</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">4</td>
-<td style="text-align: left;">AAAGAGGGCACGGTGACGCAAATCGCTAAGCTGATGGGACTGAAGACGGTACCCGTGGTAGTCTGTGTCAGCTGTACAGTTTTCGAACTTAGTGGTTCGG</td>
-</tr>
-<tr class="odd">
-<td style="text-align: right;">5</td>
-<td style="text-align: left;">TTTACCGGTTTACAACCAATCTGTGCAGACTACGTAGGTCCTGTCTTTCACTACTTCCCAAGGACGGCACATCCTTCAACAGTGAGCACAGGGTCTCCCG</td>
-</tr>
-<tr class="even">
-<td style="text-align: right;">6</td>
-<td style="text-align: left;">GATAGATCCGCAGGGCCTCGACACCCATCGGCTTATTTGGCCTTTATCAAGAGTGCCCTTGGCAATGGGTCGACGTGGAACGAAGACGCTATTGCCAGAA</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p><strong>Ejercicio:</strong> Genera un objeto data.table en el que la primera columna sea un id de secuencia y la segunda sea una secuencia (aleatoria) de tamaño 300 caracteres</p>
+<p>Imaginemos que queremos crear una simulación de una base de datos de 10,000 secuencias aleatorias. La tabla que queremos va a tener dos columnas, la primera es un número identificador y la segunda una secuencia aleatoria de 100 pb de longitud. Por ejemplo, la siguiente tabla muestra las primeras 10 filas del resultado esperado.</p>
 </div>
 </div>
 </div>
@@ -370,12 +327,12 @@ Respuesta
 <div class="cell-output cell-output-stdout">
 <pre><code>      id                                                                                            sequencia
    &lt;int&gt;                                                                                               &lt;char&gt;
-1:     1 GGTGCAGACGTCCTGGGCCGCCCCGCGATCCACATGCTAATAAAGTACGTAAAAATGCCTCGCGGGAGAACCGCAGAGGTGGACGCTCTTGTATTGCAGG
-2:     2 TTGGAAAGAGGAAGGGATAAGGACTTATTCAGTCTATTGTAAATTTACGCCAAGTCGCAAAAGCCGGAGTAGCTAGACTGGTACCAGGCTGCGGCAGGGA
-3:     3 TTTTGTTCCAAGCCATCTCCCCGCCACGGTTACCTTTTCACATTTCCCGGTCGTAGCCTGATGCCTGCGCTGTCGAGGGACGAAACCGTGCTGATGTGAA
-4:     4 CCCCCGAACGGTTGCAGCCAGTAACCAATGCCGGAGACCCGGATGCACTCTAACCGCCTCGGATAGTCTAGATATTTTAACACGAACGGACCGATTCTCT
-5:     5 TCGACGCATATTCGCCCCACTTAATAGAAATTGATCTTGCCCTAAAATAGCCACGAGCCCGGCCATAGTTGGCATGCCTTTCGGCACTTCTGTGAAGGGC
-6:     6 GGAACATACCGCCCGCATATCGCACAACACACATCAGAGCATGAAGCTCCGTGGACAACAGGGTTCTGTGAGTTCTTTGCCTGTATTTCTTTACCCGCAA</code></pre>
+1:     1 GTATGACATGCCCGCCAGATAGTCTGCAATTTTCCCATTCTGGTCTTTACTACCACTCAGCATCCCAACATCTGTATATCTCCGCGGCCCCTTCAGAGGA
+2:     2 CACCTCAATGCCATGGTTGCGGGATGAGCGGATATTTTTAGTCAACTCAGGTTTCAGCCAAACCAGATGAAGGCGAGAATCGTGGCAGAGCGTTGGCGTG
+3:     3 GCAATCGCGACATAACGAGGCGCGATTGACCGCCTCATTTCACAAAGAGAATGGGATTGACATTGTCAAACCGGCCTATCTCCGGCATTACCAGGCGGCG
+4:     4 AAAATCCTTGATCGGCGGCTTGCAATTGTAGCACCACCAGGAGTTCCCCTCGCAAAGAAATACTTCAGCTGTAGCTGAGGTGTCTCGGCCCGAGAGGGGG
+5:     5 CCTGTATACGACTATCACTCGTAAAGTACGCCGCACGACTTTCTTTATCGACCTAAGGTTACGTCATTGGCGCTTGTTAGCAGTGGGTAGTTTAAGCAGT
+6:     6 ATGGCAACCAAGGCCCCCGCTCTCCGGGTGATTCTGAGGTGAACTGGACTAACTTTTCACACTCGCGATAGACAGAGTCGAATTTGCGGTGCAAGCCTCC</code></pre>
 </div>
 </div>
 </div>
@@ -385,10 +342,10 @@ Respuesta
 </section>
 <section id="importar-y-exportar-datos-de-archivos" class="level2">
 <h2 class="anchored" data-anchor-id="importar-y-exportar-datos-de-archivos">Importar y exportar datos de archivos</h2>
-<p>Las funciones para importar (<code>fread</code>) y exportar (<code>fwrite</code>) tienen las siguientes opciones principales:</p>
+<p>Las funciones para importar y exportar son: <code>fread</code> y <code>fwrite</code></p>
+<p>Tienen las siguientes opciones principales, por ejemplo:</p>
 <ul>
-<li><p><code>x</code>: el objeto que queremos exportar.</p></li>
-<li><p><code>file</code>: ruta para escribir/leer el archivo.</p></li>
+<li><p><code>file</code>: ruta del archivo.</p></li>
 <li><p><code>sep</code>: el delimitador entre columnas.</p></li>
 </ul>
 <p>Nota: La función tiene muchos argumentos que pueden ayudarte a personalizar el proceso de cargar datos en R.</p>
@@ -408,10 +365,34 @@ Respuesta
 <span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">logical01=</span><span class="fu">getOption</span>(<span class="st">"datatable.logical01"</span>, <span class="cn">FALSE</span>),  <span class="co"># due to change to TRUE; see NEWS</span></span>
 <span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">keepLeadingZeros =</span> <span class="fu">getOption</span>(<span class="st">"datatable.keepLeadingZeros"</span>, <span class="cn">FALSE</span>),</span>
 <span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">yaml=</span><span class="cn">FALSE</span>, <span class="at">autostart=</span><span class="cn">NA</span>, <span class="at">tmpdir=</span><span class="fu">tempdir</span>(), <span class="at">tz=</span><span class="st">"UTC"</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>     )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(x, <span class="at">file =</span> <span class="st">""</span>, <span class="at">append =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="st">"auto"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep=</span><span class="fu">getOption</span>(<span class="st">"datatable.fwrite.sep"</span>, <span class="st">","</span>),</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep2 =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">"|"</span>,<span class="st">""</span>),</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">eol =</span> <span class="cf">if</span> (.Platform<span class="sc">$</span>OS.type<span class="sc">==</span><span class="st">"windows"</span>) <span class="st">"</span><span class="sc">\r\n</span><span class="st">"</span> <span class="cf">else</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">na =</span> <span class="st">""</span>, <span class="at">dec =</span> <span class="st">"."</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">qmethod =</span> <span class="fu">c</span>(<span class="st">"double"</span>,<span class="st">"escape"</span>),</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">logical01 =</span> <span class="fu">getOption</span>(<span class="st">"datatable.logical01"</span>, <span class="cn">FALSE</span>),  <span class="co"># due to change to TRUE; see NEWS</span></span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">logicalAsInt =</span> logical01,  <span class="co"># deprecated</span></span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">scipen =</span> <span class="fu">getOption</span>(<span class="st">'scipen'</span>, 0L),</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">dateTimeAs =</span> <span class="fu">c</span>(<span class="st">"ISO"</span>,<span class="st">"squash"</span>,<span class="st">"epoch"</span>,<span class="st">"write.csv"</span>),</span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">buffMB =</span> 8L, <span class="at">nThread =</span> <span class="fu">getDTthreads</span>(verbose),</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">showProgress =</span> <span class="fu">getOption</span>(<span class="st">"datatable.showProgress"</span>, <span class="fu">interactive</span>()),</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">compress =</span> <span class="fu">c</span>(<span class="st">"auto"</span>, <span class="st">"none"</span>, <span class="st">"gzip"</span>),</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">yaml =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">bom =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="fu">getOption</span>(<span class="st">"datatable.verbose"</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">encoding =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="conjunto-de-datos" class="level3">
 <h3 class="anchored" data-anchor-id="conjunto-de-datos">Conjunto de datos</h3>
-<p>Muchos de los ejemplos de este curso los haremos utilizando la tabla de las 50 mejores canciones para 73 paises de acuerdo a Spotify. La tabla la pueden descargar en <a href="https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data">kaggle</a> y se actualiza todos los días. La tabla que yo utilicé para este curso fue descargada el 8 de septiembre 2024. La tabla: - Tiene 25 columnas y 1,179,453 registros de canciones - Tiene registros desde el 2023-10-18 al 2024-09-08 - Pesa 279 MB.</p>
+<p>Muchos de los ejemplos de este curso los haremos utilizando la tabla de las 50 mejores canciones para 73 paises de acuerdo a Spotify. La tabla la pueden descargar en <a href="https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data">kaggle</a> y se actualiza todos los días. La tabla que yo utilicé para este curso fue descargada el 8 de septiembre 2024. La tabla:</p>
+<ul>
+<li>Tiene 25 columnas y 1,179,453 registros de canciones</li>
+<li>Tiene registros desde el 2023-10-18 al 2024-09-08</li>
+<li>Pesa 279 MB.</li>
+</ul>
+<p><strong>Nota:</strong> En caso de que no quieran descargar la lista actualizada aquí está el link de google drive del <a href="https://drive.google.com/file/d/1uMM71MMAaV19pxWNlDdchOZbXhcRIQbH/view?usp=sharing">archivo</a> que yo utilicé.</p>
 <p><strong>Nota:</strong> <code>fread()</code> también permite leer archivos comprimidos <code>.gz</code></p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>

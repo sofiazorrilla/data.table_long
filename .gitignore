@@ -1,5 +1,8 @@
 
-# Ignorar la tabla grande 
-/data/universal_top_spotify_songs.csv
+# Ignorar la tabla grande
 
 
+
+.Rproj.user
+
+/.quarto/

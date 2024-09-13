@@ -5,6 +5,21 @@
 #setwd()
 
 
+# Lista de paquetes que queremos asegurarnos que estén instalados
+packages <- c("data.table", "magrittr", "dplyr", "ggplot2")
+
+# Función para instalar paquetes si no están ya instalados
+install_if_missing <- function(package) {
+  if (!require(package, character.only = TRUE)) {
+    install.packages(package)
+    library(package, character.only = TRUE)
+  }
+}
+
+# Revisa cada paquete y lo instala si es necesario
+sapply(packages, install_if_missing)
+
+
 ###############################
 ## Importar y exportar datos ##
 ###############################
@@ -24,20 +39,22 @@ DT = data.table(
 
 DT
 
+# as.data.frame(DT)
+
 # Asegurar que los datos existen
 
-## Si no haz descargado la carpeta de data en tu directorio de trabajo
+## Si no haz creado la carpeta de data en tu directorio de trabajo
 # # Revisa si existe, si no crea la carpeta
 # if (!file.exists("data")) {
 #   dir.create("data")
 # }
 
 # # Descarga el archivo de datos en la carpeta de data
-# download.file(url = "https://raw.githubusercontent.com/R-Ladies-Morelia/CursosRladiesMorelia_RladiesQueretaro_2024/main/Hackaton2024/Taller_data.table/data/sub_100000_plantae_mexico_conCoords_specimen.csv", destfile = "data/sub_100000_plantae_mexico_conCoords_specimen.csv")
+# download.file(url = "https://drive.google.com/file/d/1uMM71MMAaV19pxWNlDdchOZbXhcRIQbH/view?usp=sharing", destfile = "data/universal_top_spotify_songs2.csv")
 
 # Leer archivo
 
-data  <- fread("data/sub_100000_plantae_mexico_conCoords_specimen.csv")
+data  <- fread("data/universal_top_spotify_songs.csv")
 
 head(data)
 
