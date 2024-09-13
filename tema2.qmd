@@ -33,6 +33,7 @@ Imaginemos que queremos crear una simulación de una base de datos de 10,000 sec
 
 ```{r}
 #| code-fold: true
+#| echo: false
 secuencias <- data.table(
                 id = seq(1,10000), 
                 sequencia = sapply(seq(1, 10000), function(x) paste(sample(c("A", "T", "C", "G"), 100, replace = TRUE), collapse = "")))
@@ -103,25 +104,11 @@ Muchos de los ejemplos de este curso los haremos utilizando la tabla de las 50 m
 - Tiene registros desde el 2023-10-18 al 2024-09-08
 - Pesa 279 MB. 
 
-**Nota:** En caso de que no quieran descargar la lista actualizada aquí está el link de google drive del [archivo](https://drive.google.com/file/d/1uMM71MMAaV19pxWNlDdchOZbXhcRIQbH/view?usp=sharing) que yo utilicé.
-
-**Nota:** `fread()` también permite leer archivos comprimidos `.gz`
-
-```{.r}
-library(data.table)
-
-data = fread("data/universal_top_spotify_songs.csv", quote="")
-
-head(data) |> knitr::kable()
-```
+**Nota:** Recuerda que `fread()` también permite leer archivos comprimidos `.gz`
 
 ```{r}
-#| echo: false
-#| warning: false
 
-library(data.table)
-
-fread("data/universal_top_spotify_songs.csv") |> head() |> knitr::kable()
+fread("data/universal_top_spotify_songs.csv.gz") |> head() |> knitr::kable()
 
 ```
 
@@ -164,7 +151,11 @@ Exporta la tabla de canciones como un archivo comprimido.
 ::: {.callout-note collapse="true"}
 ## Respuesta
 
-```{.r}
+```{r}
+#| eval: false
+#| code-fold: true
+#| echo: false
+
 fwrite(data, "data/universal_top_spotify_songs.csv.gz", sep = ",", compress = "auto")
 ```
 

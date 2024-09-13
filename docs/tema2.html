@@ -316,23 +316,15 @@ Respuesta
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>secuencias <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">id =</span> <span class="fu">seq</span>(<span class="dv">1</span>,<span class="dv">10000</span>), </span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">sequencia =</span> <span class="fu">sapply</span>(<span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">10000</span>), <span class="cf">function</span>(x) <span class="fu">paste</span>(<span class="fu">sample</span>(<span class="fu">c</span>(<span class="st">"A"</span>, <span class="st">"T"</span>, <span class="st">"C"</span>, <span class="st">"G"</span>), <span class="dv">100</span>, <span class="at">replace =</span> <span class="cn">TRUE</span>), <span class="at">collapse =</span> <span class="st">""</span>)))</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(secuencias)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>      id                                                                                            sequencia
    &lt;int&gt;                                                                                               &lt;char&gt;
-1:     1 GTATGACATGCCCGCCAGATAGTCTGCAATTTTCCCATTCTGGTCTTTACTACCACTCAGCATCCCAACATCTGTATATCTCCGCGGCCCCTTCAGAGGA
-2:     2 CACCTCAATGCCATGGTTGCGGGATGAGCGGATATTTTTAGTCAACTCAGGTTTCAGCCAAACCAGATGAAGGCGAGAATCGTGGCAGAGCGTTGGCGTG
-3:     3 GCAATCGCGACATAACGAGGCGCGATTGACCGCCTCATTTCACAAAGAGAATGGGATTGACATTGTCAAACCGGCCTATCTCCGGCATTACCAGGCGGCG
-4:     4 AAAATCCTTGATCGGCGGCTTGCAATTGTAGCACCACCAGGAGTTCCCCTCGCAAAGAAATACTTCAGCTGTAGCTGAGGTGTCTCGGCCCGAGAGGGGG
-5:     5 CCTGTATACGACTATCACTCGTAAAGTACGCCGCACGACTTTCTTTATCGACCTAAGGTTACGTCATTGGCGCTTGTTAGCAGTGGGTAGTTTAAGCAGT
-6:     6 ATGGCAACCAAGGCCCCCGCTCTCCGGGTGATTCTGAGGTGAACTGGACTAACTTTTCACACTCGCGATAGACAGAGTCGAATTTGCGGTGCAAGCCTCC</code></pre>
+1:     1 TATAACTTCTTTCGTACTTGTTTGTGCCTTTGGTCGGGTCATTACGCGTTTACCGCGCAGCAAAGCCTCGGGCTGGGACTGCGTCAACCGACCCTGGCTG
+2:     2 CGGTTTACACCTGTGCCCGTCTACGGTACCGGATCTTCATAATTTGAAAGTGAACTATACTTCTGAACATGTCTGGTGTCGTAATGCACCATGATATATC
+3:     3 AGTATGGGGCATCACCGCCATTGATCTACGAATCTGTAGGTTAGCAGATGAGCGAGTACCGCTGGGCCATGTGAAACAGTCTAACGAACACGAAACCAAC
+4:     4 TACTCGTCATTTGCAGAGGTGATTTAAGTCTACCCTTGCGGACGGGGGACGAAATGCTCGGATTGAACAGGTGTTAGTTATATCGCGATCATCAGAGCCT
+5:     5 CAAACCAACCGTCAGCGTTGCGGAGCACTATAAAACCAAACAACTATGACCCTCGCCACTGGTGCATAAGCTTAGGGGTTATGGTCTGAGTTCTAGATAA
+6:     6 CCGACCGAGATAACTGAAGGAACTGTCTTACTATCGTATGTATCCATCAATGATCGGCTTAGGTTTTAGCCATCTAACTGCGGATTTCTAGTAGACATAA</code></pre>
 </div>
 </div>
 </div>
@@ -349,41 +341,41 @@ Respuesta
 <li><p><code>sep</code>: el delimitador entre columnas.</p></li>
 </ul>
 <p>Nota: La función tiene muchos argumentos que pueden ayudarte a personalizar el proceso de cargar datos en R.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fread</span>(input, file, text, cmd, <span class="at">sep=</span><span class="st">"auto"</span>, <span class="at">sep2=</span><span class="st">"auto"</span>, <span class="at">dec=</span><span class="st">"."</span>, <span class="at">quote=</span><span class="st">"</span><span class="sc">\"</span><span class="st">"</span>,</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">nrows=</span><span class="cn">Inf</span>, <span class="at">header=</span><span class="st">"auto"</span>,</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">na.strings=</span><span class="fu">getOption</span>(<span class="st">"datatable.na.strings"</span>,<span class="st">"NA"</span>),  <span class="co"># due to change to ""; see NEWS</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="fu">getOption</span>(<span class="st">"datatable.verbose"</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">skip=</span><span class="st">"__auto__"</span>, <span class="at">select=</span><span class="cn">NULL</span>, <span class="at">drop=</span><span class="cn">NULL</span>, <span class="at">colClasses=</span><span class="cn">NULL</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">integer64=</span><span class="fu">getOption</span>(<span class="st">"datatable.integer64"</span>, <span class="st">"integer64"</span>),</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>     col.names,</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">check.names=</span><span class="cn">FALSE</span>, <span class="at">encoding=</span><span class="st">"unknown"</span>,</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">strip.white=</span><span class="cn">TRUE</span>, <span class="at">fill=</span><span class="cn">FALSE</span>, <span class="at">blank.lines.skip=</span><span class="cn">FALSE</span>,</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">key=</span><span class="cn">NULL</span>, <span class="at">index=</span><span class="cn">NULL</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">showProgress=</span><span class="fu">getOption</span>(<span class="st">"datatable.showProgress"</span>, <span class="fu">interactive</span>()),</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">data.table=</span><span class="fu">getOption</span>(<span class="st">"datatable.fread.datatable"</span>, <span class="cn">TRUE</span>),</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">nThread=</span><span class="fu">getDTthreads</span>(verbose),</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">logical01=</span><span class="fu">getOption</span>(<span class="st">"datatable.logical01"</span>, <span class="cn">FALSE</span>),  <span class="co"># due to change to TRUE; see NEWS</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">keepLeadingZeros =</span> <span class="fu">getOption</span>(<span class="st">"datatable.keepLeadingZeros"</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">yaml=</span><span class="cn">FALSE</span>, <span class="at">autostart=</span><span class="cn">NA</span>, <span class="at">tmpdir=</span><span class="fu">tempdir</span>(), <span class="at">tz=</span><span class="st">"UTC"</span></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>     )</span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>     </span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(x, <span class="at">file =</span> <span class="st">""</span>, <span class="at">append =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="st">"auto"</span>,</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep=</span><span class="fu">getOption</span>(<span class="st">"datatable.fwrite.sep"</span>, <span class="st">","</span>),</span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep2 =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">"|"</span>,<span class="st">""</span>),</span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">eol =</span> <span class="cf">if</span> (.Platform<span class="sc">$</span>OS.type<span class="sc">==</span><span class="st">"windows"</span>) <span class="st">"</span><span class="sc">\r\n</span><span class="st">"</span> <span class="cf">else</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">na =</span> <span class="st">""</span>, <span class="at">dec =</span> <span class="st">"."</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">qmethod =</span> <span class="fu">c</span>(<span class="st">"double"</span>,<span class="st">"escape"</span>),</span>
-<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">logical01 =</span> <span class="fu">getOption</span>(<span class="st">"datatable.logical01"</span>, <span class="cn">FALSE</span>),  <span class="co"># due to change to TRUE; see NEWS</span></span>
-<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">logicalAsInt =</span> logical01,  <span class="co"># deprecated</span></span>
-<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">scipen =</span> <span class="fu">getOption</span>(<span class="st">'scipen'</span>, 0L),</span>
-<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">dateTimeAs =</span> <span class="fu">c</span>(<span class="st">"ISO"</span>,<span class="st">"squash"</span>,<span class="st">"epoch"</span>,<span class="st">"write.csv"</span>),</span>
-<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">buffMB =</span> 8L, <span class="at">nThread =</span> <span class="fu">getDTthreads</span>(verbose),</span>
-<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">showProgress =</span> <span class="fu">getOption</span>(<span class="st">"datatable.showProgress"</span>, <span class="fu">interactive</span>()),</span>
-<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">compress =</span> <span class="fu">c</span>(<span class="st">"auto"</span>, <span class="st">"none"</span>, <span class="st">"gzip"</span>),</span>
-<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">yaml =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">bom =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="fu">getOption</span>(<span class="st">"datatable.verbose"</span>, <span class="cn">FALSE</span>),</span>
-<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">encoding =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fread</span>(input, file, text, cmd, <span class="at">sep=</span><span class="st">"auto"</span>, <span class="at">sep2=</span><span class="st">"auto"</span>, <span class="at">dec=</span><span class="st">"."</span>, <span class="at">quote=</span><span class="st">"</span><span class="sc">\"</span><span class="st">"</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">nrows=</span><span class="cn">Inf</span>, <span class="at">header=</span><span class="st">"auto"</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">na.strings=</span><span class="fu">getOption</span>(<span class="st">"datatable.na.strings"</span>,<span class="st">"NA"</span>),  <span class="co"># due to change to ""; see NEWS</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">stringsAsFactors=</span><span class="cn">FALSE</span>, <span class="at">verbose=</span><span class="fu">getOption</span>(<span class="st">"datatable.verbose"</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">skip=</span><span class="st">"__auto__"</span>, <span class="at">select=</span><span class="cn">NULL</span>, <span class="at">drop=</span><span class="cn">NULL</span>, <span class="at">colClasses=</span><span class="cn">NULL</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">integer64=</span><span class="fu">getOption</span>(<span class="st">"datatable.integer64"</span>, <span class="st">"integer64"</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>     col.names,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">check.names=</span><span class="cn">FALSE</span>, <span class="at">encoding=</span><span class="st">"unknown"</span>,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>     <span class="at">strip.white=</span><span class="cn">TRUE</span>, <span class="at">fill=</span><span class="cn">FALSE</span>, <span class="at">blank.lines.skip=</span><span class="cn">FALSE</span>,</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>     <span class="at">key=</span><span class="cn">NULL</span>, <span class="at">index=</span><span class="cn">NULL</span>,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">showProgress=</span><span class="fu">getOption</span>(<span class="st">"datatable.showProgress"</span>, <span class="fu">interactive</span>()),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">data.table=</span><span class="fu">getOption</span>(<span class="st">"datatable.fread.datatable"</span>, <span class="cn">TRUE</span>),</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">nThread=</span><span class="fu">getDTthreads</span>(verbose),</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>     <span class="at">logical01=</span><span class="fu">getOption</span>(<span class="st">"datatable.logical01"</span>, <span class="cn">FALSE</span>),  <span class="co"># due to change to TRUE; see NEWS</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>     <span class="at">keepLeadingZeros =</span> <span class="fu">getOption</span>(<span class="st">"datatable.keepLeadingZeros"</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">yaml=</span><span class="cn">FALSE</span>, <span class="at">autostart=</span><span class="cn">NA</span>, <span class="at">tmpdir=</span><span class="fu">tempdir</span>(), <span class="at">tz=</span><span class="st">"UTC"</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>     )</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>     </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(x, <span class="at">file =</span> <span class="st">""</span>, <span class="at">append =</span> <span class="cn">FALSE</span>, <span class="at">quote =</span> <span class="st">"auto"</span>,</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep=</span><span class="fu">getOption</span>(<span class="st">"datatable.fwrite.sep"</span>, <span class="st">","</span>),</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">sep2 =</span> <span class="fu">c</span>(<span class="st">""</span>,<span class="st">"|"</span>,<span class="st">""</span>),</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">eol =</span> <span class="cf">if</span> (.Platform<span class="sc">$</span>OS.type<span class="sc">==</span><span class="st">"windows"</span>) <span class="st">"</span><span class="sc">\r\n</span><span class="st">"</span> <span class="cf">else</span> <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">na =</span> <span class="st">""</span>, <span class="at">dec =</span> <span class="st">"."</span>, <span class="at">row.names =</span> <span class="cn">FALSE</span>, <span class="at">col.names =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">qmethod =</span> <span class="fu">c</span>(<span class="st">"double"</span>,<span class="st">"escape"</span>),</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">logical01 =</span> <span class="fu">getOption</span>(<span class="st">"datatable.logical01"</span>, <span class="cn">FALSE</span>),  <span class="co"># due to change to TRUE; see NEWS</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">logicalAsInt =</span> logical01,  <span class="co"># deprecated</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">scipen =</span> <span class="fu">getOption</span>(<span class="st">'scipen'</span>, 0L),</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">dateTimeAs =</span> <span class="fu">c</span>(<span class="st">"ISO"</span>,<span class="st">"squash"</span>,<span class="st">"epoch"</span>,<span class="st">"write.csv"</span>),</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">buffMB =</span> 8L, <span class="at">nThread =</span> <span class="fu">getDTthreads</span>(verbose),</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">showProgress =</span> <span class="fu">getOption</span>(<span class="st">"datatable.showProgress"</span>, <span class="fu">interactive</span>()),</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">compress =</span> <span class="fu">c</span>(<span class="st">"auto"</span>, <span class="st">"none"</span>, <span class="st">"gzip"</span>),</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">yaml =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">bom =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">verbose =</span> <span class="fu">getOption</span>(<span class="st">"datatable.verbose"</span>, <span class="cn">FALSE</span>),</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">encoding =</span> <span class="st">""</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <section id="conjunto-de-datos" class="level3">
 <h3 class="anchored" data-anchor-id="conjunto-de-datos">Conjunto de datos</h3>
 <p>Muchos de los ejemplos de este curso los haremos utilizando la tabla de las 50 mejores canciones para 73 paises de acuerdo a Spotify. La tabla la pueden descargar en <a href="https://www.kaggle.com/datasets/asaniczka/top-spotify-songs-in-73-countries-daily-updated/data">kaggle</a> y se actualiza todos los días. La tabla que yo utilicé para este curso fue descargada el 8 de septiembre 2024. La tabla:</p>
@@ -392,14 +384,9 @@ Respuesta
 <li>Tiene registros desde el 2023-10-18 al 2024-09-08</li>
 <li>Pesa 279 MB.</li>
 </ul>
-<p><strong>Nota:</strong> En caso de que no quieran descargar la lista actualizada aquí está el link de google drive del <a href="https://drive.google.com/file/d/1uMM71MMAaV19pxWNlDdchOZbXhcRIQbH/view?usp=sharing">archivo</a> que yo utilicé.</p>
-<p><strong>Nota:</strong> <code>fread()</code> también permite leer archivos comprimidos <code>.gz</code></p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/universal_top_spotify_songs.csv"</span>, <span class="at">quote=</span><span class="st">""</span>)</span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(data) <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Nota:</strong> Recuerda que <code>fread()</code> también permite leer archivos comprimidos <code>.gz</code></p>
 <div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fread</span>(<span class="st">"data/universal_top_spotify_songs.csv.gz"</span>) <span class="sc">|&gt;</span> <span class="fu">head</span>() <span class="sc">|&gt;</span> knitr<span class="sc">::</span><span class="fu">kable</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
 <colgroup>
@@ -655,7 +642,7 @@ Reto
 <li><code>compress</code> = debido a que podríamos estar trabajando con tablas de datos muy grandes podemos escribir los archivos comprimidos. Se puede especificar “gzip” o “auto” y utilizar la extension <code>.gz</code> en el nombre del archivo para escribir un archivo comprimido, la opción “none” nos permite escribir archivos sin comprimir.</li>
 </ul>
 <p><strong>Ejemplo</strong>: podemos escribir la tabla DT que creamos al principio de la sección:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(DT, <span class="st">"data/testDT.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(DT, <span class="st">"data/testDT.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p><br></p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
@@ -685,7 +672,7 @@ Respuesta
 </div>
 <div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fwrite</span>(data, <span class="st">"data/universal_top_spotify_songs.csv.gz"</span>, <span class="at">sep =</span> <span class="st">","</span>, <span class="at">compress =</span> <span class="st">"auto"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
 </div>
 </div>
 </div>
@@ -693,18 +680,18 @@ Respuesta
 <section id="velocidad-dplyr-vs-data.table" class="level2">
 <h2 class="anchored" data-anchor-id="velocidad-dplyr-vs-data.table">Velocidad dplyr vs data.table</h2>
 <p>A continuación se muestra la comparación de un ejemplo de lectura de una tabla de 3062756 filas y 50 columnas utilizando la función de R base <code>read.csv</code> y <code>fread</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rbenchmark)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">benchmark</span>(<span class="st">"r base"</span> <span class="ot">=</span> {</span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">read.csv</span>(<span class="st">"big_data/plantae_mexico_conCoords_specimen.csv"</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>          },</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>          <span class="st">"data.table"</span> <span class="ot">=</span> {</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">fread</span>(<span class="st">"big_data/plantae_mexico_conCoords_specimen.csv"</span>)</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>          },</span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">replications =</span> <span class="dv">10</span>,</span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"test"</span>, <span class="st">"replications"</span>, <span class="st">"elapsed"</span>,</span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"relative"</span>, <span class="st">"user.self"</span>, <span class="st">"sys.self"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rbenchmark)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>test <span class="ot">=</span> <span class="fu">benchmark</span>(<span class="st">"r base"</span> <span class="ot">=</span> {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">read.csv</span>(<span class="st">"big_data/plantae_mexico_conCoords_specimen.csv"</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>          },</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>          <span class="st">"data.table"</span> <span class="ot">=</span> {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">fread</span>(<span class="st">"big_data/plantae_mexico_conCoords_specimen.csv"</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>          },</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">replications =</span> <span class="dv">10</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">columns =</span> <span class="fu">c</span>(<span class="st">"test"</span>, <span class="st">"replications"</span>, <span class="st">"elapsed"</span>,</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>                      <span class="st">"relative"</span>, <span class="st">"user.self"</span>, <span class="st">"sys.self"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -763,7 +750,7 @@ Reto
 <section id="data.frame---data.table" class="level2">
 <h2 class="anchored" data-anchor-id="data.frame---data.table">data.frame - data.table</h2>
 <p>El objeto de data.table es un objeto basado en un data.frame, por lo tanto es compatible con las funciones de R base que trabajan con data.frame.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <pre><code>Classes ‘data.table’ and 'data.frame':  1179453 obs. of  25 variables:
  $ spotify_id        : chr  "2plbrEY59IikOBgBGLjaoe" "6dOtVTDdiauQNBQEDOtlAB" "5G2f63n7IPVPPjfNIGih7Q" "2HRqTpkrJO5ggZyyK6NPWz" ...
  $ name              : chr  "Die With A Smile" "BIRDS OF A FEATHER" "Taste" "Espresso" ...
@@ -794,19 +781,19 @@ Reto
 </code></pre>
 <p>Sin embargo, los objetos se pueden cambiar de clase utilizando <code>as.data.frame</code> y <code>setDF</code> para convertir a data frame o <code>as.data.table</code> y <code>setDT</code> para convertir a data.table. Por ejemplo:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Recuerda que DT es el objeto data.table que definimos al principio de la lección</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(magrittr)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Recuerda que DT es el objeto data.table que definimos al principio de la lección</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "data.frame"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">as.data.table</span>() <span class="sc">%&gt;%</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "data.table" "data.frame"</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">setDT</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">setDT</span>(DT) <span class="sc">%&gt;%</span> <span class="fu">class</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "data.table" "data.frame"</code></pre>
 </div>

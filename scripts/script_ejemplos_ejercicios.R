@@ -39,7 +39,12 @@ DT = data.table(
 
 DT
 
+# Para comparar como se ve un df vs DT
 # as.data.frame(DT)
+
+#####################
+## Importar datos ###
+#####################
 
 # Asegurar que los datos existen
 
@@ -50,21 +55,18 @@ DT
 # }
 
 # # Descarga el archivo de datos en la carpeta de data
-# download.file(url = "https://drive.google.com/file/d/1uMM71MMAaV19pxWNlDdchOZbXhcRIQbH/view?usp=sharing", destfile = "data/universal_top_spotify_songs2.csv")
+# download.file(url = "https://github.com/sofiazorrilla/data.table_long/raw/main/data/universal_top_spotify_songs.csv.gz", destfile = "data/universal_top_spotify_songs.csv.gz")
 
 # Leer archivo
 
-data  <- fread("data/universal_top_spotify_songs.csv")
+data  <- fread("data/universal_top_spotify_songs.csv.gz")
 
 head(data)
 
 # Escribir archivo
 
-fwrite(data, "data/sub_100000_plantae_mexico_conCoords_specimen_2.csv", sep = ",")
-
-# Opcional (escribir archivo comprimido)
-
-# fwrite(data, "data/plantae_mexico_conCoords_specimen.csv.gz", sep = ",", compress = "auto")
+# ¿qué le falta al comando para que escriba el archivo comprimido?
+fwrite(DT, "data/testDT.csv", sep = ",")
 
 ##################################################
 ## Operaciones sobre las filas: filtros y orden ##
@@ -72,41 +74,41 @@ fwrite(data, "data/sub_100000_plantae_mexico_conCoords_specimen_2.csv", sep = ",
 
 # Filtros por índices
 
-data[1:2] 
-
 data[1:2,] 
+
+data[1:2] 
 
 # Filtros por condicion
 
-data_quercus <- data[genus == "Quercus",,] 
+data_MX <- data[country == "MX",] 
 
-dim(data_quercus)
+dim(data_MX)
 
-data_quercus_viejos <- data[genus == "Quercus" & year <= 1950,]
+data_MX_viejos <- data[country == "MX" & album_release_date <= 2000,]
 
-dim(data_quercus_viejos)
+dim(data_MX_viejos)
 
-# Nota: En el filtro solo mantiene los TRUE
-all(!is.na(data_quercus_viejos$year))
-all(!is.na(data_quercus$year))
+# ¿Qué canciones viejas son populares en México?
 
-# Ordenar filas 
+# Ordenar filas por bailabilidad
+ordered_data_MX = data_MX[order(danceability, decreasing = T)]
 
-ordered_data = data_quercus[order(stateProvince)]
+data_MX[order(-danceability)]
 
-unique(ordered_data$stateProvince)
+# seleccionar la columna de bailabilidad como vector y seleccionar los valores únicos
+# mostrar solo los primeros valores
 
+unique(ordered_data_MX$danceability) |> head()
 
 ## Ejercicio: 
 
-# 1. Carga el archivo de registros de plantas utilizando la función fread que revisamos en el tema anterior
-# 2. Utiliza un filtro para quedarte con las filas que pertenezcan a un género o especie que te guste
-# 3. Ordena de manera descendente por año
+# 1. Carga el archivo de canciones utilizando la función fread que revisamos en el tema anterior
+# 2. Utiliza un filtro para quedarte con las filas que pertenezcan al pais que te interese
+# 3. Ordena de manera descendente por ranking
 
 # Pregunta:
 
-# ¿De qué año son los registros más nuevos y más viejos de la especie que escogiste? (selecciona utilizando 
-# rangos la primera y la última fila de la tabla)
+# ¿De qué rango de años son las 50 canciones más escuchadas?
 
 
 
@@ -116,245 +118,164 @@ unique(ordered_data$stateProvince)
 
 # Seleccionar por indice
 
-data[,7:8,]
+data[,c(2,3,7),]
 
 # Seleccionar por nombre
 
-data[,species] 
+data[,name] 
 
 # Seleccionar múltiples columnas
 
-data[,list(family,genus,species)]
+data[,list(artists,name,album_name)]
 
-data[,.(family,genus,species)]
+data[,.(artists,name,album_name)]
+
+data[,spotify_id:weekly_movement]
 
 # Seleccionar multiples columnas guardadas en una variable
 
-variables <- c("family","genus","species")
+variables <- c("artists","name","album_name")
 
 data[ , ..variables]
 
 ## Ejercicio:
 
-# 1. Selecciona las columnas que contengan información 
-# acerca de la ubicación geográfica de los registros.
+## A) Me gustaría tener un data frame en donde solo tuviera la información de las características de las canciones (por ejemplo: duración, energía, etc.)
+# 
+# 1. Enlista los nombres de columnas y analiza de qué tratan
+# 2. Guarda los nombres de las columnas que solo contengan información acerca las características en un objeto
+# 3. Selecciona las columnas de la tabla data usando el objeto de nombres de columnas.
+
+## B) Genera un objeto data.table que tenga los registros del mes de septiembre 2024 y las columnas que describen las características de las cancions (utiliza un solo comando).
+
+
+
+# Deseleccionar columnas
+
+data[,-c("name","artists")] %>% colnames()
+
+data[,!c("spotify_id")] %>% colnames()
+
+data[,!(key:time_signature)] %>% colnames()
 
 # Renombrar columnas
 
-data[, .(especie = species, genero = genus)]
+data[, .(artista = artists, song_name = name)]
 
 
 ##################################################
 ## Operaciones sobre las columnas: Modificacion ##
 ##################################################
 
-#seleccionar múltiples características al mismo tiempo
-data[family=="Araceae" & year==1997]
-### Contar el número de coincidencias para los criterios usando .N
-data[family=="Araceae" & year==1997, .N]
+### Contar el número de coincidencias 
+data[country == "MX" & acousticness > 0.5, length(spotify_id)]
+
+data[country == "MX" & acousticness > 0.5, .N]
 
 ### Ejercicio
 
 #Pregunta:
-#¿Cuántos registros hay para el año 1983? (Utiliza .N)
+#¿Cuántas canciones que se hayan publicado de antes del 2000 han estado dentro del top 50? (Utiliza .N)
 
+## Cambiar la duracion de de ms a minutos y obtener el promedio
 
-# # Descarga el archivo de datos en la carpeta de data
-# download.file(url = "https://raw.githubusercontent.com/R-Ladies-Morelia/CursosRladiesMorelia_RladiesQueretaro_2024/main/Hackaton2024/Taller_data.table/data/flights14.csv", destfile = "data/flights14.csv")
+data[, duration_ms/1000/60] %>% mean()
 
-### Leer dataset flights
-
-flights <- fread("data/flights14.csv")
-
-#### Obtener la media
-flights[, mean(dep_delay)]
+data[,mean(duration_ms/1000/60)]
 
 #### Hacer filtros y posteriormente efectuar operaciones
 
-flights[origin == "JFK" & month == 2L,
-        .(mean_arr = mean(arr_delay))]
+data[country == "MX", mean(popularity)]
 
 ## Ejercicio
 
-#Ahora es tu turno: Calcula el promedio de retraso de salida y entrada para 
-#todos los vuelos que salieron del aeropuerto JFK en el mes de Junio. 
-#Llama a tus nuevas columnas "mean_arr" y "mean_dep"
+#Calcula el promedio y desviación estandar en los movimientos diarios de ranking (el cambio en las clasificaciones en comparación con el día anterior) en las canciones populares de México.
 
 ### Agregar nuevas columnas a flights
-flights[, dif:=dep_delay - arr_delay]
-flights
+data[, .(duration_min = duration_ms/1000/60)]
 
-#### Calcular en una columna independiente
+#### Modificar la tabla que está guardada en memoria con el operador := 
+data[, date_dif := snapshot_date - album_release_date]
 
-flights[, .(dif = dep_delay - arr_delay)]
+data
+
+### Agregar múltiples columnas a la tabla de referencia
+
+## Ejercicio
+
+## 1) Agrega una nueva columna (year_release) a la tabla original que solo muestre el año de publicación del album de la canción
+
+# 2) En un solo comando: genera una columna de diferencia entre la fecha de publicación y la fecha en la que la canción apareció en el top50. Además generar una columna de duración de la canción en minutos
 
 ##################################################
 ## Operaciones sobre las columnas: Agrupacion ####
 ##################################################
-### Contar el numero de registro agrupoando por año
-data[, .N,  by = year]
+
+### Contar el numero de registro agrupando por cancion
+data[,.N,by = name]
+
+### Multiples factores por los cuales agrupar
+times_song_per_album_per_country <- data[,.N,by = .(album_name,name,country)] 
+
 
 ### Ejercicio
 
-#Podrías identificar en qué año se tienen más registros? 
-#No es necesario usar la nomeclatura de data.table. 
-
-#### Estimar el mínimo, agrupando por familia
-
-data[, min(year),by=family]
-
-### Contar registros usando múltiples agrupaciones
-
-plants[, .N,by=.(family, year)]
-
-## Ejercicio
-#En qué año y para qué familia hay más registros?
-
-##################################################
-## Cadenas de operaciones ########################
-##################################################
-
-# Ejemplo de cadenas de operaciones
-
-# 1. Seleccionar los registros del género Quercus y filtrar aquellos que 
-# no tienen información acerca de la especie o del año de colecta
-
-data[genus == "Quercus" & !is.na(species) & species != "" & !is.na(year)]
-
-# 2. Agrupar por especie y por año de colecta
-
-# 3. Contar el número de registros de que se 
-# realizó para cada especie en cada año
-
-data[genus == "Quercus" & !is.na(species) & species != "" & !is.na(year), .(.N), by = .(year,species)]
-
-# 4. Ordenar la columna de número de registros de mayor a menor
+# Genera una tabla en la que calcules el número de paises en el que un album estuvo en el top 50
+# Haz una gráfica para visualizar los resultados
 
 
-data[genus == "Quercus" & !is.na(species) & species != "" & !is.na(year), .(N = .N), by = .(year,species)][order(year,-N)]
+### Agrupar por expresion
+data[,.N,by = .(country,PopAbove80 = popularity > 80)] %>% head()
+
+### Ejercicio
+
+# Calcula cuántas veces una canción ha sido ranqueada como la número 1 (para cualquier pais). Muestra las 5 canciones que hayan tenido el ranking 1 más veces.
+
+#########################################
+### Cadenas de operaciones ##############
+#########################################
+
+# ¿cómo contarías el número de paises en los que una canción ha estado en el top 50?
+data[,.N, by = .(name,country)][,.(ncountry = .N), by = name]
+
+# Ejemplo de cadenas con data.frame
+as.data.frame(data)[1:10,][1:2,]
 
 
 ##################################################
-## Uniones entre tablas ##########################
+## Ejercicios           ##########################
 ##################################################
 
+## Ejercicio 1
+# Eres un analista de datos en una plataforma de streaming musical. Tu jefe te ha pedido que analices las tendencias de 73 paises para contestar las siguietes preguntas:
 
-dt1 = data.table(id = seq(1,10), letter1 = LETTERS[sample(1:10, replace = T)])
+# ¿Cuáles son los 5 álbumes más populares y cómo ha evolucionado su popularidad promedio (medida a través del ranking de las canciones de cada album) a lo largo del tiempo (mensualmente) en nuestra plataforma de streaming? (muestralo en un gráfico)
 
-dt2 = data.table(id = seq(6,15), letter2 = LETTERS[sample(1:10, replace = T)])
 
-# Función merge
 
-# inner join
-merge(dt1,dt2,by = "id")
+# Ejercicio 2
 
-# left join
-merge(dt1,dt2,by = "id", all.x = T)
+# ¿Cuáles son los 5 artistas que han mantenido una popularidad más constante a nivel internacional a lo largo del tiempo? En este caso vamos a considerar la popularidad como el número de paises en el que un artista es escuchado en el top50.
 
-# right join
-merge(dt1,dt2,by = "id", all.y = T)
-
-# full join
-merge(dt1,dt2,by = "id", all = T)
-
-# Sintaxis de data.table
-
-# inner join
-dt1[dt2, on = "id", nomatch=0]
-
-# left join
-dt1[dt2, on = "id"]
-
-# right join
-dt2[dt1, on = "id"]
-
-##################################################
-## Ejercicio final: Manhattan plot ###############
-##################################################
-### Antes de iniciar este ejercicio asegúrate de tener
-### el archivo que puedes conseguir en este link:
-### https://drive.google.com/file/d/16za7dS3DcMR_VKFJdszLU2kJUS9bB7Dr/view?usp=share_link
-### Guarda este archivo en el folder data
-### Cuánto tiempo se tarda en el leer este archivo usando read.table?
-start.time <- Sys.time()
-triglycerides <- read.table(gzfile("data/Triglycerides_INT.imputed.stats.gz"), header=T, stringsAsFactors = FALSE, sep = "\t")
-end.time <- Sys.time()
-time.taken <- end.time - start.time
-time.taken
-head(triglycerides)
-class(triglycerides)
-dim(triglycerides)
-
-#### Y usando data.table? 
-start.time <- Sys.time()
-triglycerides_2 <- fread(file = "/Users/mpalma/Downloads/full_cohort/Triglycerides_INT.imputed.stats.gz", header = T)
-end.time <- Sys.time()
-time.taken.2 <- end.time - start.time
-time.taken.2
-
-### Exploración de datos
-head(triglycerides_2)
-class(triglycerides_2)
-
-### Haremos un ejercicio para obtener un Manhattan plot,
-### comunment usado para presentar resultados de Genome
-### Wide Assoction Studies (GWAS)
-##### Selecciona sólo las columnas necesarias
-triglycerides_2 <- triglycerides_2[, .(CHROM, GENPOS, ID, P)]
-#### Renombrar columnas
-triglycerides_2 <- triglycerides_2[,.(CHR = CHROM, BP=GENPOS , SNP=ID, P)]
-#### Puedes explorar setnames para maneras alternativas de renombrar
-#### .() hace referencia a una lista
-### Agrupar por cromosoma y estimar la longitud
-chr_len <- triglycerides_2[, .(chr_len = max(BP)), by = CHR]
-#### Hacer la suma acumulada de la longitud de los cromosomas
-chr_len[, tot := cumsum(as.numeric(chr_len)) - chr_len]
-#### Añador esta informacio al data set original
-cum_triglycerides <- merge(triglycerides_2, chr_len[, .(CHR, tot)], by = "CHR")
-#### Añadir la posicion acumulada a cada variante/SNP (Single Nucleotide Polymorphism)
-cum_triglycerides <- cum_triglycerides[order(CHR, BP)]
-cum_triglycerides[, BPcum := BP + tot]
-### Ahora a hacer nuestro gráfico
-### Para el eje de las x
-### Estimar la posición central para cada cromosoma de 
-### acuerdo a las posiciones de cada cromosoma
-axisdf <- cum_triglycerides[, .(center = (max(BPcum) + min(BPcum)) / 2), by = CHR]
-
-Manhattan_plot <- ggplot(cum_triglycerides, aes(x=BPcum, y=-log10(P))) +
+# En particular debes:
   
-  # Graficar los puntos y azul y gris intercalado por cromosoma
-  geom_point( aes(color=as.factor(CHR)), alpha=0.8, size=0.5) +
-  scale_color_manual(values = rep(c("grey", "skyblue"), 22 )) +
-  
-  # Personalizar ejes
-  scale_x_continuous( label = axisdf$CHR, breaks= axisdf$center ) +
-  scale_y_continuous(expand = c(0, 0), labels=scales::number_format(accuracy = 0.1) , limits=c(25,0), trans = "reverse")  +  # remove space between plot area and x axis
-  
-  #### Añadir líneas de significancia
-  geom_hline(yintercept=-log10(1e-5), color = "black", linetype="dotted", linewidth=0.3) +
-  geom_hline(yintercept=-log10(5e-8), color = "black", linetype="dashed", linewidth=0.3) +
-  
-  #### Añadir título
-  
-  ggtitle("Triglycerides")+
-  
-  # Detalles de tema:
-  theme_bw() +
-  theme( 
-    legend.position="none",
-    panel.border = element_blank(),
-    panel.grid.major.x = element_blank(),
-    panel.grid.minor.x = element_blank(),
-    axis.ticks.x = element_blank(),
-    axis.text.x =   element_blank(),
-    axis.title.x = element_blank()
-  )
+#   Calcular el número de países en los que la música de cada artista es popular para cada mes.
+
+# Identificar a los 5 mejores artistas que aparecen de manera consistente en la mayor cantidad de países durante el período de tiempo dado.
+
+# Visualizar las tendencias de popularidad mensual de estos 5 mejores artistas, destacando el primer mes en que aparecieron en el conjunto de datos.
 
 
-#### Guarda tu grafico
-### Esto puede tomar algún tiempo 
-
-ggsave("data/Manhattan_example.png", plot = Manhattan_plot)
 
 
+### Ejercicio 3
+
+# Se busca encontrar patrones entre las características de las canciones populares de cada pais. Por ejemplo: ¿existen diferencias entre el tipo de canciones (felices o tristes) que escuchan paises de diferentes continentes?
+
+# Nota: El archivo country.codes.csv tiene la relación entre los códigos de los paises, los nombres de los paises y el continente al que pertenecen. Puedes utilizar funciones del paquete dplyr (left_join()) para unir las tablas.
+
+
+
+### Ejercicio 4. 
+# Utilizando las características de las canciones hipotetiza acerca del tipo de relaciones y las diferencias entre las canciones de diferentes regiones del mundo.
 

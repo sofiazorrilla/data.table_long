@@ -8,7 +8,7 @@ library(data.table)
 library(magrittr)
 library(ggplot2)
 
-data = fread("data/universal_top_spotify_songs.csv")
+data = fread("data/universal_top_spotify_songs.csv.gz")
 ```
 
 ### Ejercicio 1
@@ -25,6 +25,7 @@ Eres un analista de datos en una plataforma de streaming musical. Tu jefe te ha 
 #| fig-width: 10
 #| fig-height: 6
 #| code-fold: true
+#| echo: false
 
 
 data[, snapshot_month := format(snapshot_date, "%Y-%m")]
@@ -64,6 +65,7 @@ En particular debes:
 #| fig-width: 10
 #| fig-height: 6
 #| code-fold: true
+#| echo: false
 
 popularity_artists <- data[,.N, by = .(artists,country,snapshot_month)][,.(ncountry = .N), by = .(artists, snapshot_month)][,head(.SD, 5),by = snapshot_month]
 
@@ -102,7 +104,7 @@ labs(y = "Numero de paises", x = "Mes", color = "Artistas más consistentes")
 #| warning: false
 #| message: false
 #| fig-cap: Valencia promedio por pais y por continente. La valencia se define como una medida de 0.0 a 1.0 que describe la positividad musical que transmite una pista. Las pistas con alta valencia suenan más positivas (por ejemplo, felices, alegres, eufóricas), mientras que las pistas con baja valencia suenan más negativas (por ejemplo, tristes, deprimidas, enojadas). 
-
+#| echo: false
 
 library(tidyverse)
 

@@ -14,7 +14,7 @@ library(data.table)
 library(magrittr)
 library(ggplot2)
 
-data = fread("data/universal_top_spotify_songs.csv")
+data = fread("data/universal_top_spotify_songs.csv.gz")
 ```
 
 ```{r}
@@ -41,6 +41,7 @@ times_song_per_album_per_country <- data[,.N,by = .(album_name,name,country)]
 ## Respuesta
 ```{r}
 #| code-fold: true
+#| echo: false
 songs_per_album_per_country <- times_song_per_album_per_country[,.(n_songs = .N),by = .(album_name,country)]
 
 countries_per_album <- songs_per_album_per_country[,.(n_countries = .N), by = album_name] 
@@ -72,6 +73,7 @@ Calcula cuántas veces una canción ha sido ranqueada como la número 1 (para cu
 ## Respuesta
 ```{r}
 #| code-fold: true
+#| echo: false
 
 freq_num1 <- data[,.N,by = .(name,num1 = daily_rank == 1)]
 freq_num1[num1 == T] %>% .[order(-N)] %>% .[1:5]

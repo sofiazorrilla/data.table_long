@@ -24,14 +24,13 @@ Similar a como se seleccionan filas en un data.frame, en un objeto data.table se
 #| echo: false
 #| warning: false
 
-data = fread("data/universal_top_spotify_songs.csv")
+data = fread("data/universal_top_spotify_songs.csv.gz")
 ```
 
 ```{.r}
 library(data.table)
 
-
-data = fread("data/universal_top_spotify_songs.csv")
+data <- fread("data/universal_top_spotify_songs.csv")
 ```
 
 ```{r}
@@ -52,14 +51,8 @@ data[1:2]
 
 De acuerdo con la sintaxis del paquete, el espacio i es el lugar en el que se pueden realizar operaciones sobre las filas como los filtros. Por ejemplo, utilizando la tabla de canciones podríamos estar interesados en solo seleccionar aquellos registros que pertenezcan a México. 
 
-```{.r}
-data_MX <- data[country == "MX",] 
-
-dim(data_MX)
-```
 
 ```{r}
-#| echo: false
 
 data_MX <- data[country == "MX",] 
 
@@ -69,14 +62,7 @@ dim(data_MX)
 
 O podríamos estar interesadas en seleccionar solo los registros más viejos, los que fueron publicados antes del 2000. 
 
-```{.r}
-data_MX_viejos <- data[country == "MX" & album_release_date <= 2000,]
-
-dim(data_MX_viejos)
-```
-
 ```{r}
-#| echo: false
 data_MX_viejos <- data[country == "MX" & album_release_date <= 2000,]
 
 dim(data_MX_viejos)
@@ -98,11 +84,11 @@ Operadores lógicos para hacer los filtros:
 Otra función que se puede realizar en el espacio de las filas es ordenarlas. Por ejemplo, podríamos ordenar la tabla de canciones de México por qué tan bailable es.
 
 ```{r}
-# Ordenar los datos de la tabla de registros de Quercus por estado en orden alfabetico
+# Ordenar los datos de la tabla por qué tan bailable es
 
 ordered_data_MX = data_MX[order(danceability, decreasing = T)]
 
-# seleccionar la columna de estado como vector y seleccionar los valores únicos
+# seleccionar la columna de danceability como vector y seleccionar los valores únicos
 # mostrar solo los primeros valores
 
 unique(ordered_data_MX$danceability) |> head()
@@ -117,7 +103,9 @@ unique(ordered_data_MX$danceability) |> head()
 
 Pregunta:
 
-¿De qué rango de años son las 50 canciones más escuchadas 
+¿De qué rango de años son las 50 canciones más escuchadas?
+
+Nota: Cuando tienes una columna de fecha con formato Año-mes-dia pero solo quieres la información de alguno de los elementos (por ejemplo el año) puedes utilizar la siguiente función: `format(data_MX_ordenado$album_release_date,"%Y")`
 ::: 
 
 ::: {.callout-note collapse="true"}
@@ -125,13 +113,13 @@ Pregunta:
 
 ```{r}
 #| code-fold: true
+#| echo: false
 
 data_MX_ordenado <- data_MX[order(-daily_rank)] 
 
-years <- unique(format(data_MX_ordenado$album_release_date,"%Y"))
+years <- format(data_MX_ordenado$album_release_date,"%Y")
 
-c(min(years),max(years))
-
+print(paste("Mexico:",min(years),"-",max(years)))
 ```
 :::
 
@@ -198,6 +186,8 @@ A. Me gustaría tener un data frame en donde solo tuviera la información de las
 
 B. Genera un objeto data.table que tenga los registros del mes de septiembre 2024 y las columnas que describen las características de las cancions (utiliza un solo comando).
 
+Nota: Cuando tienes una columna de fecha con formato Año-mes-dia pero solo quieres la información de algunos de los elementos (por ejemplo el año y mes) puedes utilizar la siguiente función: `format(data_MX_ordenado$album_release_date,"%Y-%m")`
+
 :::
 
 ::: {.callout-note collapse="true"}
@@ -207,11 +197,15 @@ info_canciones <- c("duration_ms", "danceability", "energy", "loudness", "speech
 
 ```{r}
 #| code-fold: true
+#| echo: false
+
 info_canciones <- c("duration_ms", "danceability", "energy", "loudness", "speechiness", "acousticness","instrumentalness","liveness")
 
 data[,..info_canciones,]
 
-data[format(snapshot_date, "%Y-%m") == "2024-09" , ..info_canciones]
+info_canciones2 <- c("snapshot_date","duration_ms", "danceability", "energy", "loudness", "speechiness", "acousticness","instrumentalness","liveness")
+
+data[format(snapshot_date, "%Y-%m") == "2024-09" , ..info_canciones2]
 ```
 
 :::

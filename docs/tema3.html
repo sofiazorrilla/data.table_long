@@ -273,8 +273,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Similar a como se seleccionan filas en un data.frame, en un objeto data.table se pueden seleccionar filas utilizando rangos de índices. En los siguientes dos ejemplos se muestra como seleccionar las primeras dos filas de la tabla de registros.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(data.table)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/universal_top_spotify_songs.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">fread</span>(<span class="st">"data/universal_top_spotify_songs.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -316,19 +315,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="filtrar-filas" class="level2">
 <h2 class="anchored" data-anchor-id="filtrar-filas">Filtrar filas</h2>
 <p>De acuerdo con la sintaxis del paquete, el espacio i es el lugar en el que se pueden realizar operaciones sobre las filas como los filtros. Por ejemplo, utilizando la tabla de canciones podríamos estar interesados en solo seleccionar aquellos registros que pertenezcan a México.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_MX <span class="ot">&lt;-</span> data[country <span class="sc">==</span> <span class="st">"MX"</span>,] </span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data_MX <span class="ot">&lt;-</span> data[country <span class="sc">==</span> <span class="st">"MX"</span>,] </span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_MX)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 16256    25</code></pre>
 </div>
 </div>
 <p>O podríamos estar interesadas en seleccionar solo los registros más viejos, los que fueron publicados antes del 2000.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_MX_viejos <span class="ot">&lt;-</span> data[country <span class="sc">==</span> <span class="st">"MX"</span> <span class="sc">&amp;</span> album_release_date <span class="sc">&lt;=</span> <span class="dv">2000</span>,]</span>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data_MX_viejos <span class="ot">&lt;-</span> data[country <span class="sc">==</span> <span class="st">"MX"</span> <span class="sc">&amp;</span> album_release_date <span class="sc">&lt;=</span> <span class="dv">2000</span>,]</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(data_MX_viejos)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell">
 <div class="cell-output cell-output-stdout">
 <pre><code>[1]  2 25</code></pre>
 </div>
@@ -376,11 +375,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="ordenar-filas">Ordenar filas</h2>
 <p>Otra función que se puede realizar en el espacio de las filas es ordenarlas. Por ejemplo, podríamos ordenar la tabla de canciones de México por qué tan bailable es.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenar los datos de la tabla de registros de Quercus por estado en orden alfabetico</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Ordenar los datos de la tabla por qué tan bailable es</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>ordered_data_MX <span class="ot">=</span> data_MX[<span class="fu">order</span>(danceability, <span class="at">decreasing =</span> T)]</span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># seleccionar la columna de estado como vector y seleccionar los valores únicos</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># seleccionar la columna de danceability como vector y seleccionar los valores únicos</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co"># mostrar solo los primeros valores</span></span>
 <span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(ordered_data_MX<span class="sc">$</span>danceability) <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -406,7 +405,8 @@ Reto
 <li>Ordena de manera descendente por ranking</li>
 </ol>
 <p>Pregunta:</p>
-<p>¿De qué rango de años son las 50 canciones más escuchadas</p>
+<p>¿De qué rango de años son las 50 canciones más escuchadas?</p>
+<p>Nota: Cuando tienes una columna de fecha con formato Año-mes-dia pero solo quieres la información de alguno de los elementos (por ejemplo el año) puedes utilizar la siguiente función: <code>format(data_MX_ordenado$album_release_date,"%Y")</code></p>
 </div>
 </div>
 </div>
@@ -423,16 +423,8 @@ Respuesta
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>data_MX_ordenado <span class="ot">&lt;-</span> data_MX[<span class="fu">order</span>(<span class="sc">-</span>daily_rank)] </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>years <span class="ot">&lt;-</span> <span class="fu">unique</span>(<span class="fu">format</span>(data_MX_ordenado<span class="sc">$</span>album_release_date,<span class="st">"%Y"</span>))</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fu">min</span>(years),<span class="fu">max</span>(years))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "1963" "2024"</code></pre>
+<pre><code>[1] "Mexico: 1963 - 2024"</code></pre>
 </div>
 </div>
 </div>
@@ -448,7 +440,7 @@ Respuesta
 <p>De acuerdo con la sintaxis del paquete, el espacio j nos permite realizar operaciones sobre las columnas. Una de esas operaciones es la selección de columnas.</p>
 <p>Se pueden seleccionar por medio de índices:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">7</span>),]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                                      name                     artists country
                                     &lt;char&gt;                      &lt;char&gt;  &lt;char&gt;
@@ -470,7 +462,7 @@ Respuesta
 <h2 class="anchored" data-anchor-id="seleccionar-columnas-por-nombre">Seleccionar columnas por nombre</h2>
 <p>Se pueden seleccionar las columas por nombre y regresar como vector:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>data[,name] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data[,name] <span class="sc">|&gt;</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] "Die With A Smile"             "BIRDS OF A FEATHER"           "Taste"                       
 [4] "Espresso"                     "Who"                          "Si Antes Te Hubiera Conocido"</code></pre>
@@ -478,7 +470,7 @@ Respuesta
 </div>
 <p>Se pueden seleccionar las columnas usando una lista y regresar como tabla:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="fu">list</span>(artists,name,album_name)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="fu">list</span>(artists,name,album_name)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             artists                              name           album_name
                               &lt;char&gt;                            &lt;char&gt;               &lt;char&gt;
@@ -497,7 +489,7 @@ Respuesta
 </div>
 <p>Un atajo para no escribir <code>list()</code> es <code>.()</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>data[,.(artists,name,album_name)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>data[,.(artists,name,album_name)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             artists                              name           album_name
                               &lt;char&gt;                            &lt;char&gt;               &lt;char&gt;
@@ -516,7 +508,7 @@ Respuesta
 </div>
 <p>Seleccionar columnas por rangos usando nombres:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data[,spotify_id<span class="sc">:</span>weekly_movement]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>data[,spotify_id<span class="sc">:</span>weekly_movement]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                     spotify_id                              name                     artists daily_rank daily_movement
                          &lt;char&gt;                            &lt;char&gt;                      &lt;char&gt;      &lt;int&gt;          &lt;int&gt;
@@ -548,9 +540,9 @@ Respuesta
 </div>
 <p>Para seleccionar columnas guardadas en una variable se puede utilizar el prefijo <code>..</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"artists"</span>,<span class="st">"name"</span>,<span class="st">"album_name"</span>)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>data[ , ..variables]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>variables <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"artists"</span>,<span class="st">"name"</span>,<span class="st">"album_name"</span>)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>data[ , ..variables]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             artists                              name           album_name
                               &lt;char&gt;                            &lt;char&gt;               &lt;char&gt;
@@ -587,6 +579,7 @@ Reto
 <li>Selecciona las columnas de la tabla data usando el objeto de nombres de columnas.</li>
 </ol>
 <p>B. Genera un objeto data.table que tenga los registros del mes de septiembre 2024 y las columnas que describen las características de las cancions (utiliza un solo comando).</p>
+<p>Nota: Cuando tienes una columna de fecha con formato Año-mes-dia pero solo quieres la información de algunos de los elementos (por ejemplo el año y mes) puedes utilizar la siguiente función: <code>format(data_MX_ordenado$album_release_date,"%Y-%m")</code></p>
 </div>
 </div>
 </div>
@@ -604,12 +597,6 @@ Respuesta
 <div class="callout-body-container callout-body">
 <p>info_canciones &lt;- c(“duration_ms”, “danceability”, “energy”, “loudness”, “speechiness”, “acousticness”,“instrumentalness”,“liveness”)</p>
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>info_canciones <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"duration_ms"</span>, <span class="st">"danceability"</span>, <span class="st">"energy"</span>, <span class="st">"loudness"</span>, <span class="st">"speechiness"</span>, <span class="st">"acousticness"</span>,<span class="st">"instrumentalness"</span>,<span class="st">"liveness"</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>data[,..info_canciones,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>         duration_ms danceability energy loudness speechiness acousticness instrumentalness liveness
                &lt;int&gt;        &lt;num&gt;  &lt;num&gt;    &lt;num&gt;       &lt;num&gt;        &lt;num&gt;            &lt;num&gt;    &lt;num&gt;
@@ -625,24 +612,20 @@ Respuesta
 1179452:      179560        0.633  0.454   -8.016      0.0875      0.73900         0.00e+00    0.148
 1179453:      132359        0.638  0.717   -5.804      0.0375      0.00100         1.79e-06    0.113</code></pre>
 </div>
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>data[<span class="fu">format</span>(snapshot_date, <span class="st">"%Y-%m"</span>) <span class="sc">==</span> <span class="st">"2024-09"</span> , ..info_canciones]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
-<pre><code>       duration_ms danceability energy loudness speechiness acousticness instrumentalness liveness
-             &lt;int&gt;        &lt;num&gt;  &lt;num&gt;    &lt;num&gt;       &lt;num&gt;        &lt;num&gt;            &lt;num&gt;    &lt;num&gt;
-    1:      251667        0.521  0.592   -7.777      0.0304      0.30800         0.00e+00   0.1220
-    2:      210373        0.747  0.507  -10.171      0.0358      0.20000         6.08e-02   0.1170
-    3:      157279        0.674  0.907   -4.086      0.0640      0.10100         0.00e+00   0.2970
-    4:      175459        0.699  0.776   -5.282      0.0293      0.13100         5.36e-06   0.2050
-    5:      170887        0.660  0.756   -3.743      0.0320      0.00289         0.00e+00   0.1930
-   ---                                                                                            
-29196:      140733        0.882  0.764   -5.241      0.2040      0.35900         0.00e+00   0.1190
-29197:      180000        0.840  0.715   -5.141      0.1870      0.17600         0.00e+00   0.0935
-29198:      241000        0.330  0.313  -10.906      0.0353      0.53600         5.70e-06   0.2770
-29199:      131872        0.749  0.729   -3.190      0.0321      0.26100         0.00e+00   0.1130
-29200:      151739        0.804  0.957   -5.452      0.0340      0.12500         1.74e-02   0.1140</code></pre>
+<pre><code>       snapshot_date duration_ms danceability energy loudness speechiness acousticness instrumentalness liveness
+              &lt;IDat&gt;       &lt;int&gt;        &lt;num&gt;  &lt;num&gt;    &lt;num&gt;       &lt;num&gt;        &lt;num&gt;            &lt;num&gt;    &lt;num&gt;
+    1:    2024-09-08      251667        0.521  0.592   -7.777      0.0304      0.30800         0.00e+00   0.1220
+    2:    2024-09-08      210373        0.747  0.507  -10.171      0.0358      0.20000         6.08e-02   0.1170
+    3:    2024-09-08      157279        0.674  0.907   -4.086      0.0640      0.10100         0.00e+00   0.2970
+    4:    2024-09-08      175459        0.699  0.776   -5.282      0.0293      0.13100         5.36e-06   0.2050
+    5:    2024-09-08      170887        0.660  0.756   -3.743      0.0320      0.00289         0.00e+00   0.1930
+   ---                                                                                                          
+29196:    2024-09-01      140733        0.882  0.764   -5.241      0.2040      0.35900         0.00e+00   0.1190
+29197:    2024-09-01      180000        0.840  0.715   -5.141      0.1870      0.17600         0.00e+00   0.0935
+29198:    2024-09-01      241000        0.330  0.313  -10.906      0.0353      0.53600         5.70e-06   0.2770
+29199:    2024-09-01      131872        0.749  0.729   -3.190      0.0321      0.26100         0.00e+00   0.1130
+29200:    2024-09-01      151739        0.804  0.957   -5.452      0.0340      0.12500         1.74e-02   0.1140</code></pre>
 </div>
 </div>
 </div>
@@ -653,7 +636,7 @@ Respuesta
 <h2 class="anchored" data-anchor-id="deseleccionar-columas">Deseleccionar columas</h2>
 <p>Similar a las formas de seleccionar columnas podemos utilizar los operadores <code>-</code> y <code>!</code> para evitar la selección de ciertas columnas o rangos de columnas.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="sc">-</span><span class="fu">c</span>(<span class="st">"name"</span>,<span class="st">"artists"</span>)] <span class="sc">%&gt;%</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="sc">-</span><span class="fu">c</span>(<span class="st">"name"</span>,<span class="st">"artists"</span>)] <span class="sc">%&gt;%</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "spotify_id"         "daily_rank"         "daily_movement"     "weekly_movement"    "country"           
  [6] "snapshot_date"      "popularity"         "is_explicit"        "duration_ms"        "album_name"        
@@ -661,7 +644,7 @@ Respuesta
 [16] "mode"               "speechiness"        "acousticness"       "instrumentalness"   "liveness"          
 [21] "valence"            "tempo"              "time_signature"    </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="sc">!</span><span class="fu">c</span>(<span class="st">"spotify_id"</span>)] <span class="sc">%&gt;%</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="sc">!</span><span class="fu">c</span>(<span class="st">"spotify_id"</span>)] <span class="sc">%&gt;%</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "name"               "artists"            "daily_rank"         "daily_movement"     "weekly_movement"   
  [6] "country"            "snapshot_date"      "popularity"         "is_explicit"        "duration_ms"       
@@ -669,7 +652,7 @@ Respuesta
 [16] "loudness"           "mode"               "speechiness"        "acousticness"       "instrumentalness"  
 [21] "liveness"           "valence"            "tempo"              "time_signature"    </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="sc">!</span>(key<span class="sc">:</span>time_signature)] <span class="sc">%&gt;%</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="sc">!</span>(key<span class="sc">:</span>time_signature)] <span class="sc">%&gt;%</span> <span class="fu">colnames</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "spotify_id"         "name"               "artists"            "daily_rank"         "daily_movement"    
  [6] "weekly_movement"    "country"            "snapshot_date"      "popularity"         "is_explicit"       
@@ -681,7 +664,7 @@ Respuesta
 <h2 class="anchored" data-anchor-id="renombrar-columnas">Renombrar columnas</h2>
 <p>En el espacio de operaciones sobre las columnas también se pueden renombrar las columnas.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>data[, .(<span class="at">artista =</span> artists, <span class="at">song_name =</span> name)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>data[, .(<span class="at">artista =</span> artists, <span class="at">song_name =</span> name)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             artista                         song_name
                               &lt;char&gt;                            &lt;char&gt;

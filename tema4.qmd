@@ -9,7 +9,7 @@ format:
 #| echo: false
 library(data.table)
 library(magrittr)
-data = fread("data/universal_top_spotify_songs.csv")
+data = fread("data/universal_top_spotify_songs.csv.gz")
 ```
 
 
@@ -37,6 +37,9 @@ Pregunta:
 
 ## Respuesta
 ```{r}
+#| code-fold: true
+#| echo: false
+
 data[album_release_date<2000,.N]
 ```
 :::
@@ -78,6 +81,7 @@ Calcula el promedio y desviación estandar en los movimientos diarios de ranking
 
 ```{r}
 #| code-fold: true
+#| echo: false
 data[country == "MX",
         c(mean(daily_movement), sd(daily_movement))]
 ```
@@ -128,6 +132,7 @@ dt[, c("col1","col2","col3") := list(val1,val2,val3)]
 ### Ejercicio 1 
 ```{r}
 #| code-fold: true
+#| echo: false
 
 # Ejercicio 1
 data[, year_release := format(album_release_date, "%Y")]
@@ -140,6 +145,7 @@ head(data[,.(year_release)])
 ### Ejercicio 2
 ```{r}
 #| code-fold: true
+#| echo: false
 
 
 # Ejercicio 2
