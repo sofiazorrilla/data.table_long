@@ -18,6 +18,26 @@ Repositorio de taller de introducción al paquete data.table
     # Revisa cada paquete y lo instala si es necesario
     sapply(packages, install_if_missing)
    ```
+## Descarga de datos
+
+1. Asegurate de tener los archivos de `universal_top_spotify_songs.csv.gz` y `script_ejemplos_ejercicios.R` descargados. Puedes hacerlo desde R con el siguiente código:
+
+```
+# Para correr el tutorial necesitas una carpeta que se llame data en tu directorio de trabajo
+# Si no la haz creado corre el siguiente codigo en R
+## El código revisa si existe, si no crea la carpeta
+# if (!file.exists("data")) {
+#   dir.create("data")
+# }
+
+# Descarga el archivo de datos en la carpeta de data
+# download.file(url = "https://github.com/sofiazorrilla/data.table_long/raw/main/data/universal_top_spotify_songs.csv.gz", destfile = "data/universal_top_spotify_songs.csv.gz")
+
+# Descarga el script con los comandos del tutorial
+# download.file(url = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/main/scripts/script_ejemplos_ejercicios.R", destfile = "data/script_ejemplos_ejercicios.R")
+
+```
+2. Abre el siguiente [Etherpad](https://etherpad.wikimedia.org/p/data.table_ejercicios) para pegar las respuestas de los ejercicios del taller conforme los vayamos haciendo.
 
 ## Primera sesión 
 
