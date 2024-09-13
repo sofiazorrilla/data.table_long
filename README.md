@@ -24,16 +24,16 @@ Repositorio de taller de introducción al paquete data.table
 
 1. Introducción
 
-    - Función: Otra propuesta para manipular tablas
-    - Diferencias con dplyr
+    - data.table como otra propuesta para manipular tablas
+    - Diferencias con otros paquetes
     - Mencionar que hay integraciones entre ambos
+    - Comparaciones de velocidad
     - Sintaxis
     - Cheatsheet 
 
 2. Importar y exportar datos
     - Crear objetos data.table
     - Importar y exportar datos de archivos
-    - Comparaciones de velocidad entre read.csv y fread
     - Compatibilidad de data.table y data.frame
 
 3. Filtros y selección de columnas
@@ -44,16 +44,17 @@ Repositorio de taller de introducción al paquete data.table
     - Renombrar columnas
 
 4. Modificación de columnas
-    - Operaciones de resumen
+    - Operaciones sobre columnas
     - Creación de nuevas columnas
     - Operadores especiales (.N)
 
-5. Agrupación
-    - Agrupación por clave
+5. Agrupación y concatenación de comandos
+    - Agrupación por una o mas columnas
+    - Cadenas de comandos
     
-6. Concatenación de comandos
-    - ¿Qué es y para qué sirve?
-    - Ejemplos
+6. Ejercicios
+    
+   
 
 ## Segunda Sesión 
 
@@ -62,7 +63,13 @@ Repositorio de taller de introducción al paquete data.table
     - Sintaxis data.table
     - Función merge 
     - Ejemplos
-
+8. Manipular formatos de tablas
+   - Tablas anchas a largas: melt
+   - Tablas largas a anchas: dcast
+9. Funciones de apply sobre columnas
+   - Funciones sobre múltiples columnas (.SD)
+   - Columna-lista
+   
 
 
 
