@@ -37,7 +37,7 @@ Repositorio de taller de introducción al paquete data.table
     - Ejemplos
 
 ## Segunda Sesión 
----
+
 
 7. Unión de tablas
     - Sintaxis data.table
