@@ -232,7 +232,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#función-merge" id="toc-función-merge" class="nav-link active" data-scroll-target="#función-merge">Función <code>merge</code></a></li>
   <li><a href="#sintaxis-de-data.table" id="toc-sintaxis-de-data.table" class="nav-link" data-scroll-target="#sintaxis-de-data.table">Sintaxis de <code>data.table</code></a></li>
-  <li><a href="#ejercicio" id="toc-ejercicio" class="nav-link" data-scroll-target="#ejercicio">Ejercicio</a></li>
   </ul>
 </nav>
     </div>
@@ -278,31 +277,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter1
     &lt;int&gt;  &lt;char&gt;
- 1:     1       I
- 2:     2       I
- 3:     3       I
- 4:     4       E
- 5:     5       D
- 6:     6       J
- 7:     7       A
- 8:     8       A
- 9:     9       C
-10:    10       C</code></pre>
+ 1:     1       J
+ 2:     2       J
+ 3:     3       C
+ 4:     4       H
+ 5:     5       B
+ 6:     6       H
+ 7:     7       I
+ 8:     8       G
+ 9:     9       E
+10:    10       G</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dt2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter2
     &lt;int&gt;  &lt;char&gt;
- 1:     6       G
- 2:     7       E
- 3:     8       J
- 4:     9       H
- 5:    10       H
- 6:    11       F
+ 1:     6       H
+ 2:     7       J
+ 3:     8       G
+ 4:     9       G
+ 5:    10       A
+ 6:    11       D
  7:    12       H
  8:    13       C
- 9:    14       H
-10:    15       I</code></pre>
+ 9:    14       C
+10:    15       H</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># inner join</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -310,11 +309,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
       id letter1 letter2
    &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
-1:     6       J       G
-2:     7       A       E
-3:     8       A       J
-4:     9       C       H
-5:    10       C       H</code></pre>
+1:     6       H       H
+2:     7       I       J
+3:     8       G       G
+4:     9       E       G
+5:    10       G       A</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># left join</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all.x =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -322,16 +321,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1       I    &lt;NA&gt;
- 2:     2       I    &lt;NA&gt;
- 3:     3       I    &lt;NA&gt;
- 4:     4       E    &lt;NA&gt;
- 5:     5       D    &lt;NA&gt;
- 6:     6       J       G
- 7:     7       A       E
- 8:     8       A       J
- 9:     9       C       H
-10:    10       C       H</code></pre>
+ 1:     1       J    &lt;NA&gt;
+ 2:     2       J    &lt;NA&gt;
+ 3:     3       C    &lt;NA&gt;
+ 4:     4       H    &lt;NA&gt;
+ 5:     5       B    &lt;NA&gt;
+ 6:     6       H       H
+ 7:     7       I       J
+ 8:     8       G       G
+ 9:     9       E       G
+10:    10       G       A</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># right join</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all.y =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -339,16 +338,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     6       J       G
- 2:     7       A       E
- 3:     8       A       J
- 4:     9       C       H
- 5:    10       C       H
- 6:    11    &lt;NA&gt;       F
+ 1:     6       H       H
+ 2:     7       I       J
+ 3:     8       G       G
+ 4:     9       E       G
+ 5:    10       G       A
+ 6:    11    &lt;NA&gt;       D
  7:    12    &lt;NA&gt;       H
  8:    13    &lt;NA&gt;       C
- 9:    14    &lt;NA&gt;       H
-10:    15    &lt;NA&gt;       I</code></pre>
+ 9:    14    &lt;NA&gt;       C
+10:    15    &lt;NA&gt;       H</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># full join</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -356,21 +355,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1       I    &lt;NA&gt;
- 2:     2       I    &lt;NA&gt;
- 3:     3       I    &lt;NA&gt;
- 4:     4       E    &lt;NA&gt;
- 5:     5       D    &lt;NA&gt;
- 6:     6       J       G
- 7:     7       A       E
- 8:     8       A       J
- 9:     9       C       H
-10:    10       C       H
-11:    11    &lt;NA&gt;       F
+ 1:     1       J    &lt;NA&gt;
+ 2:     2       J    &lt;NA&gt;
+ 3:     3       C    &lt;NA&gt;
+ 4:     4       H    &lt;NA&gt;
+ 5:     5       B    &lt;NA&gt;
+ 6:     6       H       H
+ 7:     7       I       J
+ 8:     8       G       G
+ 9:     9       E       G
+10:    10       G       A
+11:    11    &lt;NA&gt;       D
 12:    12    &lt;NA&gt;       H
 13:    13    &lt;NA&gt;       C
-14:    14    &lt;NA&gt;       H
-15:    15    &lt;NA&gt;       I</code></pre>
+14:    14    &lt;NA&gt;       C
+15:    15    &lt;NA&gt;       H</code></pre>
 </div>
 </div>
 </section>
@@ -385,149 +384,43 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>      id letter1 letter2
    &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
-1:     6       J       G
-2:     7       A       E
-3:     8       A       J
-4:     9       C       H
-5:    10       C       H</code></pre>
+1:     6       H       H
+2:     7       I       J
+3:     8       G       G
+4:     9       E       G
+5:    10       G       A</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># left join</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dt1[dt2, on <span class="ot">=</span> <span class="st">"id"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     6       J       G
- 2:     7       A       E
- 3:     8       A       J
- 4:     9       C       H
- 5:    10       C       H
- 6:    11    &lt;NA&gt;       F
+ 1:     6       H       H
+ 2:     7       I       J
+ 3:     8       G       G
+ 4:     9       E       G
+ 5:    10       G       A
+ 6:    11    &lt;NA&gt;       D
  7:    12    &lt;NA&gt;       H
  8:    13    &lt;NA&gt;       C
- 9:    14    &lt;NA&gt;       H
-10:    15    &lt;NA&gt;       I</code></pre>
+ 9:    14    &lt;NA&gt;       C
+10:    15    &lt;NA&gt;       H</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># right join</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dt2[dt1, on <span class="ot">=</span> <span class="st">"id"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter2 letter1
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1    &lt;NA&gt;       I
- 2:     2    &lt;NA&gt;       I
- 3:     3    &lt;NA&gt;       I
- 4:     4    &lt;NA&gt;       E
- 5:     5    &lt;NA&gt;       D
- 6:     6       G       J
- 7:     7       E       A
- 8:     8       J       A
- 9:     9       H       C
-10:    10       H       C</code></pre>
-</div>
-</div>
-</section>
-<section id="ejercicio" class="level2">
-<h2 class="anchored" data-anchor-id="ejercicio">Ejercicio</h2>
-<p>Queremos averiguar cuántos registros y de cuántas especies de algún género de plantas hay de cada categoría de conservación (IUCN) para México.</p>
-<p>Con lo aprendido en los temas anteriores podemos generar un subconjunto de la tabla de registros que solo tenga los registros de un género (por ejemplo para el género Quercus).</p>
-<p><strong>Paso 1.</strong> Filtra la tabla de registros de plantas para México para quedarte con la información de algún género que te guste.</p>
-<p>Además, encontramos que utilizando el paquete <code>rredlist</code> podemos buscar el estatus de conservación de la IUCN para algunas especies que nos interesen con la función <code>rl_search</code>.</p>
-<p>El siguiente código muestra una forma para obtener el estatus de conservación. Lo que hace es buscar los resultados en la base de datos de la lista roja para cada especie en el subconjunto de registros de encinos de la tabla de registros de plantas para México.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"rredlist"</span>)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"magrittr"</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/data_quercus.csv"</span>)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>token <span class="ot">=</span> <span class="st">"9bb4facb6d23f48efbf424bb05c0c1ef1cf6f468393bc745d42179ac4aca5fee"</span></span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>sp_list <span class="ot">=</span> <span class="fu">unique</span>(data<span class="sc">$</span>species)</span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>sp_list <span class="ot">=</span> sp_list[<span class="fu">which</span>(sp_list <span class="sc">!=</span> <span class="st">""</span>)] <span class="co"># quitar elementos vacios</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>red_list <span class="ot">=</span> <span class="fu">list</span>()</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> sp_list) {</span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>        red_list[[i]] <span class="ot">&lt;-</span> <span class="fu">rl_search</span>(i, <span class="at">key =</span> token)<span class="sc">$</span>result</span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a><span class="co"># seleccionar columnas útiles</span></span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>iucn_data <span class="ot">=</span> <span class="fu">do.call</span>(rbind,red_list) <span class="sc">%&gt;%</span> <span class="fu">select</span>(scientific_name, category, population_trend)</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(iucn_data, <span class="st">"data/iucn_data.csv"</span>, <span class="at">row.names =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p><strong>Paso 2:</strong> Utiliza el código anterior para generar la tabla de estados de conservación para las especies del género que elegiste.</p>
-<p><strong>Paso 3:</strong> Une la tabla de los registros del genero que escogiste con la de estados de conservación</p>
-<p><strong>Paso 4:</strong> Haz un resumen del número de registros y el número de especies que hay para cada estado de conservación. Por ejemplo, para los encinos los resultados son los siguientes:</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">category</th>
-<th style="text-align: right;">numero_registros</th>
-<th style="text-align: right;">numero_sp</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">EN</td>
-<td style="text-align: right;">996</td>
-<td style="text-align: right;">19</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">LC</td>
-<td style="text-align: right;">41064</td>
-<td style="text-align: right;">96</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">NT</td>
-<td style="text-align: right;">3214</td>
-<td style="text-align: right;">18</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">VU</td>
-<td style="text-align: right;">1876</td>
-<td style="text-align: right;">9</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">DD</td>
-<td style="text-align: right;">762</td>
-<td style="text-align: right;">21</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">CR</td>
-<td style="text-align: right;">8</td>
-<td style="text-align: right;">1</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Respuesta
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<div class="sourceCode" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/data_quercus.csv"</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>dataIUCN <span class="ot">=</span> <span class="fu">fread</span>(<span class="st">"data/iucn_data.csv"</span>)</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="fu">setnames</span>(dataIUCN, <span class="st">"scientific_name"</span>, <span class="st">"species"</span>) <span class="co"># renombrar la columna de scientific_name a species porque es la clave que ambas tablas tienen en comun</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer un left join para añadir la información de la iucn a la tabla de datos</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>join <span class="ot">=</span> data[dataIUCN, on <span class="ot">=</span> <span class="st">"species"</span>]</span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Hacer el resumen, primero contando los registros agrupando por especie y por categoría. Después, utilizando una cadena y solo agrupamos por categoría, la suma de las filas dentro de un grupo sería el número de registros que pertenecen a la categoría y el número de filas de cada grupo corresponde al número de especies en la categoría.</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>join[,.N,by<span class="ot">=</span>.(species,category)][,.(<span class="at">numero_registros =</span> <span class="fu">sum</span>(N),<span class="at">numero_sp =</span> .N),by <span class="ot">=</span> category] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+ 1:     1    &lt;NA&gt;       J
+ 2:     2    &lt;NA&gt;       J
+ 3:     3    &lt;NA&gt;       C
+ 4:     4    &lt;NA&gt;       H
+ 5:     5    &lt;NA&gt;       B
+ 6:     6       H       H
+ 7:     7       J       I
+ 8:     8       G       G
+ 9:     9       G       E
+10:    10       A       G</code></pre>
 </div>
 </div>
 

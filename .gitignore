@@ -1,5 +1,7 @@
 
-# Ignorar la tabla grande
+# Ignorar la tabla grande descomprimida
+data/universal_top_spotify_songs.csv
+
 
 
 

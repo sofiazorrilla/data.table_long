@@ -310,17 +310,6 @@ Respuesta
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>songs_per_album_per_country <span class="ot">&lt;-</span> times_song_per_album_per_country[,.(<span class="at">n_songs =</span> .N),by <span class="ot">=</span> .(album_name,country)]</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>countries_per_album <span class="ot">&lt;-</span> songs_per_album_per_country[,.(<span class="at">n_countries =</span> .N), by <span class="ot">=</span> album_name] </span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>countries_per_album <span class="sc">%&gt;%</span> </span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> n_countries))<span class="sc">+</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">50</span>)<span class="sc">+</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output-display">
 <p><img src="tema5_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -332,7 +321,7 @@ Respuesta
 <h2 class="anchored" data-anchor-id="agrupación-por-expresión">Agrupación por expresión</h2>
 <p>El espacio <code>by</code> también nos permite formar los grupos directamente de una expresión. Por ejemplo, si quisieramos contar el número de canciones en cada pais que tienen una popularidad mayor a 80.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>data[,.N,by <span class="ot">=</span> .(country,<span class="at">PopAbove80 =</span> popularity <span class="sc">&gt;</span> <span class="dv">80</span>)] <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data[,.N,by <span class="ot">=</span> .(country,<span class="at">PopAbove80 =</span> popularity <span class="sc">&gt;</span> <span class="dv">80</span>)] <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   country PopAbove80     N
     &lt;char&gt;     &lt;lgcl&gt; &lt;int&gt;
@@ -373,11 +362,6 @@ Respuesta
 <div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<details>
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>freq_num1 <span class="ot">&lt;-</span> data[,.N,by <span class="ot">=</span> .(name,<span class="at">num1 =</span> daily_rank <span class="sc">==</span> <span class="dv">1</span>)]</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>freq_num1[num1 <span class="sc">==</span> T] <span class="sc">%&gt;%</span> .[<span class="fu">order</span>(<span class="sc">-</span>N)] <span class="sc">%&gt;%</span> .[<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
 <div class="cell-output cell-output-stdout">
 <pre><code>                           name   num1     N
                          &lt;char&gt; &lt;lgcl&gt; &lt;int&gt;
@@ -404,7 +388,7 @@ Respuesta
        ]</code></pre>
 <p>Por ejemplo, recapitulando temas anteriores ¿cómo contarías el número de paises en los que una canción ha estado en el top 50?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>data[,.N, by <span class="ot">=</span> .(name,country)][,.(<span class="at">ncountry =</span> .N), by <span class="ot">=</span> name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data[,.N, by <span class="ot">=</span> .(name,country)][,.(<span class="at">ncountry =</span> .N), by <span class="ot">=</span> name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                            name ncountry
                           &lt;char&gt;    &lt;int&gt;
@@ -423,7 +407,7 @@ Respuesta
 </div>
 <p>En realidad los corchetes consecutivos es una funcionalidad que viene desde R base. Por ejemplo, podemos seleccionar las primeras 10 filas del df data y después seleccionar las primeras dos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(data)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,][<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(data)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,][<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              spotify_id               name               artists daily_rank daily_movement weekly_movement country
 1 2plbrEY59IikOBgBGLjaoe   Die With A Smile Lady Gaga, Bruno Mars          1              0               0        
