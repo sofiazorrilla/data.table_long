@@ -100,22 +100,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <body class="nav-sidebar floating nav-fixed">
 
+
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
-    <span class="navbar-title"><img src="img/logo.png" alt="Logo" class="logo"></span>
-    </a>
-  </div>
         <div class="quarto-navbar-tools ms-auto">
-    <a href="https://twitter.com" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-twitter"></i></a>
     <div class="dropdown">
       <a href="" title="" id="quarto-navigation-tool-dropdown-0" class="quarto-navigation-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false" aria-label=""><i class="bi bi-github"></i></a>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="quarto-navigation-tool-dropdown-0">
           <li>
-            <a class="dropdown-item quarto-navbar-tools ms-auto-item" href="https://code.com">
+            <a class="dropdown-item quarto-navbar-tools ms-auto-item" href="https://github.com/sofiazorrilla/data.table_long/blob/main/README.md">
             Source Code
             </a>
           </li>
@@ -277,28 +272,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter1
     &lt;int&gt;  &lt;char&gt;
- 1:     1       J
- 2:     2       J
- 3:     3       C
- 4:     4       H
- 5:     5       B
- 6:     6       H
- 7:     7       I
- 8:     8       G
- 9:     9       E
-10:    10       G</code></pre>
+ 1:     1       C
+ 2:     2       H
+ 3:     3       J
+ 4:     4       J
+ 5:     5       I
+ 6:     6       E
+ 7:     7       B
+ 8:     8       H
+ 9:     9       A
+10:    10       J</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dt2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter2
     &lt;int&gt;  &lt;char&gt;
- 1:     6       H
- 2:     7       J
- 3:     8       G
- 4:     9       G
- 5:    10       A
- 6:    11       D
- 7:    12       H
+ 1:     6       J
+ 2:     7       B
+ 3:     8       I
+ 4:     9       E
+ 5:    10       I
+ 6:    11       E
+ 7:    12       I
  8:    13       C
  9:    14       C
 10:    15       H</code></pre>
@@ -309,11 +304,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
       id letter1 letter2
    &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
-1:     6       H       H
-2:     7       I       J
-3:     8       G       G
-4:     9       E       G
-5:    10       G       A</code></pre>
+1:     6       E       J
+2:     7       B       B
+3:     8       H       I
+4:     9       A       E
+5:    10       J       I</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># left join</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all.x =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -321,16 +316,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1       J    &lt;NA&gt;
- 2:     2       J    &lt;NA&gt;
- 3:     3       C    &lt;NA&gt;
- 4:     4       H    &lt;NA&gt;
- 5:     5       B    &lt;NA&gt;
- 6:     6       H       H
- 7:     7       I       J
- 8:     8       G       G
- 9:     9       E       G
-10:    10       G       A</code></pre>
+ 1:     1       C    &lt;NA&gt;
+ 2:     2       H    &lt;NA&gt;
+ 3:     3       J    &lt;NA&gt;
+ 4:     4       J    &lt;NA&gt;
+ 5:     5       I    &lt;NA&gt;
+ 6:     6       E       J
+ 7:     7       B       B
+ 8:     8       H       I
+ 9:     9       A       E
+10:    10       J       I</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># right join</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all.y =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -338,13 +333,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     6       H       H
- 2:     7       I       J
- 3:     8       G       G
- 4:     9       E       G
- 5:    10       G       A
- 6:    11    &lt;NA&gt;       D
- 7:    12    &lt;NA&gt;       H
+ 1:     6       E       J
+ 2:     7       B       B
+ 3:     8       H       I
+ 4:     9       A       E
+ 5:    10       J       I
+ 6:    11    &lt;NA&gt;       E
+ 7:    12    &lt;NA&gt;       I
  8:    13    &lt;NA&gt;       C
  9:    14    &lt;NA&gt;       C
 10:    15    &lt;NA&gt;       H</code></pre>
@@ -355,18 +350,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1       J    &lt;NA&gt;
- 2:     2       J    &lt;NA&gt;
- 3:     3       C    &lt;NA&gt;
- 4:     4       H    &lt;NA&gt;
- 5:     5       B    &lt;NA&gt;
- 6:     6       H       H
- 7:     7       I       J
- 8:     8       G       G
- 9:     9       E       G
-10:    10       G       A
-11:    11    &lt;NA&gt;       D
-12:    12    &lt;NA&gt;       H
+ 1:     1       C    &lt;NA&gt;
+ 2:     2       H    &lt;NA&gt;
+ 3:     3       J    &lt;NA&gt;
+ 4:     4       J    &lt;NA&gt;
+ 5:     5       I    &lt;NA&gt;
+ 6:     6       E       J
+ 7:     7       B       B
+ 8:     8       H       I
+ 9:     9       A       E
+10:    10       J       I
+11:    11    &lt;NA&gt;       E
+12:    12    &lt;NA&gt;       I
 13:    13    &lt;NA&gt;       C
 14:    14    &lt;NA&gt;       C
 15:    15    &lt;NA&gt;       H</code></pre>
@@ -384,24 +379,24 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>      id letter1 letter2
    &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
-1:     6       H       H
-2:     7       I       J
-3:     8       G       G
-4:     9       E       G
-5:    10       G       A</code></pre>
+1:     6       E       J
+2:     7       B       B
+3:     8       H       I
+4:     9       A       E
+5:    10       J       I</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># left join</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dt1[dt2, on <span class="ot">=</span> <span class="st">"id"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     6       H       H
- 2:     7       I       J
- 3:     8       G       G
- 4:     9       E       G
- 5:    10       G       A
- 6:    11    &lt;NA&gt;       D
- 7:    12    &lt;NA&gt;       H
+ 1:     6       E       J
+ 2:     7       B       B
+ 3:     8       H       I
+ 4:     9       A       E
+ 5:    10       J       I
+ 6:    11    &lt;NA&gt;       E
+ 7:    12    &lt;NA&gt;       I
  8:    13    &lt;NA&gt;       C
  9:    14    &lt;NA&gt;       C
 10:    15    &lt;NA&gt;       H</code></pre>
@@ -411,16 +406,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter2 letter1
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1    &lt;NA&gt;       J
- 2:     2    &lt;NA&gt;       J
- 3:     3    &lt;NA&gt;       C
- 4:     4    &lt;NA&gt;       H
- 5:     5    &lt;NA&gt;       B
- 6:     6       H       H
- 7:     7       J       I
- 8:     8       G       G
- 9:     9       G       E
-10:    10       A       G</code></pre>
+ 1:     1    &lt;NA&gt;       C
+ 2:     2    &lt;NA&gt;       H
+ 3:     3    &lt;NA&gt;       J
+ 4:     4    &lt;NA&gt;       J
+ 5:     5    &lt;NA&gt;       I
+ 6:     6       J       E
+ 7:     7       B       B
+ 8:     8       I       H
+ 9:     9       E       A
+10:    10       I       J</code></pre>
 </div>
 </div>
 
