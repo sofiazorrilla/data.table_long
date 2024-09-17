@@ -40,7 +40,7 @@ DT = data.table(
 DT
 
 # Para comparar como se ve un df vs DT
-# as.data.frame(DT)
+as.data.frame(DT)
 
 #####################
 ## Importar datos ###
@@ -66,7 +66,7 @@ head(data)
 # Escribir archivo
 
 # ¿qué le falta al comando para que escriba el archivo comprimido?
-fwrite(DT, "data/testDT.csv", sep = ",")
+fwrite(DT, "data/testDT.csv.gz", sep = ",", compress = "auto")
 
 ##################################################
 ## Operaciones sobre las filas: filtros y orden ##
@@ -110,7 +110,14 @@ unique(ordered_data_MX$danceability) |> head()
 
 # ¿De qué rango de años son las 50 canciones más escuchadas?
 
+data_GB <- data[country == "GB",]
+ordered_data_GB = data_GB[order(daily_rank, decreasing = F)]
+unique(ordered_data_GB$name) |> head(n = 50)
 
+
+
+min(ordered_data_GB$album_release_date, na.rm = T)
+max(ordered_data_GB$album_release_date, na.rm = T)
 
 ##################################################
 ## Operaciones sobre las columnas: seleccion #####
@@ -122,7 +129,7 @@ data[,c(2,3,7),]
 
 # Seleccionar por nombre
 
-data[,name] 
+data[,name] %>% class
 
 # Seleccionar múltiples columnas
 
@@ -148,6 +155,16 @@ data[ , ..variables]
 
 ## B) Genera un objeto data.table que tenga los registros del mes de septiembre 2024 y las columnas que describen las características de las cancions (utiliza un solo comando).
 
+
+data[,list(duration_ms,danceability,energy)]
+
+variables <- c("duration_ms","danceability","energy")
+
+data[,..variables]
+
+head(variables)
+
+sept_caracter <-  data[format(snapshot_date, "%Y-%m") == "2024-09",..variables]
 
 
 # Deseleccionar columnas
@@ -177,9 +194,11 @@ data[country == "MX" & acousticness > 0.5, .N]
 #Pregunta:
 #¿Cuántas canciones que se hayan publicado de antes del 2000 han estado dentro del top 50? (Utiliza .N)
 
+data[format(album_release_date, "%Y") < "2000" & daily_rank< 50, .N]
+
 ## Cambiar la duracion de de ms a minutos y obtener el promedio
 
-data[, duration_ms/1000/60] %>% mean()
+data[, duration_ms/1000/60]  %>% mean()
 
 data[,mean(duration_ms/1000/60)]
 
@@ -205,7 +224,13 @@ data
 
 ## 1) Agrega una nueva columna (year_release) a la tabla original que solo muestre el año de publicación del album de la canción
 
+data[, year := as.numeric(format(album_release_date, "%Y"))]
+
 # 2) En un solo comando: genera una columna de diferencia entre la fecha de publicación y la fecha en la que la canción apareció en el top50. Además generar una columna de duración de la canción en minutos
+
+# dt[, c("col1","col2","col3") := list(val1,val2,val3)]
+
+data[, c("diff_until_top50","duracion_minutos") := .(snapshot_date - album_release_date, duration_ms/1000/60)]
 
 ##################################################
 ## Operaciones sobre las columnas: Agrupacion ####

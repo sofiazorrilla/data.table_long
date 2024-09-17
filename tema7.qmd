@@ -2,6 +2,15 @@
 title: "Uniones entre tablas"
 ---
 
+```{r}
+#| echo: false
+library(data.table)
+library(magrittr)
+library(ggplot2)
+library(ggrepel)
+
+```
+
 ## Función `merge`
 
 Hay dos formas de escribir uniones entre tablas usando `data.table`. La primera es mediante la función `merge()` de r base. Los argumentos básicos de esta función son:
@@ -68,6 +77,232 @@ dt1[dt2, on = "id"]
 
 # right join
 dt2[dt1, on = "id"]
+
+```
+
+## Ejercicio
+
+Para el siguiente ejercicio vamos a cargar varias tablas. Representan la información de muchas canciones de Spotify. A diferencia de la tabla que hemos estado utilizando estas canciones son de musica electrónica de la compañía Beatport. Las tablas fueron descargadas de la siguiente [página](https://www.kaggle.com/datasets/mcfurland/10-m-beatport-tracks-spotify-audio-features?select=bp_track.csv)
+
+Las tablas se relacionan de la siguiente manera:
+
+![](img/ER.png)
+
+```{r}
+#| eval: false
+#| echo: false
+
+tracks <- fread("data/bd/bp_track.csv")
+
+split_tracks <- split(tracks, ceiling(seq_along(tracks$track_id) / (length(tracks$track_id)/4)))
+
+lapply(seq_along(split_tracks), function(x){
+      fwrite(x = split_tracks[[x]],file = paste0("data/bd/tracks/","tracks_",x,".csv.gz"), compress = "auto")})
+
+```
+
+
+Nota: El objeto de tracks tiene 10M+ de filas, pesa 2.6 GB cuando está cargado en memoria. Si tu computadora tiene poca memoria puedes elegir no juntar todos los archivos de las canciones (por ejemplo `tracks <- do.call(rbind,data_files[5:6])` para solo cargar dos de los 4 archivos)
+
+```{r}
+# Enlistar los archivos de canciones (guardados en la carpeta de tracks)
+tracks <- list.files("data/bd/tracks", full.names = T)
+
+# Enlistar los archivos restantes en la carpeta bd
+files <- c(list.files("data/bd", full.names = T, pattern = ".csv*"), tracks)
+
+# Leer los archivos usando fread
+data_files <- lapply(files,fread)
+names(data_files) <- c(list.files("data/bd", pattern = ".csv*"), list.files("data/bd/tracks"))
+
+# Guardar los datos en objetos diferentes
+genre <- data_files$bp_genre.csv
+subgenre <- data_files$bp_subgenre.csv
+artist <- data_files$bp_artist.csv.gz
+artist_track <- data_files$bp_artist_track.csv.gz
+tracks <- do.call(rbind,data_files[5:8])
+
+# Borrar la lista de archivos
+rm(data_files)
+
+```
+
+Nos gustaría explorar la distribución de canciones de diferentes géneros a lo largo del tiempo. Para esto primero tenemos que unir las tablas tracks, genre y subgenre. En el diagrama puedes ver las columnas que las unen. 
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+#| code-fold: true
+#| warning: false
+
+# Union de tablas
+tracks_genre <- merge(tracks,genre[,.(genre_id,genre_name)],by = "genre_id", all.x = T) 
+
+# Visualiza el número de canciones por genero que se publicaron cada año (release_date) del 2000 al 2024
+
+freq_tracks <- tracks_genre[,.N,by = .(genre_name, Yr = format(release_date,"%Y"))]
+
+# Opcional: 
+labels <- freq_tracks[, .SD[which.max(N)], by = genre_name][order(-N)][1:5]
+
+colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "gray")
+names(colors) <- c(labels$genre_name, "other")
+
+freq_tracks[,color := ifelse(genre_name %in% labels$genre_name, genre_name, "other")] 
+
+freq_tracks %>% 
+      ggplot(aes(x = as.numeric(Yr), y = N, group = genre_name))+
+      geom_line(color = "gray", size = 1, alpha = 0.8)+
+      geom_line(data = freq_tracks[genre_name %in% labels$genre_name], aes(color = factor(color, levels = c(labels$genre_name, "other"))), size = 2)+
+      geom_text_repel(data = labels, aes(label = genre_name, color = factor(genre_name, levels = c(labels$genre_name, "other"))), nudge_y= 500)+
+      scale_color_manual(values = colors)+
+      scale_x_continuous(limits = c(2000,2025))+
+      labs(x = "Year", y = "N songs", color = "Subgenre")+
+      theme_bw()
+```
+
+::: {.callout-note collapse="true"}
+## Ejercicio
+
+Genera una gráfica similar en la que muestres la distribución de los 5 subgéneros con más canciones en el tiempo.
+
+:::
+::: {.callout-note collapse="true"}
+## Respuesta
+
+```{r}
+#| fig-width: 12
+#| fig-height: 8
+#| echo: false
+#| warning: false
+
+# Union de tablas
+tracks_subgenre <- merge(tracks, subgenre[,.(subgenre_id,subgenre_name)], by = "subgenre_id")
+
+# Visualiza el número de canciones por genero que se publicaron cada año (release_date) del 2000 al 2024
+
+freq_tracks <- tracks_subgenre[,.N,by = .(subgenre_name, Yr = format(release_date,"%Y"))]
+
+# Opcional: 
+labels <- freq_tracks[, .SD[which.max(N)], by = subgenre_name][order(-N)][1:5]
+
+colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "gray")
+names(colors) <- c(labels$subgenre_name, "other")
+
+freq_tracks[,color := ifelse(subgenre_name %in% labels$subgenre_name, subgenre_name, "other")] 
+
+freq_tracks %>% 
+      ggplot(aes(x = as.numeric(Yr), y = N, group = subgenre_name))+
+      geom_line(color = "gray", size = 1, alpha = 0.8)+
+      geom_line(data = freq_tracks[subgenre_name %in% labels$subgenre_name], aes(color = factor(color, levels = c(labels$subgenre_name, "other"))), size = 2)+
+      geom_text_repel(data = labels, aes(label = subgenre_name, color = factor(subgenre_name, levels = c(labels$subgenre_name, "other"))), nudge_y= 500)+
+      scale_color_manual(values = colors)+
+      scale_x_continuous(limits = c(2000,2025))+
+      labs(x = "Year", y = "N songs", color = "Genre")+
+      theme_bw()
+```
+:::
+
+
+
+
+
+```{r}
+#| eval: false
+#| echo: false
+
+library('spotifyr')
+library(future.apply)
+
+#' Get Spotify Access Token
+#'
+#' This function prompts the user for their Spotify API credentials (`Client ID` and `Client Secret`),
+#' sets these values as environment variables, and retrieves an access token using the `spotifyr` package.
+#' 
+#' To get client id and client secret you must set up a developer account in spotify (https://developer.spotify.com), create an app so that you will get a web API
+#'
+#' @return A Spotify access token as a string.
+#'
+#' @examples
+#' \dontrun{
+#'   # Call the function to get the access token
+#'   access_token <- get_spotify_access_token_custom()
+#'   print(access_token)
+#' }
+#'
+#' @seealso \code{\link{get_spotify_access_token}} from the `spotifyr` package.
+#' 
+#' @export
+get_spotify_access_token_custom <- function() {
+  spotify_client_id <- readline(prompt = "Enter your Spotify Client ID: ")
+  spotify_client_secret <- readline(prompt = "Enter your Spotify Client Secret: ")
+  
+  Sys.setenv(SPOTIFY_CLIENT_ID = spotify_client_id)
+  Sys.setenv(SPOTIFY_CLIENT_SECRET = spotify_client_secret)
+  
+  access_token <- get_spotify_access_token()
+  return(access_token)
+}
+token <- get_spotify_access_token_custom()
+
+
+#' Get Artist Genre for a Spotify Song
+#'
+#' This function retrieves the genres associated with the artists of a given song on Spotify, 
+#' using the song's Spotify ID. The genres are retrieved for all artists listed on the track.
+#'
+#' @param spotify_id A character string representing the Spotify track ID.
+#'
+#' @return A data table containing the song ID, artist ID(s), and the associated genre(s).
+#'
+#' @examples
+#' \dontrun{
+#'   # Get genres for a specific track using its Spotify ID
+#'   song_genres <- get_artist_genre("3n3Ppam7vgaVa1iaRUc9Lp")
+#'   print(song_genres)
+#' }
+#'
+#' @seealso \code{\link{get_track}} and \code{\link{get_artist}} from the `spotifyr` package.
+#'
+#' @import data.table
+#' @export
+get_artist_genre <- function(spotify_id) {
+  track <- get_track(spotify_id)
+  print(track$name)
+  artist_ids <- track$artists$id
+
+  genres <- sapply(artist_ids, function(artist_id) {
+    artist_info <- get_artist(artist_id)
+    return(artist_info$genres)
+  })
+  
+  result <- data.table(song_id = spotify_id, artist_id = artist_ids, genres = as.list(genres))
+  
+  return(result)
+}
+
+# Obtener el vector único de spotify_id
+spotify_ids <- unique(data$spotify_id)
+
+# Dividir el vector en grupos de 100
+split_ids <- split(spotify_ids, ceiling(seq_along(spotify_ids) / 100))
+
+artists_genre <- data.table(id = seq(1, length(split_ids)))
+
+genres_list <-lapply(seq_along(split_ids)[68:length(split_ids)],        
+      function(x) {
+            artists_genre[id == x,gp_info := list(lapply(split_ids[[x]],get_artist_genre))]
+            Sys.sleep(10)
+      })
+
+save(artists_genre, file = "artists_genre.RData")
+
+correct_dt <- unlist(lapply(artists_genre[1,]$gp_info[[1]],function(x){dim(x)[2]}))
+indices <- which(correct_dt == 3)
+
+
+
+test <- lapply(artists_genre$gp_info,function(x){do.call(rbind,x)}) %>% do.call(rbind,.)
 
 ```
 

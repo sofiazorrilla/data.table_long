@@ -213,6 +213,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Uniones entre tablas</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema8.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Reformatear tablas</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -227,6 +233,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#función-merge" id="toc-función-merge" class="nav-link active" data-scroll-target="#función-merge">Función <code>merge</code></a></li>
   <li><a href="#sintaxis-de-data.table" id="toc-sintaxis-de-data.table" class="nav-link" data-scroll-target="#sintaxis-de-data.table">Sintaxis de <code>data.table</code></a></li>
+  <li><a href="#ejercicio" id="toc-ejercicio" class="nav-link" data-scroll-target="#ejercicio">Ejercicio</a></li>
   </ul>
 </nav>
     </div>
@@ -272,29 +279,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter1
     &lt;int&gt;  &lt;char&gt;
- 1:     1       C
- 2:     2       H
- 3:     3       J
- 4:     4       J
- 5:     5       I
- 6:     6       E
- 7:     7       B
- 8:     8       H
- 9:     9       A
-10:    10       J</code></pre>
+ 1:     1       I
+ 2:     2       D
+ 3:     3       G
+ 4:     4       H
+ 5:     5       F
+ 6:     6       D
+ 7:     7       J
+ 8:     8       G
+ 9:     9       E
+10:    10       G</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>dt2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter2
     &lt;int&gt;  &lt;char&gt;
- 1:     6       J
- 2:     7       B
+ 1:     6       F
+ 2:     7       H
  3:     8       I
- 4:     9       E
- 5:    10       I
+ 4:     9       H
+ 5:    10       D
  6:    11       E
- 7:    12       I
- 8:    13       C
+ 7:    12       G
+ 8:    13       E
  9:    14       C
 10:    15       H</code></pre>
 </div>
@@ -304,11 +311,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
       id letter1 letter2
    &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
-1:     6       E       J
-2:     7       B       B
-3:     8       H       I
-4:     9       A       E
-5:    10       J       I</code></pre>
+1:     6       D       F
+2:     7       J       H
+3:     8       G       I
+4:     9       E       H
+5:    10       G       D</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># left join</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all.x =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -316,16 +323,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1       C    &lt;NA&gt;
- 2:     2       H    &lt;NA&gt;
- 3:     3       J    &lt;NA&gt;
- 4:     4       J    &lt;NA&gt;
- 5:     5       I    &lt;NA&gt;
- 6:     6       E       J
- 7:     7       B       B
- 8:     8       H       I
- 9:     9       A       E
-10:    10       J       I</code></pre>
+ 1:     1       I    &lt;NA&gt;
+ 2:     2       D    &lt;NA&gt;
+ 3:     3       G    &lt;NA&gt;
+ 4:     4       H    &lt;NA&gt;
+ 5:     5       F    &lt;NA&gt;
+ 6:     6       D       F
+ 7:     7       J       H
+ 8:     8       G       I
+ 9:     9       E       H
+10:    10       G       D</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># right join</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">merge</span>(dt1,dt2,<span class="at">by =</span> <span class="st">"id"</span>, <span class="at">all.y =</span> T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -333,14 +340,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     6       E       J
- 2:     7       B       B
- 3:     8       H       I
- 4:     9       A       E
- 5:    10       J       I
+ 1:     6       D       F
+ 2:     7       J       H
+ 3:     8       G       I
+ 4:     9       E       H
+ 5:    10       G       D
  6:    11    &lt;NA&gt;       E
- 7:    12    &lt;NA&gt;       I
- 8:    13    &lt;NA&gt;       C
+ 7:    12    &lt;NA&gt;       G
+ 8:    13    &lt;NA&gt;       E
  9:    14    &lt;NA&gt;       C
 10:    15    &lt;NA&gt;       H</code></pre>
 </div>
@@ -350,19 +357,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>Key: &lt;id&gt;
        id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1       C    &lt;NA&gt;
- 2:     2       H    &lt;NA&gt;
- 3:     3       J    &lt;NA&gt;
- 4:     4       J    &lt;NA&gt;
- 5:     5       I    &lt;NA&gt;
- 6:     6       E       J
- 7:     7       B       B
- 8:     8       H       I
- 9:     9       A       E
-10:    10       J       I
+ 1:     1       I    &lt;NA&gt;
+ 2:     2       D    &lt;NA&gt;
+ 3:     3       G    &lt;NA&gt;
+ 4:     4       H    &lt;NA&gt;
+ 5:     5       F    &lt;NA&gt;
+ 6:     6       D       F
+ 7:     7       J       H
+ 8:     8       G       I
+ 9:     9       E       H
+10:    10       G       D
 11:    11    &lt;NA&gt;       E
-12:    12    &lt;NA&gt;       I
-13:    13    &lt;NA&gt;       C
+12:    12    &lt;NA&gt;       G
+13:    13    &lt;NA&gt;       E
 14:    14    &lt;NA&gt;       C
 15:    15    &lt;NA&gt;       H</code></pre>
 </div>
@@ -379,25 +386,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>      id letter1 letter2
    &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
-1:     6       E       J
-2:     7       B       B
-3:     8       H       I
-4:     9       A       E
-5:    10       J       I</code></pre>
+1:     6       D       F
+2:     7       J       H
+3:     8       G       I
+4:     9       E       H
+5:    10       G       D</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># left join</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dt1[dt2, on <span class="ot">=</span> <span class="st">"id"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter1 letter2
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     6       E       J
- 2:     7       B       B
- 3:     8       H       I
- 4:     9       A       E
- 5:    10       J       I
+ 1:     6       D       F
+ 2:     7       J       H
+ 3:     8       G       I
+ 4:     9       E       H
+ 5:    10       G       D
  6:    11    &lt;NA&gt;       E
- 7:    12    &lt;NA&gt;       I
- 8:    13    &lt;NA&gt;       C
+ 7:    12    &lt;NA&gt;       G
+ 8:    13    &lt;NA&gt;       E
  9:    14    &lt;NA&gt;       C
 10:    15    &lt;NA&gt;       H</code></pre>
 </div>
@@ -406,16 +413,113 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell-output cell-output-stdout">
 <pre><code>       id letter2 letter1
     &lt;int&gt;  &lt;char&gt;  &lt;char&gt;
- 1:     1    &lt;NA&gt;       C
- 2:     2    &lt;NA&gt;       H
- 3:     3    &lt;NA&gt;       J
- 4:     4    &lt;NA&gt;       J
- 5:     5    &lt;NA&gt;       I
- 6:     6       J       E
- 7:     7       B       B
- 8:     8       I       H
- 9:     9       E       A
-10:    10       I       J</code></pre>
+ 1:     1    &lt;NA&gt;       I
+ 2:     2    &lt;NA&gt;       D
+ 3:     3    &lt;NA&gt;       G
+ 4:     4    &lt;NA&gt;       H
+ 5:     5    &lt;NA&gt;       F
+ 6:     6       F       D
+ 7:     7       H       J
+ 8:     8       I       G
+ 9:     9       H       E
+10:    10       D       G</code></pre>
+</div>
+</div>
+</section>
+<section id="ejercicio" class="level2">
+<h2 class="anchored" data-anchor-id="ejercicio">Ejercicio</h2>
+<p>Para el siguiente ejercicio vamos a cargar varias tablas. Representan la información de muchas canciones de Spotify. A diferencia de la tabla que hemos estado utilizando estas canciones son de musica electrónica de la compañía Beatport. Las tablas fueron descargadas de la siguiente <a href="https://www.kaggle.com/datasets/mcfurland/10-m-beatport-tracks-spotify-audio-features?select=bp_track.csv">página</a></p>
+<p>Las tablas se relacionan de la siguiente manera:</p>
+<p><img src="img/ER.png" class="img-fluid"></p>
+<p>Nota: El objeto de tracks tiene 10M+ de filas, pesa 2.6 GB cuando está cargado en memoria. Si tu computadora tiene poca memoria puedes elegir no juntar todos los archivos de las canciones (por ejemplo <code>tracks &lt;- do.call(rbind,data_files[5:6])</code> para solo cargar dos de los 4 archivos)</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Enlistar los archivos de canciones (guardados en la carpeta de tracks)</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>tracks <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="st">"data/bd/tracks"</span>, <span class="at">full.names =</span> T)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Enlistar los archivos restantes en la carpeta bd</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>files <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">list.files</span>(<span class="st">"data/bd"</span>, <span class="at">full.names =</span> T, <span class="at">pattern =</span> <span class="st">".csv*"</span>), tracks)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Leer los archivos usando fread</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>data_files <span class="ot">&lt;-</span> <span class="fu">lapply</span>(files,fread)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(data_files) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">list.files</span>(<span class="st">"data/bd"</span>, <span class="at">pattern =</span> <span class="st">".csv*"</span>), <span class="fu">list.files</span>(<span class="st">"data/bd/tracks"</span>))</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Guardar los datos en objetos diferentes</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>genre <span class="ot">&lt;-</span> data_files<span class="sc">$</span>bp_genre.csv</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>subgenre <span class="ot">&lt;-</span> data_files<span class="sc">$</span>bp_subgenre.csv</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>artist <span class="ot">&lt;-</span> data_files<span class="sc">$</span>bp_artist.csv.gz</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>artist_track <span class="ot">&lt;-</span> data_files<span class="sc">$</span>bp_artist_track.csv.gz</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>tracks <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind,data_files[<span class="dv">5</span><span class="sc">:</span><span class="dv">8</span>])</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a><span class="co"># Borrar la lista de archivos</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(data_files)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Nos gustaría explorar la distribución de canciones de diferentes géneros a lo largo del tiempo. Para esto primero tenemos que unir las tablas tracks, genre y subgenre. En el diagrama puedes ver las columnas que las unen.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Union de tablas</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>tracks_genre <span class="ot">&lt;-</span> <span class="fu">merge</span>(tracks,genre[,.(genre_id,genre_name)],<span class="at">by =</span> <span class="st">"genre_id"</span>, <span class="at">all.x =</span> T) </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualiza el número de canciones por genero que se publicaron cada año (release_date) del 2000 al 2024</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>freq_tracks <span class="ot">&lt;-</span> tracks_genre[,.N,by <span class="ot">=</span> .(genre_name, <span class="at">Yr =</span> <span class="fu">format</span>(release_date,<span class="st">"%Y"</span>))]</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Opcional: </span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>labels <span class="ot">&lt;-</span> freq_tracks[, .SD[<span class="fu">which.max</span>(N)], by <span class="ot">=</span> genre_name][<span class="fu">order</span>(<span class="sc">-</span>N)][<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>]</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>colors <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"#1f77b4"</span>, <span class="st">"#ff7f0e"</span>, <span class="st">"#2ca02c"</span>, <span class="st">"#d62728"</span>, <span class="st">"#9467bd"</span>, <span class="st">"gray"</span>)</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(colors) <span class="ot">&lt;-</span> <span class="fu">c</span>(labels<span class="sc">$</span>genre_name, <span class="st">"other"</span>)</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>freq_tracks[,color <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(genre_name <span class="sc">%in%</span> labels<span class="sc">$</span>genre_name, genre_name, <span class="st">"other"</span>)] </span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>freq_tracks <span class="sc">%&gt;%</span> </span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">as.numeric</span>(Yr), <span class="at">y =</span> N, <span class="at">group =</span> genre_name))<span class="sc">+</span></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">color =</span> <span class="st">"gray"</span>, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">alpha =</span> <span class="fl">0.8</span>)<span class="sc">+</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_line</span>(<span class="at">data =</span> freq_tracks[genre_name <span class="sc">%in%</span> labels<span class="sc">$</span>genre_name], <span class="fu">aes</span>(<span class="at">color =</span> <span class="fu">factor</span>(color, <span class="at">levels =</span> <span class="fu">c</span>(labels<span class="sc">$</span>genre_name, <span class="st">"other"</span>))), <span class="at">size =</span> <span class="dv">2</span>)<span class="sc">+</span></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>      <span class="fu">geom_text_repel</span>(<span class="at">data =</span> labels, <span class="fu">aes</span>(<span class="at">label =</span> genre_name, <span class="at">color =</span> <span class="fu">factor</span>(genre_name, <span class="at">levels =</span> <span class="fu">c</span>(labels<span class="sc">$</span>genre_name, <span class="st">"other"</span>))), <span class="at">nudge_y=</span> <span class="dv">500</span>)<span class="sc">+</span></span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_color_manual</span>(<span class="at">values =</span> colors)<span class="sc">+</span></span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>      <span class="fu">scale_x_continuous</span>(<span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">2000</span>,<span class="dv">2025</span>))<span class="sc">+</span></span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>      <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Year"</span>, <span class="at">y =</span> <span class="st">"N songs"</span>, <span class="at">color =</span> <span class="st">"Subgenre"</span>)<span class="sc">+</span></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>      <span class="fu">theme_bw</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="tema7_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Ejercicio
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Genera una gráfica similar en la que muestres la distribución de los 5 subgéneros con más canciones en el tiempo.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Respuesta
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="tema7_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="1152"></p>
+</div>
+</div>
+</div>
 </div>
 </div>
 

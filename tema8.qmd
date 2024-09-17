@@ -1,0 +1,49 @@
+---
+  title: "Reformatear tablas"
+---
+
+```{r}
+#| echo: false
+library(data.table)
+library(magrittr)
+library(ggplot2)
+
+data = fread("data/universal_top_spotify_songs.csv.gz")
+```
+
+Las funciones para cambiar las tablas de formato son `melt` y `dcast`. Estas funciones están optimizadas para funcionar con grandes cantidades de datos guardados en memoria. 
+
+Larga a ancha:
+```
+dcast(data, formula, fun.aggregate = NULL, sep = "_",
+    ..., margins = NULL, subset = NULL, fill = NULL,
+    drop = TRUE, value.var = guess(data),
+    verbose = getOption("datatable.verbose"))
+```
+
+## Larga a ancha
+
+Actualmente tenemos una tabla larga. Vamos a convertirla en una tabla en la que las columnas sean los 73 paises y las canciones las filas. Los valores van a ser el numero de veces en las que cada canción ha aparecido en el listado de las 50 canciones más populares (`data`) en el último año. Adicionalmente vamos a mantener la columna de la fecha del listado (snapshot_date) pero la vamos a modificar de modo que nos quedemos con el mes y el año.
+
+```{r}
+
+freq_song_long <- data[,.(.N), by = .(name,country,month_yr = format(snapshot_date,"%Y-%m"))]
+freq_song_wide <- dcast(freq_song_long, month_yr+name~country, value.var = "N", fill = 0)
+
+```
+
+## Ancha a larga 
+
+Ancha a larga:
+```
+melt(data, id.vars, measure.vars,
+    variable.name = "variable", value.name = "value",
+    ..., na.rm = FALSE, variable.factor = TRUE,
+    value.factor = FALSE,
+    verbose = getOption("datatable.verbose"))
+```
+
+```{r}
+
+```
+
