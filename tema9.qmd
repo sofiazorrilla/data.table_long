@@ -1,0 +1,156 @@
+---
+  title: ".SD()"
+---
+
+```{r}
+#| echo: false
+#| warning: false
+
+library(data.table)
+library(magrittr)
+library(ggplot2)
+
+data = fread("data/universal_top_spotify_songs.csv.gz")
+```
+
+Una herramienta muy útil en data.table es `.SD`. El nombre viene de `.S`ubset `D`ata.table y se puede pensar que es una autoreferencia a la misma tabla. Es difícil describir los usos de .SD por lo que lo haremos a través de ejemplos. 
+
+## SD para hacer subconjuntos 
+
+El uso más sencillo de .SD es la realización de subconjuntos. Un uso trivial sería generar el subconjunto de toda la tabla.
+
+```{r}
+identical(data, data[ , .SD])
+```
+
+También se puede usar para hacer subconjuntos de columnas. En `.SDcols` se pueden especificar las columnas a las que hace referencia `.SD`.
+
+```{r}
+data[,.SD,.SDcols = c("artists","name")] %>% str()
+```
+
+
+Otro ejemplo más útil: en secciones anteriores del taller les pedí que generaran un subconjunto de data que solo tuviera las variables numéricas de la tabla. Utilizando .SD lo podemos hacer fácilmente si especificamos la condición de que las columnas sean numéricas en el argumento `.SDcols` 
+
+```{r}
+data[,.SD, .SDcols = is.numeric] %>% str()
+```
+
+
+## Aplicar funciones sobre los subconjuntos de columnas
+
+También podemos utilizar .SD para refereciar un subconjunto de columnas y aplicar funciones sobre ellas. Por ejemplo, imagina si quisieras cambiar el tipo de datos de muchas columnas fácilmente. Para este ejemplo vamos a volver a leer la tabla de las canciones populares, sin embargo, esta vez vamos a asignar a todas las columnas el tipo de datos de caracter.
+
+```{r}
+data = fread("data/universal_top_spotify_songs.csv.gz", colClasses = 'character')
+```
+
+Primero vamos a utilizar la función `patterns()` en `.SDcols()` para seleccionar las columnas que se refieren a fechas. Modificamos el tipo de datos de las columnas seleccionadas con ese patrón a fecha. 
+
+![](img/sd1.png)
+
+```{r}
+# Cambiar el tipo de datos a las columnas de fechas 
+data[,names(.SD) := lapply(.SD,as.Date),.SDcols = patterns('_date')]
+str(data)
+```
+```{r}
+# Cambiar el tipo de datos a las columnas numéricas
+numeric_cols <- c("daily_rank","daily_movement","weekly_movement","popularity","duration_ms","danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature")
+
+data[,names(.SD) := lapply(.SD,as.numeric), .SDcols = numeric_cols]
+str(data)
+```
+
+
+## Aplicar modelos con distintas variables explicativas (right hand side = rhs)
+
+![](img/sd2.png)
+
+```{r}
+num_vars <- data[,.SD, .SDcols = is.numeric] 
+colnames(num_vars)
+
+vars <- c("danceability","energy","loudness","valence")
+
+# Queremos generar modelos para evaluar como es que diferentes variables afectan la popularidad de las canciones.
+
+
+models = unlist(
+  lapply(1:length(vars), combn, x = vars, simplify = FALSE),
+  recursive = FALSE
+)
+
+lms = lapply(models, function(rhs) {
+ data[snapshot_date == max(snapshot_date),][, 
+      .( call = paste("popularity ~ ",paste(rhs,collapse = " + ")),
+         terms = c("Intercept",rhs),
+         coefs = coef(lm(popularity ~ ., data = .SD)),
+         pvals = summary(lm(popularity ~ ., data = .SD))$coefficients[,4],
+         radj = summary(lm(popularity ~ ., data = .SD))$adj.r.squared), .SDcols = rhs]
+})
+
+results <- do.call(rbind,lms)
+
+results
+
+```
+
+## Uniones condicionales 
+
+Queremos realizar una unión entre dos tablas: `Sales` y `Targets.` La tabla `Sales` contiene las ventas de diferentes tiendas en fechas específicas (sale_date), mientras que la tabla `Targets` tiene los objetivos de ventas (target) por tienda dentro de intervalos de fechas (start_date y end_date). El objetivo es asignar el valor de target de `Targets` a cada venta de `Sales`, basado en si la fecha de venta cae dentro del intervalo de fechas correspondiente para esa tienda.
+
+1. Sales 
+
+| storeID | sale_date   | amount |
+|---------|-------------|--------|
+| 1       | 2023-01-15  | 500    |
+| 1       | 2023-03-10  | 750    |
+| 2       | 2023-04-01  | 1200   |
+| 2       | 2023-02-15  | 600    |
+
+2. Targets Table
+
+| storeID | start_date  | end_date   | target |
+|---------|-------------|------------|--------|
+| 1       | 2023-01-01  | 2023-03-31 | 600    |
+| 1       | 2023-04-01  | 2023-06-30 | 800    |
+| 2       | 2023-01-01  | 2023-03-31 | 1000   |
+| 2       | 2023-04-01  | 2023-06-30 | 1200   |
+
+¿Cómo podemos asignar los objetivos de ventas (target) de un intervalo de fechas en la tabla Targets a las fechas de ventas específicas en la tabla Sales, asegurando que cada transacción tenga el objetivo correcto según el intervalo de fechas al que pertenece?
+
+```{r}
+Sales <- data.table(
+  storeID = c(1, 1, 2, 2),
+  sale_date = as.IDate(c("2023-01-15", "2023-03-10", "2023-04-01", "2023-02-15")),
+  amount = c(500, 750, 1200, 600)
+)
+
+Targets <- data.table(
+  storeID = c(1, 1, 2, 2),
+  start_date = as.IDate(c("2023-01-01", "2023-04-01", "2023-01-01", "2023-04-01")),
+  end_date = as.IDate(c("2023-03-31", "2023-06-30", "2023-03-31", "2023-06-30")),
+  target = c(600, 800, 1000, 1200)
+)
+
+# Add start_date and end_date to Sales as the same value (to use for range-based join)
+Sales[, c("start_date","end_date"):=.(sale_date,sale_date)]
+
+# Join Sales and Targets based on storeID and date range, and assign target as team_performance
+Sales[storeID %in% c(1, 2), 
+      target := Targets[.SD, target, on = .(storeID, start_date <= end_date, end_date >= start_date)]]
+
+Sales
+```
+
+
+## Operaciones sobre grupos
+
+```{r}
+song_freq <- data[,.N, by = .(country,name)]
+
+# Que cancion tiene el mayor numero de registros por pais 
+song_freq[,.SD[which.max(N)], by = country] %>% head()
+```
+

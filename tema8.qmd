@@ -4,6 +4,8 @@
 
 ```{r}
 #| echo: false
+#| warning: false
+
 library(data.table)
 library(magrittr)
 library(ggplot2)
@@ -11,7 +13,13 @@ library(ggplot2)
 data = fread("data/universal_top_spotify_songs.csv.gz")
 ```
 
-Las funciones para cambiar las tablas de formato son `melt` y `dcast`. Estas funciones están optimizadas para funcionar con grandes cantidades de datos guardados en memoria. 
+Las funciones para cambiar las tablas de formato son `melt` y `dcast`. Estas funciones están optimizadas para funcionar con grandes cantidades de datos guardados en memoria (10GB). 
+
+
+
+## Larga a ancha
+
+Actualmente tenemos una tabla larga. Vamos a convertirla en una tabla en la que las columnas sean los 73 paises y las canciones las filas. Los valores van a ser el numero de veces en las que cada canción ha aparecido en el listado de las 50 canciones más populares (`data`) en el último año. Adicionalmente vamos a mantener la columna de la fecha del listado (snapshot_date) pero la vamos a modificar de modo que nos quedemos con el mes y el año.
 
 Larga a ancha:
 ```
@@ -21,16 +29,33 @@ dcast(data, formula, fun.aggregate = NULL, sep = "_",
     verbose = getOption("datatable.verbose"))
 ```
 
-## Larga a ancha
-
-Actualmente tenemos una tabla larga. Vamos a convertirla en una tabla en la que las columnas sean los 73 paises y las canciones las filas. Los valores van a ser el numero de veces en las que cada canción ha aparecido en el listado de las 50 canciones más populares (`data`) en el último año. Adicionalmente vamos a mantener la columna de la fecha del listado (snapshot_date) pero la vamos a modificar de modo que nos quedemos con el mes y el año.
+![](img/dcast.png)
 
 ```{r}
+# Vamos a utilizar la tabla de canciones del top50 en 73 paises
 
-freq_song_long <- data[,.(.N), by = .(name,country,month_yr = format(snapshot_date,"%Y-%m"))]
+# Queremos crear una tabla de conteos de cada cancion por pais por mes en el que se hizo el listado top 50
+freq_song_long <- data[country != "",.(.N), by = .(name,country,month_yr = format(snapshot_date,"%Y-%m"))]
+freq_song_long
+
 freq_song_wide <- dcast(freq_song_long, month_yr+name~country, value.var = "N", fill = 0)
-
+freq_song_wide[,1:9]
 ```
+
+La función dcast también nos permite agregar valores de acuerdo a una función mientras cambiamos el formato de las tablas. Esto es útil cuando nuestra fórmula no puede identificar de manera única cada fila. Por ejemplo, si quiseramos comparar la popularidad promedio de cada canción entre el 2023 y el 2024 podemos hacer lo siguiente:
+
+```{r}
+dcast(data[country != ""], country + name ~ format(snapshot_date,"%Y"), value.var = "popularity", fun.aggregate = function(x){round(mean(x, na.rm = T),digits = 1)})
+```
+
+Ahora imagina que te gustaría pasar de ancha a larga utilizando dos columnas. Por ejemplo, para compara la popularidad y el ranking promedio por año. Podemos indicar múltiples columnas en `value.var`
+
+```{r}
+pop_rank_per_year <- dcast(data[country != ""], country + name ~ format(snapshot_date,"%Y"), value.var = c("daily_rank", "popularity"), sep = ".", fun.aggregate = function(x){round(mean(x, na.rm = T),digits = 1)})
+
+pop_rank_per_year
+```
+
 
 ## Ancha a larga 
 
@@ -43,7 +68,34 @@ melt(data, id.vars, measure.vars,
     verbose = getOption("datatable.verbose"))
 ```
 
-```{r}
+![](img/merge.png)
 
+```{r}
+freq_song_long2 <- melt(freq_song_wide, id.vars = c("month_yr","name"), variable.name = "country", value.name = "N")
+freq_song_long2
+```
+
+De manera similar a `dcast`, podemos reformatear una tabla para conservar más de una columna en la tabla en formato largo. Por ejemplo, si tenemos la tabla generada anteriormente con el ranking promedio diario por año y la popularidad promedio por año, y quisiéramos una tabla que separara las medidas de popularidad en una columna y el ranking promedio en otra, podemos hacerlo de la siguiente manera:
+
+
+```{r}
+## Forma 1
+colA = paste0("daily_rank.", 2023:2024)
+colB = paste0("popularity.", 2023:2024)
+pop_rank_year_long <- pop_rank_per_year %>% 
+  melt(., measure = list(colA, colB), value.name = c("daily_rank", "popularity"), variable.name = "year")
+
+pop_rank_year_long[,year := ifelse(year == 1, 2023,2024)]
+pop_rank_year_long
+
+## Forma 2
+
+pop_rank_per_year %>% 
+  melt(., measure = patterns("^daily_rank.", "^popularity."), value.name = c("daily_rank", "popularity"), variable.name = "year")
+
+# Forma 3
+
+pop_rank_per_year %>% 
+  melt(., measure.vars = measure(var=as.factor, year=as.integer, sep="."), value.name = "mean")
 ```
 

@@ -35,6 +35,7 @@ website:
           - tema6.qmd
           - tema7.qmd
           - tema8.qmd
+          - tema9.qmd
 
 
 format:

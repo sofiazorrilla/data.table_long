@@ -6,7 +6,8 @@ data/universal_top_spotify_songs.csv
 scripts/script_ejemplos_ejercicios_respuestas.R
 
 
-
+# Ignorar archivos de R
 .Rproj.user
+.Rhistory
 
 /.quarto/

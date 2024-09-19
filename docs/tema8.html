@@ -219,6 +219,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Reformatear tablas</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./tema9.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">.SD()</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -256,18 +262,110 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<p>Las funciones para cambiar las tablas de formato son <code>melt</code> y <code>dcast</code>. Estas funciones están optimizadas para funcionar con grandes cantidades de datos guardados en memoria.</p>
+<p>Las funciones para cambiar las tablas de formato son <code>melt</code> y <code>dcast</code>. Estas funciones están optimizadas para funcionar con grandes cantidades de datos guardados en memoria (10GB).</p>
+<section id="larga-a-ancha" class="level2">
+<h2 class="anchored" data-anchor-id="larga-a-ancha">Larga a ancha</h2>
+<p>Actualmente tenemos una tabla larga. Vamos a convertirla en una tabla en la que las columnas sean los 73 paises y las canciones las filas. Los valores van a ser el numero de veces en las que cada canción ha aparecido en el listado de las 50 canciones más populares (<code>data</code>) en el último año. Adicionalmente vamos a mantener la columna de la fecha del listado (snapshot_date) pero la vamos a modificar de modo que nos quedemos con el mes y el año.</p>
 <p>Larga a ancha:</p>
 <pre><code>dcast(data, formula, fun.aggregate = NULL, sep = "_",
     ..., margins = NULL, subset = NULL, fill = NULL,
     drop = TRUE, value.var = guess(data),
     verbose = getOption("datatable.verbose"))</code></pre>
-<section id="larga-a-ancha" class="level2">
-<h2 class="anchored" data-anchor-id="larga-a-ancha">Larga a ancha</h2>
-<p>Actualmente tenemos una tabla larga. Vamos a convertirla en una tabla en la que las columnas sean los 73 paises y las canciones las filas. Los valores van a ser el numero de veces en las que cada canción ha aparecido en el listado de las 50 canciones más populares (<code>data</code>) en el último año. Adicionalmente vamos a mantener la columna de la fecha del listado (snapshot_date) pero la vamos a modificar de modo que nos quedemos con el mes y el año.</p>
+<p><img src="img/dcast.png" class="img-fluid"></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>freq_song_long <span class="ot">&lt;-</span> data[,.(.N), by <span class="ot">=</span> .(name,country,<span class="at">month_yr =</span> <span class="fu">format</span>(snapshot_date,<span class="st">"%Y-%m"</span>))]</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>freq_song_wide <span class="ot">&lt;-</span> <span class="fu">dcast</span>(freq_song_long, month_yr<span class="sc">+</span>name<span class="sc">~</span>country, <span class="at">value.var =</span> <span class="st">"N"</span>, <span class="at">fill =</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Vamos a utilizar la tabla de canciones del top50 en 73 paises</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Queremos crear una tabla de conteos de cada cancion por pais por mes en el que se hizo el listado top 50</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>freq_song_long <span class="ot">&lt;-</span> data[country <span class="sc">!=</span> <span class="st">""</span>,.(.N), by <span class="ot">=</span> .(name,country,<span class="at">month_yr =</span> <span class="fu">format</span>(snapshot_date,<span class="st">"%Y-%m"</span>))]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>freq_song_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                     name country month_yr     N
+                                                   &lt;char&gt;  &lt;char&gt;   &lt;char&gt; &lt;int&gt;
+    1:  Yebo Lapho (Gogo) (feat. DJ Maphorisa &amp; Djy Biza)      ZA  2024-09     8
+    2: Sdakiwe Sbali (feat. Bless The Gentleman &amp; DJ Kap)      ZA  2024-09     8
+    3:      Mfazi Wephepha (feat. Big Zulu &amp; Zee Nxumalo)      ZA  2024-09     8
+    4:      Kwelanga 2.0 (feat. Tman Xpress &amp; LeeMcKrazy)      ZA  2024-09     8
+    5:                     eGoli (feat. Eltee &amp; Novatron)      ZA  2024-09     8
+   ---                                                                          
+75846:                  Nachts wach (Lila Wolken Bootleg)      AT  2023-10     2
+75847:                                             HIBIKI      AR  2023-10     2
+75848:                          Slime You Out (feat. SZA)      AE  2023-10     2
+75849:                  SAY MY GRACE (feat. Travis Scott)      AE  2023-10     2
+75850:                                         Rainy Days      AE  2023-10     2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>freq_song_wide <span class="ot">&lt;-</span> <span class="fu">dcast</span>(freq_song_long, month_yr<span class="sc">+</span>name<span class="sc">~</span>country, <span class="at">value.var =</span> <span class="st">"N"</span>, <span class="at">fill =</span> <span class="dv">0</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>freq_song_wide[,<span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;month_yr, name&gt;
+       month_yr                                          name    AE    AR    AT    AU    BE    BG    BO
+         &lt;char&gt;                                        &lt;char&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+    1:  2023-10                                                   0     0     0     0     0     0     0
+    2:  2023-10 ""Slut!"" (Taylor's Version) (From The Vault)     3     0     3     3     3     3     0
+    3:  2023-10                                   $AD BOYZ II     0     0     0     0     0     0     0
+    4:  2023-10                  (It Goes Like) Nanana - Edit     0     0     0     5    14     0     0
+    5:  2023-10                                   0800 HEAVEN     0     0     0     0     0     0     0
+   ---                                                                                                 
+37446:  2024-09                                        青と夏     0     0     0     0     0     0     0
+37447:  2024-09                                高嶺の花子さん     0     0     0     0     0     0     0
+37448:  2024-09                                          黑月     0     0     0     0     0     0     0
+37449:  2024-09                                        黑玻璃     0     0     0     0     0     0     0
+37450:  2024-09                            별별별 (See that?)     0     0     0     0     0     0     0</code></pre>
+</div>
+</div>
+<p>La función dcast también nos permite agregar valores de acuerdo a una función mientras cambiamos el formato de las tablas. Esto es útil cuando nuestra fórmula no puede identificar de manera única cada fila. Por ejemplo, si quiseramos comparar la popularidad promedio de cada canción entre el 2023 y el 2024 podemos hacer lo siguiente:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dcast</span>(data[country <span class="sc">!=</span> <span class="st">""</span>], country <span class="sc">+</span> name <span class="sc">~</span> <span class="fu">format</span>(snapshot_date,<span class="st">"%Y"</span>), <span class="at">value.var =</span> <span class="st">"popularity"</span>, <span class="at">fun.aggregate =</span> <span class="cf">function</span>(x){<span class="fu">round</span>(<span class="fu">mean</span>(x, <span class="at">na.rm =</span> T),<span class="at">digits =</span> <span class="dv">1</span>)})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;country, name&gt;
+       country                                                                 name  2023  2024
+        &lt;char&gt;                                                               &lt;char&gt; &lt;num&gt; &lt;num&gt;
+    1:      AE                        ""Slut!"" (Taylor's Version) (From The Vault)  85.4   NaN
+    2:      AE                                         (It Goes Like) Nanana - Edit   NaN  87.0
+    3:      AE                                                            100 Bands   NaN  53.4
+    4:      AE                                                                   22   NaN  35.0
+    5:      AE                                                               3 Days   NaN   1.0
+   ---                                                                                         
+29523:      ZA uKhome Lotto (feat. Agzo, Optimist Music ZA, Seun1401 &amp; El.Stephano)   NaN  55.3
+29524:      ZA                        uLala Kanjani (feat. LeeMcKrazy &amp; Skandisoul)  61.0   NaN
+29525:      ZA                             we can't be friends (wait for your love)   NaN  91.5
+29526:      ZA                                                    whatsapp (wassam)   NaN   0.0
+29527:      ZA                                                            yes, and?   NaN  84.0</code></pre>
+</div>
+</div>
+<p>Ahora imagina que te gustaría pasar de ancha a larga utilizando dos columnas. Por ejemplo, para compara la popularidad y el ranking promedio por año. Podemos indicar múltiples columnas en <code>value.var</code></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pop_rank_per_year <span class="ot">&lt;-</span> <span class="fu">dcast</span>(data[country <span class="sc">!=</span> <span class="st">""</span>], country <span class="sc">+</span> name <span class="sc">~</span> <span class="fu">format</span>(snapshot_date,<span class="st">"%Y"</span>), <span class="at">value.var =</span> <span class="fu">c</span>(<span class="st">"daily_rank"</span>, <span class="st">"popularity"</span>), <span class="at">sep =</span> <span class="st">"."</span>, <span class="at">fun.aggregate =</span> <span class="cf">function</span>(x){<span class="fu">round</span>(<span class="fu">mean</span>(x, <span class="at">na.rm =</span> T),<span class="at">digits =</span> <span class="dv">1</span>)})</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>pop_rank_per_year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Key: &lt;country, name&gt;
+       country                                                                 name daily_rank.2023 daily_rank.2024
+        &lt;char&gt;                                                               &lt;char&gt;           &lt;num&gt;           &lt;num&gt;
+    1:      AE                        ""Slut!"" (Taylor's Version) (From The Vault)            28.7             NaN
+    2:      AE                                         (It Goes Like) Nanana - Edit             NaN            33.0
+    3:      AE                                                            100 Bands             NaN             2.7
+    4:      AE                                                                   22             NaN            26.0
+    5:      AE                                                               3 Days             NaN             1.0
+   ---                                                                                                             
+29523:      ZA uKhome Lotto (feat. Agzo, Optimist Music ZA, Seun1401 &amp; El.Stephano)             NaN            42.0
+29524:      ZA                        uLala Kanjani (feat. LeeMcKrazy &amp; Skandisoul)            33.1             NaN
+29525:      ZA                             we can't be friends (wait for your love)             NaN            33.3
+29526:      ZA                                                    whatsapp (wassam)             NaN            42.0
+29527:      ZA                                                            yes, and?             NaN            30.5
+       popularity.2023 popularity.2024
+                 &lt;num&gt;           &lt;num&gt;
+    1:            85.4             NaN
+    2:             NaN            87.0
+    3:             NaN            53.4
+    4:             NaN            35.0
+    5:             NaN             1.0
+   ---                                
+29523:             NaN            55.3
+29524:            61.0             NaN
+29525:             NaN            91.5
+29526:             NaN             0.0
+29527:             NaN            84.0</code></pre>
+</div>
 </div>
 </section>
 <section id="ancha-a-larga" class="level2">
@@ -278,6 +376,90 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     ..., na.rm = FALSE, variable.factor = TRUE,
     value.factor = FALSE,
     verbose = getOption("datatable.verbose"))</code></pre>
+<p><img src="img/merge.png" class="img-fluid"></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>freq_song_long2 <span class="ot">&lt;-</span> <span class="fu">melt</span>(freq_song_wide, <span class="at">id.vars =</span> <span class="fu">c</span>(<span class="st">"month_yr"</span>,<span class="st">"name"</span>), <span class="at">variable.name =</span> <span class="st">"country"</span>, <span class="at">value.name =</span> <span class="st">"N"</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>freq_song_long2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>         month_yr                                          name country     N
+           &lt;char&gt;                                        &lt;char&gt;  &lt;fctr&gt; &lt;int&gt;
+      1:  2023-10                                                    AE     0
+      2:  2023-10 ""Slut!"" (Taylor's Version) (From The Vault)      AE     3
+      3:  2023-10                                   $AD BOYZ II      AE     0
+      4:  2023-10                  (It Goes Like) Nanana - Edit      AE     0
+      5:  2023-10                                   0800 HEAVEN      AE     0
+     ---                                                                     
+2696396:  2024-09                                        青と夏      ZA     0
+2696397:  2024-09                                高嶺の花子さん      ZA     0
+2696398:  2024-09                                          黑月      ZA     0
+2696399:  2024-09                                        黑玻璃      ZA     0
+2696400:  2024-09                            별별별 (See that?)      ZA     0</code></pre>
+</div>
+</div>
+<p>De manera similar a <code>dcast</code>, podemos reformatear una tabla para conservar más de una columna en la tabla en formato largo. Por ejemplo, si tenemos la tabla generada anteriormente con el ranking promedio diario por año y la popularidad promedio por año, y quisiéramos una tabla que separara las medidas de popularidad en una columna y el ranking promedio en otra, podemos hacerlo de la siguiente manera:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Forma 1</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>colA <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"daily_rank."</span>, <span class="dv">2023</span><span class="sc">:</span><span class="dv">2024</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>colB <span class="ot">=</span> <span class="fu">paste0</span>(<span class="st">"popularity."</span>, <span class="dv">2023</span><span class="sc">:</span><span class="dv">2024</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>pop_rank_year_long <span class="ot">&lt;-</span> pop_rank_per_year <span class="sc">%&gt;%</span> </span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(., <span class="at">measure =</span> <span class="fu">list</span>(colA, colB), <span class="at">value.name =</span> <span class="fu">c</span>(<span class="st">"daily_rank"</span>, <span class="st">"popularity"</span>), <span class="at">variable.name =</span> <span class="st">"year"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>pop_rank_year_long[,year <span class="sc">:</span><span class="er">=</span> <span class="fu">ifelse</span>(year <span class="sc">==</span> <span class="dv">1</span>, <span class="dv">2023</span>,<span class="dv">2024</span>)]</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>pop_rank_year_long</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       country                                                                 name  year daily_rank popularity
+        &lt;char&gt;                                                               &lt;char&gt; &lt;num&gt;      &lt;num&gt;      &lt;num&gt;
+    1:      AE                        ""Slut!"" (Taylor's Version) (From The Vault)  2023       28.7       85.4
+    2:      AE                                         (It Goes Like) Nanana - Edit  2023        NaN        NaN
+    3:      AE                                                            100 Bands  2023        NaN        NaN
+    4:      AE                                                                   22  2023        NaN        NaN
+    5:      AE                                                               3 Days  2023        NaN        NaN
+   ---                                                                                                         
+59050:      ZA uKhome Lotto (feat. Agzo, Optimist Music ZA, Seun1401 &amp; El.Stephano)  2024       42.0       55.3
+59051:      ZA                        uLala Kanjani (feat. LeeMcKrazy &amp; Skandisoul)  2024        NaN        NaN
+59052:      ZA                             we can't be friends (wait for your love)  2024       33.3       91.5
+59053:      ZA                                                    whatsapp (wassam)  2024       42.0        0.0
+59054:      ZA                                                            yes, and?  2024       30.5       84.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Forma 2</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>pop_rank_per_year <span class="sc">%&gt;%</span> </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(., <span class="at">measure =</span> <span class="fu">patterns</span>(<span class="st">"^daily_rank."</span>, <span class="st">"^popularity."</span>), <span class="at">value.name =</span> <span class="fu">c</span>(<span class="st">"daily_rank"</span>, <span class="st">"popularity"</span>), <span class="at">variable.name =</span> <span class="st">"year"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       country                                                                 name   year daily_rank popularity
+        &lt;char&gt;                                                               &lt;char&gt; &lt;fctr&gt;      &lt;num&gt;      &lt;num&gt;
+    1:      AE                        ""Slut!"" (Taylor's Version) (From The Vault)      1       28.7       85.4
+    2:      AE                                         (It Goes Like) Nanana - Edit      1        NaN        NaN
+    3:      AE                                                            100 Bands      1        NaN        NaN
+    4:      AE                                                                   22      1        NaN        NaN
+    5:      AE                                                               3 Days      1        NaN        NaN
+   ---                                                                                                          
+59050:      ZA uKhome Lotto (feat. Agzo, Optimist Music ZA, Seun1401 &amp; El.Stephano)      2       42.0       55.3
+59051:      ZA                        uLala Kanjani (feat. LeeMcKrazy &amp; Skandisoul)      2        NaN        NaN
+59052:      ZA                             we can't be friends (wait for your love)      2       33.3       91.5
+59053:      ZA                                                    whatsapp (wassam)      2       42.0        0.0
+59054:      ZA                                                            yes, and?      2       30.5       84.0</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Forma 3</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>pop_rank_per_year <span class="sc">%&gt;%</span> </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">melt</span>(., <span class="at">measure.vars =</span> <span class="fu">measure</span>(<span class="at">var=</span>as.factor, <span class="at">year=</span>as.integer, <span class="at">sep=</span><span class="st">"."</span>), <span class="at">value.name =</span> <span class="st">"mean"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        country                                                                 name        var  year  mean
+         &lt;char&gt;                                                               &lt;char&gt;     &lt;fctr&gt; &lt;int&gt; &lt;num&gt;
+     1:      AE                        ""Slut!"" (Taylor's Version) (From The Vault) daily_rank  2023  28.7
+     2:      AE                                         (It Goes Like) Nanana - Edit daily_rank  2023   NaN
+     3:      AE                                                            100 Bands daily_rank  2023   NaN
+     4:      AE                                                                   22 daily_rank  2023   NaN
+     5:      AE                                                               3 Days daily_rank  2023   NaN
+    ---                                                                                                    
+118104:      ZA uKhome Lotto (feat. Agzo, Optimist Music ZA, Seun1401 &amp; El.Stephano) popularity  2024  55.3
+118105:      ZA                        uLala Kanjani (feat. LeeMcKrazy &amp; Skandisoul) popularity  2024   NaN
+118106:      ZA                             we can't be friends (wait for your love) popularity  2024  91.5
+118107:      ZA                                                    whatsapp (wassam) popularity  2024   0.0
+118108:      ZA                                                            yes, and? popularity  2024  84.0</code></pre>
+</div>
+</div>
 
 
 </section>
