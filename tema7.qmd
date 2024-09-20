@@ -94,7 +94,7 @@ Las tablas se relacionan de la siguiente manera:
 
 tracks <- fread("data/bd/bp_track.csv")
 
-split_tracks <- split(tracks, ceiling(seq_along(tracks$track_id) / (length(tracks$track_id)/4)))
+split_tracks <- split(tracks, ceiling(seq_along(tracks$track_id) / (length(tracks$track_id)/6)))
 
 lapply(seq_along(split_tracks), function(x){
       fwrite(x = split_tracks[[x]],file = paste0("data/bd/tracks/","tracks_",x,".csv.gz"), compress = "auto")})

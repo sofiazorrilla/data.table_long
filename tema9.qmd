@@ -68,9 +68,6 @@ str(data)
 ![](img/sd2.png)
 
 ```{r}
-num_vars <- data[,.SD, .SDcols = is.numeric] 
-colnames(num_vars)
-
 vars <- c("danceability","energy","loudness","valence")
 
 # Queremos generar modelos para evaluar como es que diferentes variables afectan la popularidad de las canciones.
@@ -81,13 +78,15 @@ models = unlist(
   recursive = FALSE
 )
 
+test <- summary(lm(popularity ~ danceability, data = data[snapshot_date == max(snapshot_date),])) 
+
 lms = lapply(models, function(rhs) {
  data[snapshot_date == max(snapshot_date),][, 
       .( call = paste("popularity ~ ",paste(rhs,collapse = " + ")),
          terms = c("Intercept",rhs),
          coefs = coef(lm(popularity ~ ., data = .SD)),
          pvals = summary(lm(popularity ~ ., data = .SD))$coefficients[,4],
-         radj = summary(lm(popularity ~ ., data = .SD))$adj.r.squared), .SDcols = rhs]
+         radj = summary(lm(popularity ~ ., data = .SD))$adj.r.squared), .SDcols = c("popularity",rhs)]
 })
 
 results <- do.call(rbind,lms)
