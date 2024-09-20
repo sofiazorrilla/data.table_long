@@ -267,6 +267,234 @@ data[,.N, by = .(name,country)][,.(ncountry = .N), by = name]
 as.data.frame(data)[1:10,][1:2,]
 
 
+#########################################
+### Unión de tablas        ##############
+#########################################
+
+
+dt1 = data.table(id = seq(1,10), letter1 = LETTERS[sample(1:10, replace = T)])
+
+dt2 = data.table(id = seq(6,15), letter2 = LETTERS[sample(1:10, replace = T)])
+
+
+# Inner join
+merge(dt1,dt2,by = "id")
+
+# left join
+merge(dt1,dt2,by = "id", all.x = T)
+
+# right join
+merge(dt1,dt2,by = "id", all.y = T)
+
+# full join
+merge(dt1,dt2,by = "id", all = T)
+
+## Sintaxis DT
+
+# inner join
+dt1[dt2, on = "id", nomatch=0]
+
+# left join
+dt1[dt2, on = "id"]
+
+# right join
+dt2[dt1, on = "id"]
+
+## Ejercicio: Nos gustaría explorar la distribución de canciones de diferentes géneros a lo largo del tiempo. Para esto primero tenemos que unir las tablas tracks, genre y subgenre. En el diagrama puedes ver las columnas que las unen.
+
+# Enlistar los archivos de canciones (guardados en la carpeta de tracks)
+tracks <- list.files("data/bd/tracks", full.names = T)
+
+# Enlistar los archivos restantes en la carpeta bd
+files <- c(list.files("data/bd", full.names = T, pattern = ".csv*"), tracks)
+
+# Leer los archivos usando fread
+data_files <- lapply(files,fread)
+names(data_files) <- c(list.files("data/bd", pattern = ".csv*"), list.files("data/bd/tracks"))
+
+# Guardar los datos en objetos diferentes
+genre <- data_files$bp_genre.csv
+subgenre <- data_files$bp_subgenre.csv
+artist <- data_files$bp_artist.csv.gz
+artist_track <- data_files$bp_artist_track.csv.gz
+tracks <- do.call(rbind,data_files[5:8])
+
+# Borrar la lista de archivos
+rm(data_files)
+
+# Union de tablas
+tracks_genre <- merge(tracks,genre[,.(genre_id,genre_name)],by = "genre_id") 
+
+# Visualiza el número de canciones por genero que se publicaron cada año (release_date) del 2000 al 2024
+
+freq_tracks <- tracks_genre[,.N,by = .(genre_name, Yr = format(release_date,"%Y"))]
+
+# Opcional: Subconjunto de los géneros con más canciones.
+labels <- freq_tracks[, .SD[which.max(N)], by = genre_name][order(-N)][1:5]
+
+# Generar un vector de 6 colores (el último debe ser gris) para colorear las líneas de los subgeneros
+colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "gray")
+names(colors) <- c(labels$genre_name, "other")
+
+# Generar una nueva columna que se llame color donde solo aparecen los nombres de los 5 generos más escuchados (en sus filas correspondientes) y el resto de las celdas tiene la palabra "other". 
+freq_tracks[,color := ifelse(genre_name %in% labels$genre_name, genre_name, "other")] 
+
+library(ggrepel)
+
+freq_tracks %>% 
+  ggplot(aes(x = as.numeric(Yr), y = N, group = genre_name))+
+  geom_line(color = "gray", size = 1, alpha = 0.8)+
+  geom_line(data = freq_tracks[genre_name %in% labels$genre_name], aes(color = factor(color, levels = c(labels$genre_name, "other"))), size = 2)+
+  geom_text_repel(data = labels, aes(label = genre_name, color = factor(genre_name, levels = c(labels$genre_name, "other"))), nudge_y= 500)+
+  scale_color_manual(values = colors)+
+  scale_x_continuous(limits = c(2000,2025))+
+  labs(x = "Year", y = "N songs", color = "Género")+
+  theme_bw()
+
+#########################################
+### Reformatear tablas     ##############
+#########################################
+
+## Larga a ancha
+
+# Vamos a utilizar la tabla de canciones del top50 en 73 paises
+
+# Queremos crear una tabla de conteos de cada cancion por pais por mes en el que se hizo el listado top 50
+freq_song_long <- data[country != "",.(.N), by = .(name,country,month_yr = format(snapshot_date,"%Y-%m"))]
+freq_song_long
+
+freq_song_wide <- dcast(freq_song_long, month_yr+name~country, value.var = "N", fill = 0)
+freq_song_wide[,1:9]
+
+## Larga a ancha con una función de resumen
+
+dcast(data[country != ""], country + name ~ format(snapshot_date,"%Y"), value.var = "popularity", fun.aggregate = function(x){round(mean(x, na.rm = T),digits = 1)})
+
+## Larga a ancha: múltiples columnas simultáneas
+
+pop_rank_per_year <- dcast(data[country != ""], country + name ~ format(snapshot_date,"%Y"), value.var = c("daily_rank", "popularity"), sep = ".", fun.aggregate = function(x){round(mean(x, na.rm = T),digits = 1)})
+
+pop_rank_per_year
+
+
+## Ancha a larga 
+
+freq_song_long2 <- melt(freq_song_wide, id.vars = c("month_yr","name"), variable.name = "country", value.name = "N")
+freq_song_long2
+
+## Guardar valores en distintas columnas (forma 1)
+colA = paste0("daily_rank.", 2023:2024)
+colB = paste0("popularity.", 2023:2024)
+pop_rank_year_long <- pop_rank_per_year %>% 
+  melt(., measure = list(colA, colB), value.name = c("daily_rank", "popularity"), variable.name = "year")
+
+pop_rank_year_long[,year := ifelse(year == 1, 2023,2024)]
+pop_rank_year_long
+
+## Guardar valores en dos columnas utilizando patrones en los encabezados de las tablas
+
+pop_rank_per_year %>% 
+  melt(., measure = patterns("^daily_rank.", "^popularity."), value.name = c("daily_rank", "popularity"), variable.name = "year")
+
+# Generar una columna de variables (variables combinadas) y otra de valores.
+
+pop_rank_per_year %>% 
+  melt(., measure.vars = measure(var=as.factor, year=as.integer, sep="."), value.name = "mean")
+
+##################################################
+## SD.()                ##########################
+##################################################
+
+# Subconjunto de la tabla completa
+identical(data, data[ , .SD])
+
+# Subconjunto de columnas
+data[,.SD,.SDcols = c("artists","name")] %>% str()
+
+# Subconjunto de columnas por condición 
+data[,.SD, .SDcols = is.numeric] %>% str()
+
+# Para ver el efecto de los siguientes ejercicios lee la tabla de canciones asignando el tipo de datos de todas las columnas como caracter
+data = fread("data/universal_top_spotify_songs.csv.gz", colClasses = 'character')
+
+
+# Cambiar el tipo de datos a las columnas de fechas 
+data[,names(.SD) := lapply(.SD,as.Date),.SDcols = patterns('_date')]
+str(data)
+
+# Cambiar el tipo de datos a las columnas numéricas
+numeric_cols <- c("daily_rank","daily_movement","weekly_movement","popularity","duration_ms","danceability","energy","key","loudness","mode","speechiness","acousticness","instrumentalness","liveness","valence","tempo","time_signature")
+
+data[,names(.SD) := lapply(.SD,as.numeric), .SDcols = numeric_cols]
+str(data)
+
+## Aplicar modelos con distintas variables
+
+vars <- c("danceability","energy","loudness","valence")
+
+# Queremos generar modelos para evaluar como es que diferentes variables afectan la popularidad de las canciones.
+
+
+models = unlist(
+  lapply(1:length(vars), combn, x = vars, simplify = FALSE),
+  recursive = FALSE
+)
+
+test <- summary(lm(popularity ~ danceability, data = data[snapshot_date == max(snapshot_date),])) 
+
+lms = lapply(models, function(rhs) {
+  data[snapshot_date == max(snapshot_date),][, 
+                                             .( call = paste("popularity ~ ",paste(rhs,collapse = " + ")),
+                                                terms = c("Intercept",rhs),
+                                                coefs = coef(lm(popularity ~ ., data = .SD)),
+                                                pvals = summary(lm(popularity ~ ., data = .SD))$coefficients[,4],
+                                                radj = summary(lm(popularity ~ ., data = .SD))$adj.r.squared), .SDcols = c("popularity",rhs)]
+})
+
+results <- do.call(rbind,lms)
+
+results
+
+
+## Operaciones sobre grupos.
+
+song_freq <- data[country != "",.N, by = .(country,name)]
+
+hist(song_freq$N)
+
+# Que cancion tiene el mayor numero de registros por pais 
+song_freq[,.SD[which.max(N)], by = country] %>% head()
+
+
+
+## Uniones condicionales
+
+Sales <- data.table(
+  storeID = c(1, 1, 2, 2),
+  sale_date = as.IDate(c("2023-01-15", "2023-03-10", "2023-04-01", "2023-02-15")),
+  amount = c(500, 750, 1200, 600)
+)
+
+Targets <- data.table(
+  storeID = c(1, 1, 2, 2),
+  start_date = as.IDate(c("2023-01-01", "2023-04-01", "2023-01-01", "2023-04-01")),
+  end_date = as.IDate(c("2023-03-31", "2023-06-30", "2023-03-31", "2023-06-30")),
+  target = c(600, 800, 1000, 1200)
+)
+
+# Add start_date and end_date to Sales as the same value (to use for range-based join)
+Sales[, c("start_date","end_date"):=.(sale_date,sale_date)]
+
+# Join Sales and Targets based on storeID and date range, and assign target as team_performance
+Sales[storeID %in% c(1, 2), 
+      target := Targets[.SD, target, on = .(storeID, x.sale_date <= end_date, end_date >= start_date)]]
+
+Sales
+
+#Sales[Targets, target := x.target, on = .(storeID, sale_date >= start_date, sale_date <= end_date)]
+
+
+
 ##################################################
 ## Ejercicios           ##########################
 ##################################################
@@ -275,7 +503,6 @@ as.data.frame(data)[1:10,][1:2,]
 # Eres un analista de datos en una plataforma de streaming musical. Tu jefe te ha pedido que analices las tendencias de 73 paises para contestar las siguietes preguntas:
 
 # ¿Cuáles son los 5 álbumes más populares y cómo ha evolucionado su popularidad promedio (medida a través del ranking de las canciones de cada album) a lo largo del tiempo (mensualmente) en nuestra plataforma de streaming? (muestralo en un gráfico)
-
 
 
 # Ejercicio 2
@@ -289,8 +516,6 @@ as.data.frame(data)[1:10,][1:2,]
 # Identificar a los 5 mejores artistas que aparecen de manera consistente en la mayor cantidad de países durante el período de tiempo dado.
 
 # Visualizar las tendencias de popularidad mensual de estos 5 mejores artistas, destacando el primer mes en que aparecieron en el conjunto de datos.
-
-
 
 
 ### Ejercicio 3

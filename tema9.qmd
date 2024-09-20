@@ -95,6 +95,25 @@ results
 
 ```
 
+## Operaciones sobre grupos
+
+![Imagen tomada de: [Viñeta Using .SD for Data Analysis](https://rdatatable.gitlab.io/data.table/articles/datatable-sd-usage.html#grouped-sd-operations)
+](img/sd_group.png)
+
+Podemos realizar operaciones sobre sub-grupos. Por ejemplo: si quisieramos seleccionar únicamente las filas de las canciones con el mayor número de registros por pais.
+
+```{r}
+
+song_freq <- data[country != "",.N, by = .(country,name)]
+
+# Que cancion tiene el mayor numero de registros por pais 
+song_freq[,.SD[which.max(N)], by = country] %>% head()
+
+
+```
+
+
+
 ## Uniones condicionales 
 
 Queremos realizar una unión entre dos tablas: `Sales` y `Targets.` La tabla `Sales` contiene las ventas de diferentes tiendas en fechas específicas (sale_date), mientras que la tabla `Targets` tiene los objetivos de ventas (target) por tienda dentro de intervalos de fechas (start_date y end_date). El objetivo es asignar el valor de target de `Targets` a cada venta de `Sales`, basado en si la fecha de venta cae dentro del intervalo de fechas correspondiente para esa tienda.
@@ -144,12 +163,4 @@ Sales
 ```
 
 
-## Operaciones sobre grupos
-
-```{r}
-song_freq <- data[,.N, by = .(country,name)]
-
-# Que cancion tiene el mayor numero de registros por pais 
-song_freq[,.SD[which.max(N)], by = country] %>% head()
-```
 

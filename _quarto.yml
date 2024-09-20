@@ -32,11 +32,10 @@ website:
           - tema3.qmd
           - tema4.qmd
           - tema5.qmd
-          - tema6.qmd
           - tema7.qmd
           - tema8.qmd
           - tema9.qmd
-
+          - tema6.qmd
 
 format:
   html:
@@ -44,8 +43,14 @@ format:
     css: styles.css
     toc: true
     code-wrap: true
+    code-overflow: wrap
+    page-layout: full
+    code-block-style: "line-wrap"
     grid: 
-      body-width: 1000px 
+      body-width: 1100px
+      sidebar-width: 250px
+      margin-width: 150px
+      gutter-width: 0.8em
   
 engine: knitr
 knitr:

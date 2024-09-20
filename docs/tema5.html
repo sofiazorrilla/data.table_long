@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Modificación de columnas</title>
+<title>Agrupación y cadenas de operaciones</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -125,7 +125,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3.html">Operaciones</a></li><li class="breadcrumb-item"><a href="./tema4.html">Modificación de columnas</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./tema3.html">Operaciones</a></li><li class="breadcrumb-item"><a href="./tema5.html">Agrupación y cadenas de operaciones</a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -191,13 +191,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema4.html" class="sidebar-item-text sidebar-link active">
+  <a href="./tema4.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Modificación de columnas</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./tema5.html" class="sidebar-item-text sidebar-link">
+  <a href="./tema5.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Agrupación y cadenas de operaciones</span></a>
   </div>
 </li>
@@ -237,8 +237,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#operaciones-en-j" id="toc-operaciones-en-j" class="nav-link active" data-scroll-target="#operaciones-en-j">Operaciones en j</a></li>
-  <li><a href="#agregar-nuevas-columnas-a-nuestro-data.table" id="toc-agregar-nuevas-columnas-a-nuestro-data.table" class="nav-link" data-scroll-target="#agregar-nuevas-columnas-a-nuestro-data.table">Agregar nuevas columnas a nuestro data.table</a></li>
+  <li><a href="#agrupación-por-expresión" id="toc-agrupación-por-expresión" class="nav-link active" data-scroll-target="#agrupación-por-expresión">Agrupación por expresión</a></li>
+  <li><a href="#cadenas-de-operaciones" id="toc-cadenas-de-operaciones" class="nav-link" data-scroll-target="#cadenas-de-operaciones">Cadenas de operaciones</a></li>
   </ul>
 </nav>
     </div>
@@ -247,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Modificación de columnas</h1>
+<h1 class="title">Agrupación y cadenas de operaciones</h1>
 </div>
 
 
@@ -262,20 +262,29 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </header>
 
-<section id="operaciones-en-j" class="level3">
-<h3 class="anchored" data-anchor-id="operaciones-en-j">Operaciones en j</h3>
-<p>data.table nos permite efectuar operaciones sobre las columnas, por ejemplo, contar cuántas coincidencias tenemos para nuestros criterios aplicados.</p>
+<p>Ahora continuaremos usando el dataset de las plantas para sacar datos considerando agrupaciones. Por ejemplo podemos estimar cuántas veces aparece una canción entre las top 50.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data[country <span class="sc">==</span> <span class="st">"MX"</span> <span class="sc">&amp;</span> acousticness <span class="sc">&gt;</span> <span class="fl">0.5</span>, <span class="fu">length</span>(spotify_id)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>data[,.N,by <span class="ot">=</span> name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2395</code></pre>
+<pre><code>                            name     N
+                          &lt;char&gt; &lt;int&gt;
+    1:          Die With A Smile  1145
+    2:        BIRDS OF A FEATHER  5515
+    3:                     Taste   674
+    4:                  Espresso  6972
+    5:                       Who  1965
+   ---                                
+13332:                     Tsiou     2
+13333:              Mexri Telous     2
+13334:           Virtuální drogy     2
+13335: AMBIENTE ERRADO - Ao Vivo     2
+13336:     Oficializar - Ao Vivo     2</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>data[country <span class="sc">==</span> <span class="st">"MX"</span> <span class="sc">&amp;</span> acousticness <span class="sc">&gt;</span> <span class="fl">0.5</span>, .N]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2395</code></pre>
 </div>
+<p>Se pueden usar múltiples factores en las agrupaciones. Por ejemplo, cuantas veces aparece una canción de su album particular por pais.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>times_song_per_album_per_country <span class="ot">&lt;-</span> data[,.N,by <span class="ot">=</span> .(album_name,name,country)] </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Existen símbolos especiales como .N que nos cuenta el número de observaciones que cumplen nuestros criterios para el número de grupos que hemos definido. En este caso todas las observaciones pertenecen al mismo grupo.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -288,7 +297,10 @@ Ejercicio
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Pregunta: ¿Cuántas canciones que se hayan publicado de antes del 2000 han estado dentro del top 50? (Utiliza .N)</p>
+<ol type="1">
+<li>Genera una tabla en la que calcules el número de paises en el que un album estuvo en el top 50</li>
+<li>Haz una gráfica para visualizar los resultados</li>
+</ol>
 </div>
 </div>
 </div>
@@ -305,37 +317,29 @@ Respuesta
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 6430</code></pre>
+<div class="cell-output-display">
+<p><img src="tema5_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>Por ejemplo si quisieramos saber el promedio de duración en minutos de las canciones</p>
+<section id="agrupación-por-expresión" class="level2">
+<h2 class="anchored" data-anchor-id="agrupación-por-expresión">Agrupación por expresión</h2>
+<p>El espacio <code>by</code> también nos permite formar los grupos directamente de una expresión. Por ejemplo, si quisieramos contar el número de canciones en cada pais que tienen una popularidad mayor a 80.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>data[, duration_ms<span class="sc">/</span><span class="dv">1000</span><span class="sc">/</span><span class="dv">60</span>] <span class="sc">%&gt;%</span> <span class="fu">mean</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>data[,.N,by <span class="ot">=</span> .(country,<span class="at">PopAbove80 =</span> popularity <span class="sc">&gt;</span> <span class="dv">80</span>)] <span class="sc">%&gt;%</span> <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.207851</code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="fu">mean</span>(duration_ms<span class="sc">/</span><span class="dv">1000</span><span class="sc">/</span><span class="dv">60</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 3.207851</code></pre>
-</div>
-</div>
-<p>Además podemos combinar filtros sobre las filas y acciones sobre las columnas. Por ejemplo, si queremos calcular el promedio de popularidad de las canciones en el top 50 de México. Primero hacemos un filtro de las canciones populares en México y después obtenemos el promedio de popularidad únicamente de estas filas.</p>
-<blockquote class="blockquote">
-<blockquote class="blockquote">
-<p>Nota: La popularidad de una canción es un valor entre 0 y 100, donde 100 indica la mayor popularidad. La popularidad se calcula mediante un algoritmo y se basa, en su mayoría, en el número total de reproducciones que ha tenido la canción y en cuán recientes han sido esas reproducciones. En términos generales, las canciones que se reproducen mucho actualmente tendrán una popularidad mayor que las canciones que se reprodujeron mucho en el pasado. Las canciones duplicadas (por ejemplo, la misma canción de un sencillo y de un álbum) se califican de manera independiente. La popularidad de los artistas y los álbumes se deriva matemáticamente de la popularidad de las canciones. Nota: el valor de popularidad puede no reflejar la popularidad real en algunos días, ya que no se actualiza en tiempo real.</p>
-</blockquote>
-</blockquote>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>data[country <span class="sc">==</span> <span class="st">"MX"</span>, <span class="fu">mean</span>(popularity)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 84.38275</code></pre>
+<pre><code>   country PopAbove80     N
+    &lt;char&gt;     &lt;lgcl&gt; &lt;int&gt;
+1:               TRUE 14869
+2:              FALSE  1138
+3:      ZA      FALSE 10786
+4:      ZA       TRUE  5244
+5:      VN       TRUE  2622
+6:      VN      FALSE 13634</code></pre>
 </div>
 </div>
-<p>Debido a que tanto el filtro como la función sobre la columna están en el mismo comando, data.table sabe el total de las operaciones y puede hacer más eficiente la velocidad y el uso de la memoria cuando las ejecuta.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -348,7 +352,7 @@ Ejercicio
 </div>
 <div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Calcula el promedio y desviación estandar en los movimientos diarios de ranking (el cambio en las clasificaciones en comparación con el día anterior) en las canciones populares de México.</p>
+<p>Calcula cuántas veces una canción ha sido ranqueada como la número 1 (para cualquier pais). Muestra las 5 canciones que hayan tenido el ranking 1 más veces.</p>
 </div>
 </div>
 </div>
@@ -366,198 +370,63 @@ Respuesta
 <div class="callout-body-container callout-body">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.4105561 4.9231557</code></pre>
+<pre><code>                           name   num1     N
+                         &lt;char&gt; &lt;lgcl&gt; &lt;int&gt;
+1:                         LUNA   TRUE  1015
+2:                          Who   TRUE   624
+3:   i like the way you kiss me   TRUE   570
+4: Si Antes Te Hubiera Conocido   TRUE   531
+5:                    La Diabla   TRUE   505</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
 </section>
-<section id="agregar-nuevas-columnas-a-nuestro-data.table" class="level2">
-<h2 class="anchored" data-anchor-id="agregar-nuevas-columnas-a-nuestro-data.table">Agregar nuevas columnas a nuestro data.table</h2>
-<p>Hasta ahora estabamos aplicando funciones y obtuvimos vectores o números como resultado pero podemos utilizar el espacio j para crear nuevas columnas en nuestras tablas. Por ejemplo, podemos guardar la duración de cada canción en minutos.</p>
+<section id="cadenas-de-operaciones" class="level2">
+<h2 class="anchored" data-anchor-id="cadenas-de-operaciones">Cadenas de operaciones</h2>
+<p>Una función muy importante del paquete es la capacidad de encadenar operaciones en un mismo comando sin necesidad de guardar el resultado en algun objeto.</p>
+<p>Es una función que se puede entender de manera similar al uso del pipe <code>%&gt;%</code> o <code>|&gt;</code> en tidyverse o rbase. En data table se pueden evaluar una serie de expresiones una después de la otra escribiendolas entre corchetes de esta manera:</p>
+<pre><code>DT[ ... ][ ... ][ ... ]</code></pre>
+<p>o de forma vertical</p>
+<pre><code>DT[ ...
+   ][ ...
+     ][ ...
+       ]</code></pre>
+<p>Por ejemplo, recapitulando temas anteriores ¿cómo contarías el número de paises en los que una canción ha estado en el top 50?</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a> data[, .(<span class="at">duration_min =</span> duration_ms<span class="sc">/</span><span class="dv">1000</span><span class="sc">/</span><span class="dv">60</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>data[,.N, by <span class="ot">=</span> .(name,country)][,.(<span class="at">ncountry =</span> .N), by <span class="ot">=</span> name]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>         duration_min
-                &lt;num&gt;
-      1:     4.194450
-      2:     3.506217
-      3:     2.621317
-      4:     2.924317
-      5:     2.848117
-     ---             
-1179449:     5.174833
-1179450:     2.887550
-1179451:     3.079850
-1179452:     2.992667
-1179453:     2.205983</code></pre>
+<pre><code>                            name ncountry
+                          &lt;char&gt;    &lt;int&gt;
+    1:          Die With A Smile       61
+    2:        BIRDS OF A FEATHER       62
+    3:                     Taste       49
+    4:                  Espresso       62
+    5:                       Who       48
+   ---                                   
+13332:                     Tsiou        1
+13333:              Mexri Telous        1
+13334:           Virtuální drogy        1
+13335: AMBIENTE ERRADO - Ao Vivo        1
+13336:     Oficializar - Ao Vivo        1</code></pre>
 </div>
 </div>
-<p>Ahora qué sucede si queremos generar la nueva columna dentro de nuestra tabla original. Por ejemplo si estimamos la diferencia en tiempo desde que el album fue publicado y la fecha en la que apareció entre el top 50</p>
-<p><strong>Nota:</strong> El operador <code>:=</code> sirve para modificar tablas guardadas en la memoria directamente (modify in place)</p>
+<p>En realidad los corchetes consecutivos es una funcionalidad que viene desde R base. Por ejemplo, podemos seleccionar las primeras 10 filas del df data y después seleccionar las primeras dos.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>data[, date_dif <span class="sc">:</span><span class="er">=</span> snapshot_date <span class="sc">-</span> album_release_date]</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">as.data.frame</span>(data)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,][<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Index: &lt;country&gt;
-                     spotify_id                              name                     artists daily_rank daily_movement
-                         &lt;char&gt;                            &lt;char&gt;                      &lt;char&gt;      &lt;int&gt;          &lt;int&gt;
-      1: 2plbrEY59IikOBgBGLjaoe                  Die With A Smile       Lady Gaga, Bruno Mars          1              0
-      2: 6dOtVTDdiauQNBQEDOtlAB                BIRDS OF A FEATHER               Billie Eilish          2              0
-      3: 5G2f63n7IPVPPjfNIGih7Q                             Taste           Sabrina Carpenter          3              0
-      4: 2HRqTpkrJO5ggZyyK6NPWz                          Espresso           Sabrina Carpenter          4             46
-      5: 7tI8dRuH2Yc6RuoTjxo4dU                               Who                       Jimin          5              0
-     ---                                                                                                               
-1179449: 0AYt6NMyyLd0rLuvr0UkMH         Slime You Out (feat. SZA)                  Drake, SZA         46              4
-1179450: 2Gk6fi0dqt91NKvlzGsmm7 SAY MY GRACE (feat. Travis Scott)        Offset, Travis Scott         47              3
-1179451: 26b3oVLrRUaaybJulow9kz                            People                    Libianca         48              2
-1179452: 5ydjxBSUIDn26MFzU3asP4                        Rainy Days                           V         49              1
-1179453: 59NraMJsLaMCVtwXTSia8i                             Prada cassö, RAYE, D-Block Europe         50              0
-         weekly_movement country snapshot_date popularity is_explicit duration_ms           album_name
-                   &lt;int&gt;  &lt;char&gt;        &lt;IDat&gt;      &lt;int&gt;      &lt;lgcl&gt;       &lt;int&gt;               &lt;char&gt;
-      1:               0            2024-09-08         97       FALSE      251667     Die With A Smile
-      2:               0            2024-09-08        100       FALSE      210373 HIT ME HARD AND SOFT
-      3:               0            2024-09-08         94       FALSE      157279       Short n' Sweet
-      4:              46            2024-09-08         83        TRUE      175459       Short n' Sweet
-      5:               0            2024-09-08         94       FALSE      170887                 MUSE
-     ---                                                                                              
-1179449:               0      AE    2023-10-18         84        TRUE      310490     For All The Dogs
-1179450:               0      AE    2023-10-18         80        TRUE      173253           SET IT OFF
-1179451:               0      AE    2023-10-18         88       FALSE      184791               People
-1179452:               0      AE    2023-10-18         88       FALSE      179560              Layover
-1179453:               0      AE    2023-10-18         94        TRUE      132359                Prada
-         album_release_date danceability energy   key loudness  mode speechiness acousticness instrumentalness liveness
-                     &lt;IDat&gt;        &lt;num&gt;  &lt;num&gt; &lt;int&gt;    &lt;num&gt; &lt;int&gt;       &lt;num&gt;        &lt;num&gt;            &lt;num&gt;    &lt;num&gt;
-      1:         2024-08-16        0.521  0.592     6   -7.777     0      0.0304      0.30800         0.00e+00    0.122
-      2:         2024-05-17        0.747  0.507     2  -10.171     1      0.0358      0.20000         6.08e-02    0.117
-      3:         2024-08-23        0.674  0.907     3   -4.086     1      0.0640      0.10100         0.00e+00    0.297
-      4:         2024-08-23        0.699  0.776     0   -5.282     1      0.0293      0.13100         5.36e-06    0.205
-      5:         2024-07-19        0.660  0.756     0   -3.743     0      0.0320      0.00289         0.00e+00    0.193
-     ---                                                                                                               
-1179449:         2023-10-06        0.483  0.408     5   -9.243     0      0.0502      0.50800         0.00e+00    0.259
-1179450:         2023-10-13        0.773  0.635    10   -5.060     1      0.0452      0.05850         0.00e+00    0.132
-1179451:         2022-12-06        0.573  0.422    10   -7.621     0      0.0678      0.55100         1.31e-05    0.102
-1179452:         2023-08-11        0.633  0.454     9   -8.016     0      0.0875      0.73900         0.00e+00    0.148
-1179453:         2023-08-11        0.638  0.717     8   -5.804     1      0.0375      0.00100         1.79e-06    0.113
-         valence   tempo time_signature date_dif
-           &lt;num&gt;   &lt;num&gt;          &lt;int&gt;    &lt;int&gt;
-      1:   0.535 157.969              3       23
-      2:   0.438 104.978              4      114
-      3:   0.721 112.964              4       16
-      4:   0.708 103.963              4       16
-      5:   0.838 116.034              4       51
-     ---                                        
-1179449:   0.105  88.880              3       12
-1179450:   0.476 121.879              4        5
-1179451:   0.693 124.357              5      316
-1179452:   0.282  74.828              4       68
-1179453:   0.422 141.904              4       68</code></pre>
+<pre><code>              spotify_id               name               artists daily_rank daily_movement weekly_movement country
+1 2plbrEY59IikOBgBGLjaoe   Die With A Smile Lady Gaga, Bruno Mars          1              0               0        
+2 6dOtVTDdiauQNBQEDOtlAB BIRDS OF A FEATHER         Billie Eilish          2              0               0        
+  snapshot_date popularity is_explicit duration_ms           album_name album_release_date danceability energy key
+1    2024-09-08         97       FALSE      251667     Die With A Smile         2024-08-16        0.521  0.592   6
+2    2024-09-08        100       FALSE      210373 HIT ME HARD AND SOFT         2024-05-17        0.747  0.507   2
+  loudness mode speechiness acousticness instrumentalness liveness valence   tempo time_signature
+1   -7.777    0      0.0304        0.308           0.0000    0.122   0.535 157.969              3
+2  -10.171    1      0.0358        0.200           0.0608    0.117   0.438 104.978              4</code></pre>
 </div>
 </div>
-<p>Para agregar múltiples columnas en la tabla original se utiliza la siguientes sintaxis</p>
-<pre><code>dt[,`:=`(col1 = funcion, col2 = funcion)]
-
-dt[, c("col1","col2","col3") := list(val1,val2,val3)]</code></pre>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Ejercicio
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<ol type="1">
-<li><p>Agrega una nueva columna (<code>year_release</code>) a la tabla original que solo muestre el año de publicación del album de la canción</p></li>
-<li><p>En un solo comando: genera una columna de diferencia entre la fecha de publicación y la fecha en la que la canción apareció en el top50. Además generar una columna de duración de la canción en minutos</p></li>
-</ol>
-</div>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Respuesta
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
-<div class="callout-body-container callout-body">
-<section id="ejercicio-1-1" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-1-1">Ejercicio 1</h3>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "spotify_id"         "name"               "artists"            "daily_rank"         "daily_movement"    
- [6] "weekly_movement"    "country"            "snapshot_date"      "popularity"         "is_explicit"       
-[11] "duration_ms"        "album_name"         "album_release_date" "danceability"       "energy"            
-[16] "key"                "loudness"           "mode"               "speechiness"        "acousticness"      
-[21] "instrumentalness"   "liveness"           "valence"            "tempo"              "time_signature"    
-[26] "date_dif"           "year_release"      </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>   year_release
-         &lt;char&gt;
-1:         2024
-2:         2024
-3:         2024
-4:         2024
-5:         2024
-6:         2024</code></pre>
-</div>
-</div>
-</section>
-<section id="ejercicio-2-1" class="level3">
-<h3 class="anchored" data-anchor-id="ejercicio-2-1">Ejercicio 2</h3>
-<div class="cell">
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "spotify_id"         "name"               "artists"            "daily_rank"         "daily_movement"    
- [6] "weekly_movement"    "country"            "snapshot_date"      "popularity"         "is_explicit"       
-[11] "duration_ms"        "album_name"         "album_release_date" "danceability"       "energy"            
-[16] "key"                "loudness"           "mode"               "speechiness"        "acousticness"      
-[21] "instrumentalness"   "liveness"           "valence"            "tempo"              "time_signature"    
-[26] "date_dif"           "year_release"       "days_until_top50"   "duration_min"      </code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>         days_until_top50 duration_min
-                    &lt;int&gt;        &lt;num&gt;
-      1:               23     4.194450
-      2:              114     3.506217
-      3:               16     2.621317
-      4:               16     2.924317
-      5:               51     2.848117
-     ---                              
-1179449:               12     5.174833
-1179450:                5     2.887550
-1179451:              316     3.079850
-1179452:               68     2.992667
-1179453:               68     2.205983</code></pre>
-</div>
-</div>
-</section>
-</div>
-</div>
-</div>
-<!-- ## Indices
-
-```{.r}
-setkeyv(data,"country")
-
-data["Mexico"]
-
-data["Mexico", nomatch = NULL]
-
-data[country == "Mexico"]
-
-data[,.N]
-``` -->
 
 
 </section>

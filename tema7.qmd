@@ -136,19 +136,23 @@ Nos gustaría explorar la distribución de canciones de diferentes géneros a lo
 #| warning: false
 
 # Union de tablas
-tracks_genre <- merge(tracks,genre[,.(genre_id,genre_name)],by = "genre_id", all.x = T) 
+tracks_genre <- merge(tracks,genre[,.(genre_id,genre_name)],by = "genre_id") 
 
 # Visualiza el número de canciones por genero que se publicaron cada año (release_date) del 2000 al 2024
 
 freq_tracks <- tracks_genre[,.N,by = .(genre_name, Yr = format(release_date,"%Y"))]
 
-# Opcional: 
+# Opcional: Subconjunto de los géneros con más canciones.
 labels <- freq_tracks[, .SD[which.max(N)], by = genre_name][order(-N)][1:5]
 
+# Generar un vector de 6 colores (el último debe ser gris) para colorear las líneas de los subgeneros
 colors <- c("#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "gray")
 names(colors) <- c(labels$genre_name, "other")
 
+# Generar una nueva columna que se llame color donde solo aparecen los nombres de los 5 generos más escuchados (en sus filas correspondientes) y el resto de las celdas tiene la palabra "other". 
 freq_tracks[,color := ifelse(genre_name %in% labels$genre_name, genre_name, "other")] 
+
+library(ggrepel)
 
 freq_tracks %>% 
       ggplot(aes(x = as.numeric(Yr), y = N, group = genre_name))+
@@ -157,7 +161,7 @@ freq_tracks %>%
       geom_text_repel(data = labels, aes(label = genre_name, color = factor(genre_name, levels = c(labels$genre_name, "other"))), nudge_y= 500)+
       scale_color_manual(values = colors)+
       scale_x_continuous(limits = c(2000,2025))+
-      labs(x = "Year", y = "N songs", color = "Subgenre")+
+      labs(x = "Year", y = "N songs", color = "Género")+
       theme_bw()
 ```
 
@@ -198,7 +202,7 @@ freq_tracks %>%
       geom_text_repel(data = labels, aes(label = subgenre_name, color = factor(subgenre_name, levels = c(labels$subgenre_name, "other"))), nudge_y= 500)+
       scale_color_manual(values = colors)+
       scale_x_continuous(limits = c(2000,2025))+
-      labs(x = "Year", y = "N songs", color = "Genre")+
+      labs(x = "Year", y = "N songs", color = "Subgénero")+
       theme_bw()
 ```
 :::

@@ -99,3 +99,4 @@ pop_rank_per_year %>%
   melt(., measure.vars = measure(var=as.factor, year=as.integer, sep="."), value.name = "mean")
 ```
 
+
