@@ -300,6 +300,42 @@ dt1[dt2, on = "id"]
 # right join
 dt2[dt1, on = "id"]
 
+#####################
+## Importar datos ###
+#####################
+
+# Asegurar que los datos existen
+
+## Si no haz creado la carpeta de data en tu directorio de trabajo
+# # Revisa si existe, si no crea la carpeta
+# if (!file.exists("data/bd")) {
+#   dir.create("data")
+#   dir.create("data/tracks")
+# }
+
+# links_bd <- list(
+#   "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/bp_subgenre.csv",
+#   "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/bp_genre.csv",
+#   "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/bp_artist_track.csv.gz",
+#   "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/bp_subgenre.csv"
+#   
+# )
+# 
+# lapply(seq_along(links_bd), function(x){download.file(url = links_bd[[x]], destfile = paste0("data/bd/tracks/", names(links_bd[x])))})
+# 
+# links_tracks <- list(
+#  tracks1.csv.gz = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/tracks/tracks_1.csv.gz",
+#  tracks2.csv.gz = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/tracks/tracks_2.csv.gz",
+#  tracks3.csv.gz = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/tracks/tracks_3.csv.gz",
+#  tracks4.csv.gz = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/tracks/tracks_4.csv.gz",
+#  tracks5.csv.gz = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/tracks/tracks_5.csv.gz",
+#  tracks6.csv.gz = "https://raw.githubusercontent.com/sofiazorrilla/data.table_long/refs/heads/main/data/bd/tracks/tracks_6.csv.gz"
+#   
+# )
+# 
+# lapply(seq_along(links_tracks), function(x){download.file(url = links_tracks[[x]], destfile = paste0("data/bd/tracks/", names(links_tracks[x])))})
+
+
 ## Ejercicio: Nos gustaría explorar la distribución de canciones de diferentes géneros a lo largo del tiempo. Para esto primero tenemos que unir las tablas tracks, genre y subgenre. En el diagrama puedes ver las columnas que las unen.
 
 # Enlistar los archivos de canciones (guardados en la carpeta de tracks)
